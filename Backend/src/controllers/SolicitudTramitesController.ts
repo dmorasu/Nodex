@@ -1,7 +1,7 @@
 import type {Request, Response} from 'express'
 
 
-export class TramitesController{
+export class SolicitudTramitesController{
     static getAll = async (req:Request, res:Response)=>{
 
     }

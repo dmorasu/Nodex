@@ -1,18 +1,18 @@
 import type { Request,Response } from "express";
-import Solicitantes from "../models/solicitantes";
-import { param } from "express-validator";
+import Usuarios from "../models/usuarios";
 
-export class SolicitantesController{
+
+export class UsuarioController{
     static getAll= async (req:Request,res:Response)=>{
         try {
             
-            const solicitante=await Solicitantes.findAll({
+            const usuario=await Usuarios.findAll({ 
                 order:[
                     ['createdAt','DESC']
                 ],
                 // TODO:Filtrar por usuario autenticado
             })
-            res.json(solicitante)
+            res.json(usuario)
         
         } catch (error) {
             //console.log(error);
@@ -23,12 +23,12 @@ export class SolicitantesController{
 
     static create= async (req:Request,res:Response)=>{
         try {
-            const solicitante=new Solicitantes(req.body)
-            await solicitante.save()
+            const usuario=new Usuarios(req.body)
+            await usuario.save()
             res.status(201).json("Dato ingresado correctamente")
         } catch (error) {
-            //console.log(error);
-            res.status(500).json({error:'Hubo un error'})
+            console.log(error);
+            //res.status(500).json({error:'No se puede guardar el registro'})
 
             
             
@@ -38,18 +38,18 @@ export class SolicitantesController{
 
     static getById= async (req:Request,res:Response)=>{
         
-         res.json(req.solicitante)
+         res.json(req.usuario)
 
     
     }
      static updateById= async (req:Request,res:Response)=>{
-        await req.solicitante.update(req.body)
+        await req.usuario.update(req.body)
         res.json('Registro Actualizado')
     
     }
     
      static deleteById= async (req:Request,res:Response)=>{
-           await req.solicitante.destroy()
+           await req.usuario.destroy()
             res.json('Solicitante Eliminado')
     
     }

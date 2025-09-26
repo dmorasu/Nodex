@@ -1,17 +1,17 @@
 import type {Request,Response, NextFunction } from "express";
 import  {param, validationResult, body} from 'express-validator'
-import Solicitantes from "../models/solicitantes";
+import Usuario from "../models/usuarios";
 
 declare global{
     namespace Express{
         interface Request{
-            solicitante?:Solicitantes
+            usuario?:Usuario
         }
     }
 }
 
-export const  validateSolicitanteId= async(req:Request,res:Response,next:NextFunction)=>{
-         await param('solicitanteId').isInt().withMessage('ID no valido')
+export const  validateUsuarioId= async(req:Request,res:Response,next:NextFunction)=>{
+         await param('usuarioId').isInt().withMessage('ID no valido')
             .custom(value => value > 0).withMessage('id no valido')
             .run(req)
         
@@ -26,16 +26,16 @@ export const  validateSolicitanteId= async(req:Request,res:Response,next:NextFun
     
 }
 
-export const  validateSolicitanteExits= async(req:Request,res:Response,next:NextFunction)=>{
+export const  validateUsuarioExits= async(req:Request,res:Response,next:NextFunction)=>{
         
         try {
-            const{solicitanteId}=req.params
-            const solicitante=await  Solicitantes.findByPk(solicitanteId)
-            if(!solicitante){
-                const error =new Error('No se encuentra en la base de datos')
+            const{usuarioId}=req.params
+            const usuario=await  Usuario.findByPk(usuarioId)
+            if(!usuario){
+                const error =new Error('El usuario no se encuentra en la base de datos')
                 return res.status(404).json({error:error.message})
             }
-            req.solicitante=solicitante
+            req.usuario=usuario
 
             next()
 
@@ -51,7 +51,7 @@ export const  validateSolicitanteExits= async(req:Request,res:Response,next:Next
     
 }
 
-export const  validateSolicitanteInput =async(req:Request,res:Response,next:NextFunction)=>{
+export const  validateUsuarioInput =async(req:Request,res:Response,next:NextFunction)=>{
         await body('nombre').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
         await body('prefijo').notEmpty().withMessage('Debe escribir un prefijo').run(req)
                // .isNumeric().withMessage('Debe escribir un prefijo'),  --> Validacion que sea un numero

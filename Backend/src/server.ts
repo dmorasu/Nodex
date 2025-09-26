@@ -2,7 +2,8 @@ import express from 'express'
 import colors from 'colors'
 import morgan from 'morgan'
 import { db } from './config/db'
-import solicitanteRouter from "./routes/solicitanteRouter"
+import usuarioRouter from "./routes/usuarioRouter"
+import entidadRouter from "./routes/entidadRouter"
 
 async function connectDB() {
     try {
@@ -24,7 +25,9 @@ app.use(morgan('dev'))
 
 app.use(express.json())
 
-app.use('/api/solicitantes', solicitanteRouter)
+app.use('/api/usuarios', usuarioRouter)
+
+app.use('/api/entidad',entidadRouter)
 
 
 
