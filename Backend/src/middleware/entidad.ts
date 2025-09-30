@@ -1,6 +1,6 @@
 import type {Request,Response, NextFunction } from "express";
 import  {param, validationResult, body} from 'express-validator'
-import Usuario from "../models/entidad";
+
 import Entidad from "../models/entidad";
 
 
@@ -11,7 +11,7 @@ export const  validateEntidadExits= async(req:Request,res:Response,next:NextFunc
         
         try {
             const{entidadId}=req.params
-            const entidad=await  Usuario.findByPk(entidadId)
+            const entidad=await  Entidad.findByPk(entidadId)
             if(!entidad){
                 const error =new Error('La entidad no se encuentra en la base de datos')
                 return res.status(404).json({error:error.message})

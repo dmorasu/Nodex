@@ -21,7 +21,7 @@ class Municipios extends Model{
     @Column({
         type: DataType.STRING(100)
     })
-    declare regiona:string
+    declare regional:string
 
     @HasMany(()=>SolicitudTramites,{
         onUpdate:'CASCADE',

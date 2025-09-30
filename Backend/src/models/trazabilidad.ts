@@ -1,4 +1,4 @@
-import {Table,Column,DataType,Model,ForeignKey,BelongsTo} from 'sequelize-typescript'
+import {Table,Column,DataType,Model,ForeignKey,BelongsTo, AllowNull} from 'sequelize-typescript'
 import SolicitudTramites from './solicitudTramites'
 
 
@@ -19,7 +19,10 @@ class Trazabilidad extends Model{
     declare nombreUsuario:string
 
      @ForeignKey(()=>SolicitudTramites)
-     declare solicitudTramitesId:number
+     @Column({
+        allowNull:false
+     })
+     declare solicitudTramiteId:number
 
      @BelongsTo(()=>SolicitudTramites)
      declare solicitudTramites:SolicitudTramites

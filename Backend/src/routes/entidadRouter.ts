@@ -1,9 +1,9 @@
 import {Router}  from 'express'
 
 import { handleInputErrors } from '../middleware/validation'
-import { validateUsuarioExits, validateUsuarioId, validateUsuarioInput } from '../middleware/usuario'
+
 import { EntidadController } from '../controllers/EntidadController'
-import Entidad from '../models/entidad'
+
 import { validateEntidadExits, validateEntidadInput } from '../middleware/entidad'
 
 

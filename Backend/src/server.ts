@@ -4,6 +4,11 @@ import morgan from 'morgan'
 import { db } from './config/db'
 import usuarioRouter from "./routes/usuarioRouter"
 import entidadRouter from "./routes/entidadRouter"
+import clienteRouter from "./routes/clienteRouter"
+import municipiosRouter from "./routes/municipiosRouter"
+import operacionesRouter from "./routes/operacionesRouter" 
+import tarifaRouter from "./routes/tarifaRouter" 
+import tramitadorRouter from "./routes/tramitadorRouter" 
 
 async function connectDB() {
     try {
@@ -29,6 +34,14 @@ app.use('/api/usuarios', usuarioRouter)
 
 app.use('/api/entidad',entidadRouter)
 
+app.use('/api/clientes', clienteRouter)
 
+app.use('/api/municipios', municipiosRouter)
+
+app.use('/api/operaciones',operacionesRouter)
+
+app.use('/api/tarifa',tarifaRouter)
+
+app.use('/api/tramitador',tramitadorRouter)
 
 export default app

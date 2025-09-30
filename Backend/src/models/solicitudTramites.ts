@@ -83,6 +83,12 @@ class SolicitudTramites extends Model{
      declare documentosAportados:string
 
      @Column({
+         type:DataType.TEXT
+
+     })
+     declare descripcionTramite:string
+
+     @Column({
         type:DataType.DECIMAL(10,2)
 
     })
@@ -179,17 +185,14 @@ class SolicitudTramites extends Model{
      @BelongsTo(()=>Municipios)
      declare municipios:Municipios
 
-     @HasMany(()=>EstadosTramites,{
-              
-     
-      })
-      declare estadosTramites:EstadosTramites
+     @HasMany(() => EstadosTramites, { foreignKey: 'solicitudTramiteId' })
+      declare estadosTramites: EstadosTramites[];
 
       @HasMany(()=>Trazabilidad,{
               
      
       })
-      declare trazabilidad:Trazabilidad
+      declare trazabilidad:Trazabilidad[]
 
 
 }
