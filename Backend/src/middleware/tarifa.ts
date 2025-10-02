@@ -37,7 +37,7 @@ export const  validateTarifaInput =async(req:Request,res:Response,next:NextFunct
         await body('nombreTarifa').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
         await body('valorTarifa')
         .notEmpty().withMessage('El valor no puede estar vacío')
-        .isNumeric().withMessage('El valor debe ser numérico')
+        .isInt().withMessage('El valor debe ser numérico')
         .custom(value => {
             if (Number(value) <= 0) {
             throw new Error('El valor debe ser mayor a 0');

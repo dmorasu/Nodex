@@ -52,7 +52,7 @@ export class TarifaController{
     
      static deleteById= async (req:Request,res:Response)=>{
            await req.tarifa.destroy()
-            res.json('tarifa Eliminada')
+           res.json('tarifa Eliminada')
     
     }
 }

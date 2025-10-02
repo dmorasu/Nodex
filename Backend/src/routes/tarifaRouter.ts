@@ -20,6 +20,7 @@ router.get('/:tarifaId',
 )
 
 router.put('/:tarifaId',
+    validateTarifaExits,
     TarifaController.updateById
 )
 

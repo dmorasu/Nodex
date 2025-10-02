@@ -3,7 +3,7 @@ import SolicitudTramites from './solicitudTramites'
 
 
 @Table({
-    tableName:'logistica'
+    tableName:'Logistica'
 })
 
 class Logistica extends Model{
