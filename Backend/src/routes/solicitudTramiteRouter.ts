@@ -5,7 +5,7 @@ import { TrazabilidadController } from '../controllers/TrazabilidadController'
 import { validateSolicitudTramiteExits,validateSolicitudTramitesInput } from '../middleware/solicitudTramites'
 
 import { handleInputErrors } from '../middleware/validation'
-import { validateTrazabilidadInput } from '../middleware/trazabilidad'
+import { validateTrazabilidadInput,validateTrazabilidadId,validateTrazabilidadExits } from '../middleware/trazabilidad'
 
 
 
@@ -13,6 +13,8 @@ import { validateTrazabilidadInput } from '../middleware/trazabilidad'
 
 const router =Router()
 router.param('solicitudTramitesId',validateSolicitudTramiteExits)
+router.param('trazabilidadId', validateTrazabilidadId)
+router.param('trazabilidadId',validateTrazabilidadExits )
 
 
 //Rutas de Tramites 
@@ -33,14 +35,17 @@ router.delete(':solicitudTramiteId', SolicitudTramitesController.deleteById)
 
 //Rutas para Trazabilidad
 
-router.get('/:solicitudTramitesId/trazabilidad',TrazabilidadController.getAll)
+
 router.post('/:solicitudTramitesId/trazabilidad',
     validateTrazabilidadInput,
     handleInputErrors,
     TrazabilidadController.create)
-router.get('/:solicitudTramitesId/trazabilidad/:TrazabilidadId',TrazabilidadController.getById)
-router.put('/:solicitudTramitesId/trazabilidad/:TrazabilidadId',TrazabilidadController.updateById)
-router.delete('/:solicitudTramitesId/trazabilidad/:TrazabilidadId',TrazabilidadController.deleteById)
+router.get('/:solicitudTramitesId/trazabilidad/:trazabilidadId',TrazabilidadController.getById)
+router.put('/:solicitudTramitesId/trazabilidad/:trazabilidadId',
+    validateTrazabilidadInput,
+    handleInputErrors,
+    TrazabilidadController.updateById)
+router.delete('/:solicitudTramitesId/trazabilidad/:trazabilidadId',TrazabilidadController.deleteById)
 
 
 

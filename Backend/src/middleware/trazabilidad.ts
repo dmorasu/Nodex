@@ -41,3 +41,16 @@ export const  validateTrazabilidadInput =async(req:Request,res:Response,next:Nex
 
 
 }
+
+export const  validateTrazabilidadId = async (req:Request, res:Response, next:NextFunction)=>{
+        await param('trazabilidadId').isInt().custom(value => value>0)
+            .withMessage('ID no valido')
+            .run(req)
+
+        let error = validationResult(req)
+        if(!error.isEmpty()){
+            return res.status(400).json({error:error.array()})
+        }
+        next()
+
+}

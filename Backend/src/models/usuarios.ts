@@ -19,7 +19,7 @@ class Usuarios extends Model{
 
      })
      
-     declare prefijo: string
+     declare contrasena: string
 
      @Column({
         type:DataType.STRING(100)

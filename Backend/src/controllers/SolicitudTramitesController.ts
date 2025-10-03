@@ -1,5 +1,10 @@
 import type {Request, Response} from 'express'
 import SolicitudTramites from '../models/solicitudTramites'
+import Trazabilidad from '../models/trazabilidad'
+import EstadosTramites from '../models/estadosTramites'
+import CuentaCobros from '../models/cuentaCobro'
+import Logistica from '../models/logistica'
+import Programacion from '../models/programacion'
 
 
 
@@ -48,7 +53,10 @@ export class SolicitudTramitesController{
 
 
      static getById = async (req:Request, res:Response)=>{
-        res.json(req.solicitudTramites)
+        const solicitudTramites =await SolicitudTramites.findByPk(req.solicitudTramites.id, {
+            include:[Trazabilidad,EstadosTramites,CuentaCobros,Logistica,Programacion]
+        })
+        res.json(solicitudTramites)
     }
 
      static updateById = async (req:Request, res:Response)=>{
