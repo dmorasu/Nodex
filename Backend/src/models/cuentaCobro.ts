@@ -47,7 +47,7 @@ class CuentaCobros extends Model{
          onDelete:'CASCADE'
 
       })
-     declare solicitudTramites:SolicitudTramites
+     declare solicitudTramitesId:SolicitudTramites
 
 }
 
