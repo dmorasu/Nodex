@@ -1,4 +1,4 @@
-import {Table, Column,DataType,HasMany,BelongsTo,ForeignKey, Model} from 'sequelize-typescript'
+import {Table, Column,DataType,HasMany,BelongsTo,ForeignKey, Model, Unique} from 'sequelize-typescript'
 import SolicitudTramites from './solicitudTramites'
 
 
@@ -12,7 +12,7 @@ class Usuarios extends Model{
 
      })
      
-     declare nombre: string
+     declare nombreUsuario: string
 
       @Column({
         type:DataType.STRING(100)
@@ -20,6 +20,15 @@ class Usuarios extends Model{
      })
      
      declare contrasena: string
+
+     @Unique(true)
+     @Column({
+        type:DataType.STRING(100)
+
+     })
+     
+     declare correoUsuario: string
+     
 
      @Column({
         type:DataType.STRING(100)

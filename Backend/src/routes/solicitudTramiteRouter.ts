@@ -28,7 +28,9 @@ router.param('programacionId',validateProgramacionId)
 router.param('cuentaCobroId',validateCuentaCobroId)
 
 
-//Rutas de Tramites 
+//--------------------------------------------Rutas de SolicitudTramites  ----------------------------------------------------------
+
+
 
 router.get('/', SolicitudTramitesController.getAll)
 router.post('/', 
@@ -41,10 +43,12 @@ router.get('/:solicitudTramitesId',
 router.put('/:solicitudTramitesId',
     validateSolicitudTramitesInput,
     SolicitudTramitesController.updateById)
-router.delete(':solicitudTramiteId', SolicitudTramitesController.deleteById)
+router.delete('/:solicitudTramitesId', SolicitudTramitesController.deleteById)
 
 
-//Rutas para Trazabilidad
+
+//--------------------------------------------Rutas para Trazabilidad --------------------------------------------------------------------
+
 
 
 router.post('/:solicitudTramitesId/trazabilidad',
@@ -60,7 +64,8 @@ router.delete('/:solicitudTramitesId/trazabilidad/:trazabilidadId',TrazabilidadC
 
 
 
-//Rutas para EstadosTramites
+//---------------------------------------------Rutas para EstadosTramites ----------------------------------------------------------------------
+
 
 router.post('/:solicitudTramitesId/estadosTramites',
     validateEstadosTramitesInput,
@@ -73,7 +78,10 @@ router.put('/:solicitudTramitesId/estadosTramites/:estadosTramitesId',
     EstadosTramitesController.updateById)
 router.delete('/:solicitudTramitesId/estadosTramites/:estadosTramitesId',EstadosTramitesController.deleteById)
 
-//Rutas para Logistica
+
+
+//------------------------------------------------- Rutas para Logistica -----------------------------------------------------------------------
+
 
 router.post('/:solicitudTramitesId/logistica',
     validateLogisticaInput,
@@ -87,7 +95,11 @@ router.put('/:solicitudTramitesId/logistica/:logisticaId',
 router.delete('/:solicitudTramitesId/logistica/:logisticaId',LogisticaController.deleteById)
 
 
-//Rutas para Programacion
+
+
+//--------------------------------------------------- Rutas para Programacion -------------------------------------------------------------------
+
+
 router.post('/:solicitudTramitesId/programacion',
     validateProgramacionInput,
     handleInputErrors,
@@ -99,12 +111,15 @@ router.put('/:solicitudTramitesId/programacion/:programacionId',
     ProgramacionController.updateById)
 router.delete('/:solicitudTramitesId/programacion/:programacionId',ProgramacionController.deleteById)
 
-//Rutas para Cuenta Cobro
+
+
+//--------------------------------------------------- Rutas para Cuenta Cobro -----------------------------------------------------------------------
+
 router.post('/:solicitudTramitesId/cuentaCobro',
     validateCuentaCobroInput,
     handleInputErrors,
     CuentaCobroController.create)
-router.get('/:solicitudTramitesId/cuentaCobro',CuentaCobroController.getById)
+router.get('/:solicitudTramitesId/cuentaCobro/:cuentaCobroId',CuentaCobroController.getById)
 router.put('/:solicitudTramitesId/cuentaCobro/:cuentaCobroId',
     validateCuentaCobroInput,
     handleInputErrors,

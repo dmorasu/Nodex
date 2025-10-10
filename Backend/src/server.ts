@@ -11,6 +11,7 @@ import tarifaRouter from "./routes/tarifaRouter"
 import tramitadorRouter from "./routes/tramitadorRouter" 
 import solicitudTramiteRouter from  "./routes/solicitudTramiteRouter"
 import estadosRouter from './routes/estadosRouter'
+import authRouter from './routes/authRouter'
 
 async function connectDB() {
     try {
@@ -49,5 +50,7 @@ app.use('/api/tramitador',tramitadorRouter)
 app.use('/api/solicitudTramites',solicitudTramiteRouter)
 
 app.use('/api/estados',estadosRouter)
+
+app.use('/api/auth',authRouter)
 
 export default app
