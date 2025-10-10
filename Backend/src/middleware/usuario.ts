@@ -52,8 +52,9 @@ export const  validateUsuarioExits= async(req:Request,res:Response,next:NextFunc
 }
 
 export const  validateUsuarioInput =async(req:Request,res:Response,next:NextFunction)=>{
-        await body('nombre').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
-        await body('prefijo').notEmpty().withMessage('Debe escribir un prefijo').run(req)
+        await body('nombreUsuario').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
+        await body('correoUsuario').notEmpty().withMessage('El correo no puede estar vacio').run(req)
+        
                // .isNumeric().withMessage('Debe escribir un prefijo'),  --> Validacion que sea un numero
                //.custom(value=> value > 0 ).withMessage('Presupuesto mayor a cero) --> Validacion numero positivo
         

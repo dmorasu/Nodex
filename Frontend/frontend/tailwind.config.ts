@@ -8,9 +8,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      
+      backgroundImage:{
+          "auth":"url('/grafico.png')"
+      },
+      backgroundSize:{
+        '30':'30rem'
+
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        /*background: "var(--background)",
+        foreground: "var(--foreground)",*/
+       
+
       },
     },
   },

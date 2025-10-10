@@ -1,12 +1,28 @@
 "use client"
 
+import { registrarUsuario } from "@/actions/crear-cuenta"
+import { useActionState } from "react"
+
+import { useFormState } from "react-dom"
+import ErrorMessage from "../ui/ErrorMessage"
+import SuccessMessage from "../ui/SuccessMessage"
+
 export default function RegisterForm() {
+  const [state,dispatch]=useFormState(registrarUsuario,{
+    errors:[],
+    success:''
+  })
+  
   return (
     <div>
       <form
     className="mt-14 space-y-5"
     noValidate
->
+    action={dispatch}
+
+>   {state.errors.map(error=><ErrorMessage>{error}</ErrorMessage>)}
+
+    {state.success && <SuccessMessage>{state.success}</SuccessMessage>}
     <div className="flex flex-col gap-2">
         <label
             className="font-bold text-2xl"
@@ -50,11 +66,11 @@ export default function RegisterForm() {
             className="font-bold text-2xl"
         >Repetir Contraseña</label>
         <input
-            id="password_confirmation"
+            id="confirmacion_contrasena"
             type="password"
             placeholder="Repite Contraseña"
             className="w-full border border-gray-300 p-3 rounded-lg"
-            name="password_confirmation"
+            name="confirmacion_contrasena"
         />
     </div>
 

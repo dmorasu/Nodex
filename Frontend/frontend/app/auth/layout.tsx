@@ -9,9 +9,9 @@ export default function RootLayout({
   return (
     <>  
         <div className=" lg:grid lg:grid-cols-2 lg:min-h-screen">
-            <div className=" bg-blue-600">
+            <div className="flex justify-center bg-blue-600 bg-auth bg-30 bg-no-repeat bg-left-bottom  ">
 
-                <div className="w-full flex justify-center items-center py-20">
+                <div className="w-full flex justify-center items-center py-100">
 
                     <Logo />
                 </div>
