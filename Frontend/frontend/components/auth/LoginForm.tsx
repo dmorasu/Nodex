@@ -1,38 +1,60 @@
-"use cliente"
+"use client"
+import { autenticacion } from "@/actions/iniciarSesion"
+import { useEffect } from "react"
+import { useFormState } from "react-dom"
+import { toast } from "react-toastify"
+
+
 
 
 export default function LoginForm() {
 
+    const[state,dispatch]= useFormState(autenticacion,{
+        errors:[]
+    })
+
+    useEffect(()=>{
+        if(state.errors){
+            state.errors.forEach(error=>{
+                toast.error(error)
+                
+            })
+        }
+
+    },[state])
+
     return (
         <>
             <form
+                action={dispatch}
                 className="mt-14 space-y-5"
                 noValidate
             >
                 <div className="flex flex-col gap-2">
                     <label
                         className="font-bold text-2xl"
-                    >Email</label>
+                    >Usuario</label>
 
                     <input
-                        id="email"
+                        id="correoUsuario"
                         type="email"
-                        placeholder="Email de Registro"
+                        placeholder="Correo Electronico"
                         className="w-full border border-gray-300 p-3 rounded-lg"
-                        name="email"
+                        name="correoUsuario"
                     />
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <label
                         className="font-bold text-2xl"
-                    >Password</label>
+                    >Contraseña</label>
 
                     <input
+                        id="contrasena"
                         type="password"
-                        placeholder="Password de Registro"
+                        placeholder="Contraseña"
                         className="w-full border border-gray-300 p-3 rounded-lg"
-                        name="password"
+                        name="contrasena"
                     />
                 </div>
 

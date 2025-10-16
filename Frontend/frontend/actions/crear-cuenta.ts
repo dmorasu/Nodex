@@ -1,6 +1,6 @@
 "use server";
 
-import { RegistroSchema, SuccessSchema } from "@/schemas";
+import { ErrorResponoseSchema, RegistroSchema, SuccessSchema } from "@/src/schemas";
 import { success } from "zod";
 type ActionStateType={
     errors:string[],
@@ -42,10 +42,23 @@ export async function registrarUsuario(prevSatate:ActionStateType,formData: Form
       
     }),
   });
+
   const json =await req.json()
+  if(req.status=== 409){
+      const error = ErrorResponoseSchema.parse(json)
+
+      return{
+        errors:[error.error],
+        success:''
+      }
+  }
+  
   const success = SuccessSchema.parse(json)
   return {
-    errors:prevSatate.errors,
+    errors:[],
     success:success
   }
+
+  
+
 }

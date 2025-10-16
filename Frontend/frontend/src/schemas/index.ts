@@ -18,4 +18,24 @@ export const RegistroSchema =z.object({
 
 })
 
-export const SuccessSchema =z.string().min(1,{message:'Valor no valido'})
+export const inicioSesionSchema = z.object({
+        correoUsuario: z.string()
+                .min(1, {message: 'El correo es Obligatorio'})
+                .email( {message: 'correo  no válido'}),
+        contrasena: z.string()
+                .min(1, {message: 'La contraseña no puede ir vacia'})
+})
+
+
+
+
+export const SuccessSchema =z.string()
+export const ErrorResponoseSchema =z.object({
+    error:z.string()
+})
+
+export const UserSchema = z.object({
+        id: z.number(),
+        nombreUsuario: z.string(),
+        correoUsuario: z.string().email()
+})

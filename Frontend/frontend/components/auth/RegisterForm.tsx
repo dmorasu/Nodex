@@ -1,28 +1,52 @@
 "use client"
 
 import { registrarUsuario } from "@/actions/crear-cuenta"
-import { useActionState } from "react"
+import { useActionState, useEffect, useRef } from "react"
 
 import { useFormState } from "react-dom"
 import ErrorMessage from "../ui/ErrorMessage"
 import SuccessMessage from "../ui/SuccessMessage"
+import { toast } from "react-toastify"
 
 export default function RegisterForm() {
+  const ref =useRef<HTMLFormElement>(null)
   const [state,dispatch]=useFormState(registrarUsuario,{
     errors:[],
     success:''
   })
+
+  useEffect(()=>{
+    if(state.success){
+        ref.current?.reset()
+    }
+
+  },[state])
+
+
+  useEffect(()=>{
+    if(state.errors){
+       state.errors.forEach(error =>{
+            toast.error(error)
+       })
+    }
+    if(state.success){
+            toast.success(state.success)
+    }
+
+  },[state])
+
   
   return (
     <div>
       <form
-    className="mt-14 space-y-5"
-    noValidate
-    action={dispatch}
+            ref={ref}
+            className="mt-14 space-y-5"
+            noValidate
+            action={dispatch}
 
->   {state.errors.map(error=><ErrorMessage>{error}</ErrorMessage>)}
+>   
 
-    {state.success && <SuccessMessage>{state.success}</SuccessMessage>}
+   
     <div className="flex flex-col gap-2">
         <label
             className="font-bold text-2xl"
