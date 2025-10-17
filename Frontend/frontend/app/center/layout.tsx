@@ -1,5 +1,7 @@
+import CenterMenu from "@/components/center/centerMenu";
 import LogoEncabezado from "@/components/ui/LogoEncabezado";
 import ToastNotificaciones from "@/components/ui/notificaciones";
+import { verificacionSesion } from "@/src/auth/dal";
 import Link from "next/link";
 
 export default async function CenterLayout({
@@ -7,6 +9,7 @@ export default async function CenterLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const {usuario}=await verificacionSesion()
   return (
     <>
       <header className='bg-blue-600/80 py-1'>
@@ -16,6 +19,9 @@ export default async function CenterLayout({
                 <LogoEncabezado />
             </Link>
           </div>
+          <CenterMenu
+              usuario={usuario}
+          />
         </div>
       </header>
       <section className='max-w-5xl mx-auto mt-20 p-3 py-10'>

@@ -1,6 +1,7 @@
 import express from 'express' 
 import colors from 'colors'
 import morgan from 'morgan'
+import cors from 'cors'
 import { db } from './config/db'
 import usuarioRouter from "./routes/usuarioRouter"
 import entidadRouter from "./routes/entidadRouter"
@@ -30,6 +31,11 @@ connectDB()
 const app = express()
 
 app.use(morgan('dev'))
+
+app.use(cors({
+  origin: 'http://localhost:3000',  // dominio del frontend
+  credentials: true,                // si usas cookies o auth headers
+}))
 
 app.use(express.json())
 

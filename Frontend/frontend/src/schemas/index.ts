@@ -39,3 +39,6 @@ export const UserSchema = z.object({
         nombreUsuario: z.string(),
         correoUsuario: z.string().email()
 })
+
+
+export type Usuario =z.infer<typeof UserSchema>

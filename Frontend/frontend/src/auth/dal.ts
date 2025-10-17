@@ -1,8 +1,12 @@
+import "server-only"
 
+import {cache} from 'react'
 import { redirect } from 'next/navigation'
 import {cookies} from 'next/headers'
 import { UserSchema } from '../schemas'
-export const verificacionSesion =async ()=>{
+
+
+export const verificacionSesion = cache(async ()=>{
     const token = cookies().get('TOKEN')?.value
     if(!token){
         redirect('/auth/login')
@@ -28,4 +32,4 @@ export const verificacionSesion =async ()=>{
     }
 
 
-}
+})
