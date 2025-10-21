@@ -1,4 +1,4 @@
-import CenterMenu from "@/components/center/centerMenu";
+import CenterMenu from "@/components/menuCenter/centerMenu";
 import LogoEncabezado from "@/components/ui/LogoEncabezado";
 import ToastNotificaciones from "@/components/ui/notificaciones";
 import { verificacionSesion } from "@/src/auth/dal";

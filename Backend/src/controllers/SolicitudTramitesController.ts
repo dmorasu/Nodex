@@ -5,6 +5,8 @@ import EstadosTramites from '../models/estadosTramites'
 import CuentaCobros from '../models/cuentaCobro'
 import Logistica from '../models/logistica'
 import Programacion from '../models/programacion'
+import Clientes from '../models/clientes'
+import Municipios from '../models/municipios'
 
 
 
@@ -24,6 +26,18 @@ export class SolicitudTramitesController{
                     order:[
                         ['createdAt','DESC']
                     ],
+                    include:[
+                        {   
+                            model:Clientes,
+                            attributes:['id','nombreCliente'],
+                        
+                        },
+                        {
+                            model:Municipios,
+                            attributes:['id','nombreMunicipio']
+                        }
+
+                    ]
 
                 })
                 res.json(solicitudTramites)

@@ -36,7 +36,7 @@ export const  validateClienteExits= async(req:Request,res:Response,next:NextFunc
 export const  validateClienteInput =async(req:Request,res:Response,next:NextFunction)=>{
         await body('nombreCliente').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
         await body('identificacion').notEmpty().withMessage('Debe ingresar una identificacion').run(req)
-        await body('telefono').notEmpty().withMessage('Debe ingresar un numero telefonico').run(req)
+        await body('telefonoCliente').notEmpty().withMessage('Debe ingresar un numero telefonico').run(req)
         
         
     next()

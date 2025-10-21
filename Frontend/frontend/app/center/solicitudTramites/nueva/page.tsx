@@ -15,7 +15,7 @@ export default function CreateBudgetPage() {
         </div>
         <Link
           href={'/center'}
-          className='bg-orange-500 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center'
+          className='bg-gray-400 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center'
         >
           Volver
         </Link>

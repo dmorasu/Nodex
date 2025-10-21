@@ -36,9 +36,8 @@ export const  validateSolicitudTramiteExits= async(req:Request,res:Response,next
 }
 
 export const  validateSolicitudTramitesInput =async(req:Request,res:Response,next:NextFunction)=>{
-        await body('fechaAsignacion').notEmpty().withMessage('la fecha de asignacion  no puede estar vacia').run(req)
-        await body('fechaDiligenciamiento').notEmpty().withMessage('la fecha de Diligenciamiento  no puede estar vacia').run(req)
-        await body('fechaEntregaResultado').notEmpty().withMessage('la fecha de entrega de resultado  no puede estar vacia').run(req)
+        
+        await body('direccionTramite').notEmpty().withMessage('La direccion de diligencia  no puede estar vacia').run(req)
         await body('detalleSolicitud').notEmpty().withMessage('Debe ingresar un detalle a la Solicitud').run(req)
         
         

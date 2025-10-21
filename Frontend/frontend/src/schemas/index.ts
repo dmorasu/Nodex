@@ -26,6 +26,19 @@ export const inicioSesionSchema = z.object({
                 .min(1, {message: 'La contraseña no puede ir vacia'})
 })
 
+export const CrearSolicitudSchema = z.object({
+        detalleSolicitud: z.string()
+                .min(1, {message: 'El detalle de la solicitud no puede estar vacio'}),
+       /* amount: z.coerce. --> Me sirve para convertir de string a int para validacion 
+                number({message: 'Cantidad no válida'})*/
+        direccionTramite: z.string()
+                .min(1, {message: 'La direccion de Diligencia no puede estar vacia'}),
+        municipiosId:z.string()
+        .min(1,{message:'El municipio no puede estar vacio'}),
+        clienteId:z.string()
+        .min(1,{message:'El cliente no puede estar vacio'})
+})
+
 
 
 
@@ -40,5 +53,32 @@ export const UserSchema = z.object({
         correoUsuario: z.string().email()
 })
 
+export const ClienteSchema = z.object({
+        id:z.number(),
+        nombreCliente:z.string()
+})
+
+export const MunicipioSchema = z.object({
+        id:z.number(),
+        nombreMunicipio:z.string()
+})
+
+
+export const SolicitudAPIRespuestaSchema = z.object({
+        id:z.number(),
+        detalleSolicitud: z.string(),
+        direccionTramite: z.string().nullable().optional(),
+        createdAt:z.string(),
+        updatedAt:z.string(),
+        clientes:ClienteSchema.optional(),
+        municipios:MunicipioSchema.optional()
+        
+        
+        //userId: z.number(),
+       
+})
+
+export const SolicitudesAPIRespuestaSchema =z.array(SolicitudAPIRespuestaSchema)
 
 export type Usuario =z.infer<typeof UserSchema>
+export type SolicitudTramites=z.infer<typeof SolicitudAPIRespuestaSchema>

@@ -11,47 +11,46 @@ import {
   DialogPanel
 } from '@headlessui/react'
 
-interface Municipio {
+interface Clientes {
   id: number
-  nombreMunicipio: string
-  departamento: string
-  regional: string
+  nombreCliente: string
+  
 }
 
 interface Props {
-  onChange?: (municipioId: number | null) => void // 👈 Nueva prop
+  onChange?: (clienteId: number | null) => void // 👈 Nueva prop
   name?: string // 👈 opcional: para enviar en form
 }
 
-export default function MunicipiosComboBox({ onChange, name = 'municipioId' }: Props) {
-  const [municipios, setMunicipios] = useState<Municipio[]>([])
-  const [selectedMunicipio, setSelectedMunicipio] = useState<Municipio | null>(null)
+export default function ClientesComboBox({ onChange, name = 'clienteId' }: Props) {
+  const [clientes, setClientes] = useState<Clientes[]>([])
+  const [selectedClientes, setSelectedClientes] = useState<Clientes | null>(null)
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const fetchMunicipios = async () => {
+    const fetchClientes = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/municipios`)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clientes`)
         const data = await response.json()
-        setMunicipios(data)
+        setClientes(data)
       } catch (error) {
-        console.error('Error al cargar municipios:', error)
+        console.error('Error al cargar Clientes:', error)
       }
     }
 
-    fetchMunicipios()
+    fetchClientes()
   }, [])
 
   const filteredMunicipios =
     query === ''
-      ? municipios
-      : municipios.filter((m) =>
-          m.nombreMunicipio.toLowerCase().includes(query.toLowerCase())
+      ? clientes
+      : clientes.filter((m) =>
+          m.nombreCliente.toLowerCase().includes(query.toLowerCase())
         )
 
-  const handleSelect = (municipio: Municipio | null) => {
-    setSelectedMunicipio(municipio)
+  const handleSelect = (municipio: Clientes | null) => {
+    setSelectedClientes(municipio)
     setOpen(false)
     setQuery('')
     onChange?.(municipio ? municipio.id : null) // 👈 avisamos al padre
@@ -64,32 +63,32 @@ export default function MunicipiosComboBox({ onChange, name = 'municipioId' }: P
         onClick={() => setOpen(true)}
         className="w-full  p-3 font-bold border border-pra-300 bg-white text-orange-500 rounded-xl"
       >
-        {selectedMunicipio ? selectedMunicipio.nombreMunicipio : 'Seleccionar municipio...'}
+        {selectedClientes ? selectedClientes.nombreCliente : 'Buscar Cliente...'}
       </button>
 
       {/* 🔒 input oculto que se envía con el form */}
-      <input type="hidden" name={name} value={selectedMunicipio?.id ?? ''} />
+      <input type="hidden" name={name} value={selectedClientes?.id ?? ''} />
 
       <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="w-full max-w-lg rounded-2xl bg-white p-4 shadow-lg shadow-blue-400">
-            <h2 className="text-gray-700 mb-2">Selecciona un municipio</h2>
+            <h2 className="text-gray-700 mb-2">Buscar Cliente</h2>
 
-            <Combobox value={selectedMunicipio} onChange={handleSelect}>
+            <Combobox value={selectedClientes} onChange={handleSelect}>
               <ComboboxInput
                 aria-label="Buscar municipio"
-                displayValue={(m: Municipio | null) => m?.nombreMunicipio ?? ''}
+                displayValue={(m: Clientes | null) => m?.nombreCliente ?? ''}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full border p-2 rounded mb-2"
-                placeholder="Buscar municipio..."
+                placeholder="Buscar cliente..."
               />
 
               <div className="max-h-80 overflow-y-auto border rounded">
                 <ComboboxOptions>
                   {filteredMunicipios.length === 0 ? (
                     <p className="p-2 text-gray-500 text-sm text-center">
-                      No se encontraron municipios
+                      No se encontraron Clientes
                     </p>
                   ) : (
                     filteredMunicipios.map((m) => (
@@ -98,7 +97,7 @@ export default function MunicipiosComboBox({ onChange, name = 'municipioId' }: P
                         value={m}
                         className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                       >
-                        {m.nombreMunicipio}
+                        {m.nombreCliente}
                       </ComboboxOption>
                     ))
                   )}
