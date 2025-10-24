@@ -25,7 +25,7 @@ export default function SolicitudTramiteMenu({solicitudId}:{solicitudId:Solicitu
           <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
             <MenuItem>
               <Link
-                href={`/center/solicitudesTramites/${solicitudId}`}
+                href={`/center/solicitudTramites/${solicitudId}`}
                 className='block px-3 py-1 text-sm leading-6 text-gray-900'
               >
                 Ver Trámite

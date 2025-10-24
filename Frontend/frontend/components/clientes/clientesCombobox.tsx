@@ -20,9 +20,10 @@ interface Clientes {
 interface Props {
   onChange?: (clienteId: number | null) => void // 👈 Nueva prop
   name?: string // 👈 opcional: para enviar en form
+  defaultValue?:string
 }
 
-export default function ClientesComboBox({ onChange, name = 'clienteId' }: Props) {
+export default function ClientesComboBox({ onChange, name = 'clienteId',defaultValue }: Props) {
   const [clientes, setClientes] = useState<Clientes[]>([])
   const [selectedClientes, setSelectedClientes] = useState<Clientes | null>(null)
   const [query, setQuery] = useState('')
@@ -34,26 +35,33 @@ export default function ClientesComboBox({ onChange, name = 'clienteId' }: Props
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clientes`)
         const data = await response.json()
         setClientes(data)
+
+        if (defaultValue) {
+        const clienteInicial = data.find((m: Clientes) => m.nombreCliente === defaultValue)
+        if (clienteInicial) {
+          setSelectedClientes(clienteInicial)
+        }
+      }
       } catch (error) {
         console.error('Error al cargar Clientes:', error)
       }
     }
 
     fetchClientes()
-  }, [])
+  }, [defaultValue])
 
-  const filteredMunicipios =
+  const filteredClientes =
     query === ''
       ? clientes
       : clientes.filter((m) =>
           m.nombreCliente.toLowerCase().includes(query.toLowerCase())
         )
 
-  const handleSelect = (municipio: Clientes | null) => {
-    setSelectedClientes(municipio)
+  const handleSelect = (cliente: Clientes | null) => {
+    setSelectedClientes(cliente)
     setOpen(false)
     setQuery('')
-    onChange?.(municipio ? municipio.id : null) // 👈 avisamos al padre
+    onChange?.(cliente ? cliente.id : null) // 👈 avisamos al padre
   }
 
   return (
@@ -63,7 +71,7 @@ export default function ClientesComboBox({ onChange, name = 'clienteId' }: Props
         onClick={() => setOpen(true)}
         className="w-full  p-3 font-bold border border-pra-300 bg-white text-orange-500 rounded-xl"
       >
-        {selectedClientes ? selectedClientes.nombreCliente : 'Buscar Cliente...'}
+        {selectedClientes ? selectedClientes.nombreCliente : 'Seleccionar Cliente...'}
       </button>
 
       {/* 🔒 input oculto que se envía con el form */}
@@ -86,12 +94,12 @@ export default function ClientesComboBox({ onChange, name = 'clienteId' }: Props
 
               <div className="max-h-80 overflow-y-auto border rounded">
                 <ComboboxOptions>
-                  {filteredMunicipios.length === 0 ? (
+                  {filteredClientes.length === 0 ? (
                     <p className="p-2 text-gray-500 text-sm text-center">
                       No se encontraron Clientes
                     </p>
                   ) : (
-                    filteredMunicipios.map((m) => (
+                    filteredClientes.map((m) => (
                       <ComboboxOption
                         key={m.id}
                         value={m}

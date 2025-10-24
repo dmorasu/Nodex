@@ -21,27 +21,37 @@ interface Municipio {
 interface Props {
   onChange?: (municipioId: number | null) => void // 👈 Nueva prop
   name?: string // 👈 opcional: para enviar en form
+  defaultValue?:string
 }
 
-export default function MunicipiosComboBox({ onChange, name = 'municipioId' }: Props) {
+export default function MunicipiosComboBox({ onChange, name = 'municipioId' ,defaultValue}: Props) {
   const [municipios, setMunicipios] = useState<Municipio[]>([])
   const [selectedMunicipio, setSelectedMunicipio] = useState<Municipio | null>(null)
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const fetchMunicipios = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/municipios`)
-        const data = await response.json()
-        setMunicipios(data)
-      } catch (error) {
-        console.error('Error al cargar municipios:', error)
-      }
-    }
+    
+const fetchMunicipios = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/municipios`)
+      const data = await response.json()
+      setMunicipios(data)
 
-    fetchMunicipios()
-  }, [])
+      if (defaultValue) {
+        const municipioInicial = data.find((m: Municipio) => m.nombreMunicipio === defaultValue)
+        if (municipioInicial) {
+          setSelectedMunicipio(municipioInicial)
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar municipios:', error)
+    }
+  }
+
+  fetchMunicipios()
+}, [defaultValue])
+
 
   const filteredMunicipios =
     query === ''

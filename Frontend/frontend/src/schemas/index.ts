@@ -67,7 +67,7 @@ export const MunicipioSchema = z.object({
 export const SolicitudAPIRespuestaSchema = z.object({
         id:z.number(),
         detalleSolicitud: z.string(),
-        direccionTramite: z.string().nullable().optional(),
+        direccionTramite: z.string(),
         createdAt:z.string(),
         updatedAt:z.string(),
         clientes:ClienteSchema.optional(),
@@ -77,8 +77,16 @@ export const SolicitudAPIRespuestaSchema = z.object({
         //userId: z.number(),
        
 })
+ .passthrough()
+ export const SolicitudesPaginadasSchema = z.object({
+  data: z.array(SolicitudAPIRespuestaSchema),
+  total: z.number(),
+  totalPages: z.number(),
+  currentPage: z.number(),
+});
 
 export const SolicitudesAPIRespuestaSchema =z.array(SolicitudAPIRespuestaSchema)
 
 export type Usuario =z.infer<typeof UserSchema>
 export type SolicitudTramites=z.infer<typeof SolicitudAPIRespuestaSchema>
+export type SolicitudType = z.infer<typeof SolicitudAPIRespuestaSchema>

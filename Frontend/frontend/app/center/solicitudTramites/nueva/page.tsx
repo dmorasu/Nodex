@@ -1,7 +1,7 @@
 import CrearSolicitudesForm from "@/components/solicitudTramites/CrearSolicitudes";
 import Link from "next/link";
 
-export default function CreateBudgetPage() {
+export default function CrearSolicitudesPage() {
   return (
     <>
       <div className='flex flex-col-reverse md:flex-row md:justify-between items-center'>
