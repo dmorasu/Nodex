@@ -29,7 +29,7 @@ export default function CenterMenu({usuario}:{usuario:Usuario}) {
             <p className="text-center"> Hola: <span className="text-orange-600 font-semibold">{usuario.nombreUsuario.split(' ')[0]}</span>
 </p>
             <Link
-                href='/admin/profile/settings'
+                href='/center'
                 className='block p-2 hover:text-orange-500'
             >Tramites</Link>
             <Link

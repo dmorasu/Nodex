@@ -2,6 +2,7 @@ import { SolicitudesAPIRespuestaSchema } from "@/src/schemas"
 import CenterPageClient from "@/components/solicitudTramites/CenterPageClient"
 import { Metadata } from "next"
 
+
 export const metadata: Metadata = {
   title: "Nodex - Inicio",
 }
@@ -12,8 +13,11 @@ async function getAllSolicitudes() {
   const req = await fetch(url, { cache: "no-store" })
   const json = await req.json()
   const solicitudes = SolicitudesAPIRespuestaSchema.parse(json)
+  console.log(solicitudes[0].estadosTramites)
   return solicitudes
 }
+
+
 
 export default async function CenterPage() {
   const solicitudes = await getAllSolicitudes()

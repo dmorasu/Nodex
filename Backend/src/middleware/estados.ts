@@ -34,7 +34,7 @@ export const  validateEstadosExits= async(req:Request,res:Response,next:NextFunc
 }
 
 export const  validateEstadosInput =async(req:Request,res:Response,next:NextFunction)=>{
-        await body('nombreEstados').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
+        await body('nombreEstado').notEmpty().withMessage('El Nombre no puede estar vacio').run(req)
        
         
         

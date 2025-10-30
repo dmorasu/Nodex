@@ -8,6 +8,7 @@ import Programacion from '../models/programacion'
 import Clientes from '../models/clientes'
 import Municipios from '../models/municipios'
 import {Op} from 'sequelize'
+import Estados from '../models/estados'
 
 
 
@@ -84,35 +85,40 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
     }
   }
     
- static getAll = async (req:Request, res:Response)=>{
-         try {
-                const solicitudTramites=  await SolicitudTramites.findAll({
-                    order:[
-                        ['createdAt','DESC']
-                    ],
-                    include:[
-                        {   
-                            model:Clientes,
-                            attributes:['id','nombreCliente'],
-                        
-                        },
-                        {
-                            model:Municipios,
-                            attributes:['id','nombreMunicipio']
-                        }
+static getAll = async (req: Request, res: Response) => {
+  try {
+    const solicitudTramites = await SolicitudTramites.findAll({
+      order: [['createdAt', 'DESC']],
+      include: [
+        {
+          model: EstadosTramites,
+          separate: true, // 👈 Sequelize hace subconsultas por solicitud
+          limit: 1,       // 👈 solo el último estado
+          order: [['createdAt', 'DESC']],
+          include: [
+            {
+              model: Estados,
+              attributes: ['nombreEstado'], // 👈 solo queremos el nombre del estado
+            },
+          ],
+        },
+        {
+          model: Clientes,
+          attributes: ['id', 'nombreCliente'],
+        },
+        {
+          model: Municipios,
+          attributes: ['id', 'nombreMunicipio'],
+        },
+      ],
+    });
 
-                    ]
-
-                })
-                res.json(solicitudTramites)
-            
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({error:'Hubo un error'})
-            
-        }
-
-    }
+    res.json(solicitudTramites);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Hubo un error al obtener las solicitudes' });
+  }
+};
 
      static create= async (req:Request, res:Response)=>{
 
@@ -132,7 +138,20 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
 
      static getById = async (req:Request, res:Response)=>{
         const solicitudTramites =await SolicitudTramites.findByPk(req.solicitudTramites.id, {
-            include:[Clientes,Municipios,Trazabilidad,EstadosTramites,CuentaCobros,Logistica,Programacion]
+            include:[ Clientes,
+                      Municipios,
+                      Trazabilidad,
+                      { 
+                        model:EstadosTramites,
+                          include:[{
+                            model:Estados, attributes:["nombreEstado"]}],
+                      
+                      limit:1,
+                      order:[["createdAt","DESC"]]
+                      },
+                      CuentaCobros,
+                      Logistica,
+                      Programacion]
         })
         res.json(solicitudTramites)
     }

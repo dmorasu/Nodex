@@ -1,7 +1,9 @@
 import EditarSolicitudTramiteForm from "@/components/solicitudTramites/EditarSolicitudTramiteForm"
 import { SolicitudAPIRespuestaSchema } from "@/src/schemas"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+
+
+
 
 
 
@@ -19,6 +21,14 @@ const getSolicitudTramites = async (solicitudTramiteId:string)=>{
   return solicitud
 }
 
+// // export async function  generateMetadata({params}:{params:{id:string}}) {
+// //   const solicitud = await getSolicitudTramites(params.id)
+// //   console.log(solicitud)
+// //   return {
+    
+// //     title:solicitud.id
+// //   }
+// }
 export default  async function EditarSolicitudTramitePage({params}:{params:{id:string}}) {
   const id= params.id
 
@@ -32,7 +42,7 @@ export default  async function EditarSolicitudTramitePage({params}:{params:{id:s
             Editar Solicitud de Trámite: {solicitud.id}
           </h1>
           <p className="text-xl font-bold">Modifique los datos de la {''}
-            <span className="text-amber-500">Solicitud:</span>
+            <span className="text-amber-500">Solicitud:{solicitud.clientes?.nombreCliente}</span>
           </p>
         </div>
         <Link

@@ -4,8 +4,11 @@ import Link from "next/link"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { SolicitudTramites } from "@/src/schemas"
+import { useRouter } from "next/navigation"
+
 
 export default function SolicitudTramiteMenu({solicitudId}:{solicitudId:SolicitudTramites['id']}) {
+  const router =useRouter()
   return (
     <>
       <Menu as="div" className="relative flex-none">
@@ -34,19 +37,20 @@ export default function SolicitudTramiteMenu({solicitudId}:{solicitudId:Solicitu
             <MenuItem>
               <Link
                 href={`/center/solicitudTramites/${solicitudId}/edit`}
-                className='block px-3 py-1 text-sm leading-6 text-gray-900'
+                className='block px-3 py-1 text-sm leading-6 text-sky-500 font-semibold hover:text-red-500'
               >
                 Editar 
               </Link>
             </MenuItem>
+            
 
             <MenuItem>
               <button
                 type='button'
-                className='block px-3 py-1 text-sm leading-6 text-red-500'
-                onClick={ () => {} }
+                className='block px-3 py-1 text-sm leading-6 text-red-500 font-semibold'
+                onClick={ () => router.push(`?eliminarSolicitudTramiteId=${solicitudId}`) }
               >
-                Eliminar Presupuesto
+                Eliminar 
               </button>
             </MenuItem>
           </MenuItems>

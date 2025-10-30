@@ -73,6 +73,8 @@ router.post('/:solicitudTramitesId/estadosTramites',
     handleInputErrors,
     EstadosTramitesController.create)
 router.get('/:solicitudTramitesId/estadosTramites/:estadosTramitesId',EstadosTramitesController.getById)
+router.get('/estadosTramites',EstadosTramitesController.getAll
+)
 router.put('/:solicitudTramitesId/estadosTramites/:estadosTramitesId',
     validateEstadosTramitesInput,
     handleInputErrors,

@@ -1,5 +1,11 @@
 import CrearSolicitudesForm from "@/components/solicitudTramites/CrearSolicitudes";
 import Link from "next/link";
+import {Metadata} from 'next'
+
+export const metadata :Metadata={
+  title:'Nodex - Centro Admin',
+  description: 'Nodex - Centro Admin'
+}
 
 export default function CrearSolicitudesPage() {
   return (

@@ -5,6 +5,8 @@ import { useState } from "react"
 import SolicitudTramiteMenu from "@/components/solicitudTramites/MenuSolicitudTramites"
 import { formatoFecha } from "@/src/ultis"
 import { SolicitudTramites } from "@/src/schemas"
+import EliminarSolicitudTramiteModal from "./EliminarSolicitudTramiteModal"
+import clsx from "clsx"
 
 interface Props {
   solicitudes: SolicitudTramites[]
@@ -14,6 +16,7 @@ export default function CenterPageClient({ solicitudes }: Props) {
   const [busqueda, setBusqueda] = useState("")
   const [paginaActual, setPaginaActual] = useState(1)
   const itemsPorPagina = 6 // 🔹 Puedes ajustar este valor
+ 
 
   // 🔍 Filtrado inteligente
   const solicitudesFiltradas = solicitudes.filter((solicitud) => {
@@ -40,6 +43,7 @@ export default function CenterPageClient({ solicitudes }: Props) {
       window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }
+  
 
   return (
     <>
@@ -83,20 +87,28 @@ export default function CenterPageClient({ solicitudes }: Props) {
             className="divide-y divide-gray-300 border shadow-lg mt-4 bg-white p-4 shadow-blue-400 rounded-xl"
           >
             {solicitudesPaginadas.map((solicitud) => (
+              
               <li
                 key={solicitud.id}
                 className="flex justify-between gap-x-6 p-5 hover:bg-gray-50 transition"
               >
+                
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto space-y-2">
+                    
                     <p className="text-sm font-semibold leading-6 text-gray-900">
                       <Link
                         href={`/center/solicitudTramites/${solicitud.id}`}
                         className="cursor-pointer hover:underline text-lg font-bold"
                       >
                         <span className="text-sky-500">ST</span>: {solicitud.id}
+                        
+                        
+ 
+                        
                       </Link>
                     </p>
+                    
 
                     <p className="text-sm font-semibold leading-6 text-gray-900">
                       <span className="text-sky-500">Cliente:</span>{" "}
@@ -124,12 +136,37 @@ export default function CenterPageClient({ solicitudes }: Props) {
                   </div>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-x-6">
+                <div className="flex shrink-0 flex-col items-end gap-y-8">
+                <div>
+                  <div
+                    className={clsx(
+                      "p-2 rounded-lg font-bold w-full md:w-auto text-center",
+                      {
+                        "bg-red-400 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Sin Iniciar",
+                        "bg-amber-400 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "En Curso",
+                        "bg-green-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Finalizado",
+                        "bg-blue-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Reprogramado",
+                        "bg-orange-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Desistido",
+                        "bg-purple-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Suspendido",
+                        "bg-gray-400 text-white": !["Sin Iniciar", "En Curso", "Finalizado", "Reprogramado","Desistido","Suspendido"].includes(
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? ""
+                        ),
+                      }
+                    )}
+                  >
+                    <span>
+                      {solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
+                    </span>
+                  </div>
+                </div>
+
                   <SolicitudTramiteMenu solicitudId={solicitud.id} />
                 </div>
               </li>
             ))}
+            <EliminarSolicitudTramiteModal />
           </ul>
+          
 
           {/* 🔹 Controles de paginación */}
           <div className="flex justify-center items-center gap-3 mt-6">

@@ -39,7 +39,7 @@ export const CrearSolicitudSchema = z.object({
         .min(1,{message:'El cliente no puede estar vacio'})
 })
 
-
+export const ContrasenaValidacionSchema =z.string().min(1,{message:'Ingrese una contraseña'})
 
 
 export const SuccessSchema =z.string()
@@ -64,6 +64,22 @@ export const MunicipioSchema = z.object({
 })
 
 
+export const EstadosSchema=z.object({
+        id:z.number(),
+        nombreEstado:z.string()
+})
+
+export const estadosTramites=z.object({
+        id:z.number(),
+        estado:z.object({
+                nombreEstado:z.string()
+        })
+        
+
+        
+
+})
+
 export const SolicitudAPIRespuestaSchema = z.object({
         id:z.number(),
         detalleSolicitud: z.string(),
@@ -71,7 +87,8 @@ export const SolicitudAPIRespuestaSchema = z.object({
         createdAt:z.string(),
         updatedAt:z.string(),
         clientes:ClienteSchema.optional(),
-        municipios:MunicipioSchema.optional()
+        municipios:MunicipioSchema.optional(),
+        estadosTramites:z.array(estadosTramites).optional()
         
         
         //userId: z.number(),
@@ -83,10 +100,19 @@ export const SolicitudAPIRespuestaSchema = z.object({
   total: z.number(),
   totalPages: z.number(),
   currentPage: z.number(),
-});
+}) .passthrough();
+
+export const EstadoTramitesSchema = z.object({
+        estadoId:z.coerce.number().
+        min(1,{message:"Debe selecionar un Estado"}),
+        
+        
+}
+
+)
 
 export const SolicitudesAPIRespuestaSchema =z.array(SolicitudAPIRespuestaSchema)
 
 export type Usuario =z.infer<typeof UserSchema>
 export type SolicitudTramites=z.infer<typeof SolicitudAPIRespuestaSchema>
-export type SolicitudType = z.infer<typeof SolicitudAPIRespuestaSchema>
+export type SolicitudType = z.infer<typeof SolicitudAPIRespuestaSchema> 
