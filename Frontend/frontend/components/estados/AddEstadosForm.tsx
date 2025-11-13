@@ -33,13 +33,13 @@ export default function AddExpenseForm({closeModal}:{closeModal:()=>void}) {
     <>
       <DialogTitle
         as="h3"
-        className="font-black text-4xl text-purple-950 my-5"
+        className="font-black text-4xl text-sky-400 my-5"
       >
         Agregar Estado
       </DialogTitle>
 
       <p className="text-xl font-bold">Llena el formulario y registre un {''}
-        <span className="text-amber-500">Estado</span>
+        <span className="text-sky-400">Estado</span>
       </p>
       {state.errors.map(error=><ErrorMessage key={error}>{error}</ErrorMessage>)}
       <form
@@ -52,7 +52,7 @@ export default function AddExpenseForm({closeModal}:{closeModal:()=>void}) {
        </div>
         <input
           type="submit"
-          className="bg-amber-500 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"
+          className="bg-sky-400 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"
           value='Cambiar Estado'
         />
       </form>

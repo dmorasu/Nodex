@@ -1,130 +1,111 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-  Dialog,
-  DialogBackdrop,
-  DialogPanel
-} from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogPanel, Combobox, ComboboxInput, ComboboxOption } from '@headlessui/react'
+import { useMunicipiosSearch } from '@/hooks/useMunicipiosSearch'
 
 interface Municipio {
   id: number
   nombreMunicipio: string
   departamento: string
-  regional: string
 }
 
 interface Props {
-  onChange?: (municipioId: number | null) => void // 👈 Nueva prop
-  name?: string // 👈 opcional: para enviar en form
-  defaultValue?:string
+  onChange?: (value: number | null) => void
+  defaultValue?: number
+  name?: string
 }
 
-export default function MunicipiosComboBox({ onChange, name = 'municipioId' ,defaultValue}: Props) {
-  const [municipios, setMunicipios] = useState<Municipio[]>([])
-  const [selectedMunicipio, setSelectedMunicipio] = useState<Municipio | null>(null)
-  const [query, setQuery] = useState('')
+export default function MunicipiosModalSelect({ onChange, defaultValue, name = 'municipioId' }: Props) {
+  const { search, setSearch, results, loading } = useMunicipiosSearch()
+  const [selected, setSelected] = useState<Municipio | null>(null)
   const [open, setOpen] = useState(false)
 
+  // cargar defaultValue
   useEffect(() => {
-    
-const fetchMunicipios = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/municipios`)
-      const data = await response.json()
-      setMunicipios(data)
-
-      if (defaultValue) {
-        const municipioInicial = data.find((m: Municipio) => m.nombreMunicipio === defaultValue)
-        if (municipioInicial) {
-          setSelectedMunicipio(municipioInicial)
-        }
-      }
-    } catch (error) {
-      console.error('Error al cargar municipios:', error)
+    const loadDefault = async () => {
+      if (!defaultValue) return
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/municipios/${defaultValue}`)
+      const data = await res.json()
+      setSelected(data)
     }
-  }
+    loadDefault()
+  }, [defaultValue])
 
-  fetchMunicipios()
-}, [defaultValue])
-
-
-  const filteredMunicipios =
-    query === ''
-      ? municipios
-      : municipios.filter((m) =>
-          m.nombreMunicipio.toLowerCase().includes(query.toLowerCase())
-        )
-
-  const handleSelect = (municipio: Municipio | null) => {
-    setSelectedMunicipio(municipio)
-    setOpen(false)
-    setQuery('')
-    onChange?.(municipio ? municipio.id : null) // 👈 avisamos al padre
+  const selectMunicipio = (m: Municipio | null) => {
+    setSelected(m)
+    onChange?.(m ? m.id : null)
+    setSearch('')
+    setOpen(false) // cerrar modal
   }
 
   return (
-    <div>
-      <button
-        type="button"
+    <div className="w-full">
+      
+      {/* BOTÓN */}
+      <button 
+        type="button" 
         onClick={() => setOpen(true)}
-        className="w-full  p-3 font-bold border border-pra-300 bg-white text-orange-500 rounded-xl"
+        className="w-full px-4 py-3 rounded-lg border bg-white text-gray-700 font-medium"
       >
-        {selectedMunicipio ? selectedMunicipio.nombreMunicipio : 'Seleccionar municipio...'}
+        {selected ? selected.nombreMunicipio : "Seleccionar municipio"}
       </button>
 
-      {/* 🔒 input oculto que se envía con el form */}
-      <input type="hidden" name={name} value={selectedMunicipio?.id ?? ''} />
+      <input type="hidden" name={name} value={selected?.id ?? ''} />
 
+      {/* MODAL */}
       <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
-        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <DialogBackdrop className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+        
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-lg rounded-2xl bg-white p-4 shadow-lg shadow-blue-400">
-            <h2 className="text-gray-700 mb-2">Selecciona un municipio</h2>
+          <DialogPanel className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-5">
 
-            <Combobox value={selectedMunicipio} onChange={handleSelect}>
+            <h2 className="text-lg font-semibold mb-3 text-gray-800">
+              Seleccionar municipio
+            </h2>
+
+            <Combobox value={selected} onChange={selectMunicipio}>
+              
               <ComboboxInput
-                aria-label="Buscar municipio"
-                displayValue={(m: Municipio | null) => m?.nombreMunicipio ?? ''}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full border p-2 rounded mb-2"
+                className="w-full border p-3 rounded-lg mb-2"
                 placeholder="Buscar municipio..."
+                onChange={(e) => setSearch(e.target.value)}
+                displayValue={(m: Municipio) => m?.nombreMunicipio ?? ''}
               />
 
-              <div className="max-h-80 overflow-y-auto border rounded">
-                <ComboboxOptions>
-                  {filteredMunicipios.length === 0 ? (
-                    <p className="p-2 text-gray-500 text-sm text-center">
-                      No se encontraron municipios
-                    </p>
-                  ) : (
-                    filteredMunicipios.map((m) => (
-                      <ComboboxOption
-                        key={m.id}
-                        value={m}
-                        className="px-4 py-2 cursor-pointer hover:bg-blue-100"
-                      >
-                        {m.nombreMunicipio}
-                      </ComboboxOption>
-                    ))
+              {/* LISTA DE RESULTADOS */}
+              {search.length >= 2 && (
+                <div className="border rounded-lg max-h-80 overflow-y-auto shadow-inner">
+                  {loading && (
+                    <div className="p-3 text-gray-500 text-sm">Buscando...</div>
                   )}
-                </ComboboxOptions>
-              </div>
 
-              <div className="flex justify-end mt-3">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="bg-blue-500 hover:bg-orange-500 text-white px-4 py-1 rounded"
-                >
-                  Cerrar
-                </button>
-              </div>
+                  {!loading && results.length === 0 && (
+                    <div className="p-3 text-gray-500 text-sm">No se encontraron municipios</div>
+                  )}
+
+                  {!loading && results.map((m) => (
+                    <ComboboxOption
+                      key={m.id}
+                      value={m}
+                      className="cursor-pointer px-4 py-2 hover:bg-blue-100"
+                    >
+                      <div className="font-medium">{m.nombreMunicipio}</div>
+                      <div className="text-xs text-gray-500">{m.departamento}</div>
+                    </ComboboxOption>
+                  ))}
+                </div>
+              )}
             </Combobox>
+
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-gray-200 px-4 py-2 rounded-lg"
+                onClick={() => setOpen(false)}
+              >
+                Cerrar
+              </button>
+            </div>
           </DialogPanel>
         </div>
       </Dialog>

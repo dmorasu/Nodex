@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
   Dialog,
   DialogBackdrop,
   DialogPanel
 } from '@headlessui/react'
+import { useRouter } from 'next/navigation'
 
 interface Estado {
   id: number
@@ -19,112 +16,121 @@ interface Estado {
 interface Props {
   onChange?: (estadoId: number | null) => void
   name?: string
-  defaultValue?: string
+  defaultValue?: number
+  openExternally?: boolean         // 👈 NUEVO
+  onCloseExternally?: () => void   // 👈 NUEVO
 }
 
-export default function EstadosComboBox({ onChange, name = 'estadoId', defaultValue }: Props) {
+export default function EstadosLista({
+  onChange,
+  name = 'estadoId',
+  defaultValue,
+  openExternally,
+  onCloseExternally
+}: Props) {
   const [estados, setEstados] = useState<Estado[]>([])
   const [selectedEstado, setSelectedEstado] = useState<Estado | null>(null)
-  const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
+  
 
+  const router = useRouter()
+
+  // Permitir que otro botón abra este modal
+  useEffect(() => {
+    if (openExternally) {
+      setOpen(true)
+    }
+  }, [openExternally])
+
+  // Cargar la lista
   useEffect(() => {
     const fetchEstados = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/estados`)
-        const data = await response.json()
-        // Filtra estados nulos
-        const validos = data.filter((e: Estado) => e && e.nombreEstado)
-        setEstados(validos)
+        const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/estados`)
+        const data = await r.json()
+
+        setEstados(data)
 
         if (defaultValue) {
-          const estadoInicial = validos.find((m: Estado) => m.nombreEstado === defaultValue)
-          if (estadoInicial) {
-            setSelectedEstado(estadoInicial)
-          }
+          const found = data.find((e: Estado) => e.id === defaultValue)
+          if (found) setSelectedEstado(found)
         }
       } catch (error) {
-        console.error('Error al cargar estados:', error)
+        console.error("Error cargando estados:", error)
       }
     }
 
     fetchEstados()
   }, [defaultValue])
 
-  const filteredEstados =
-    query.trim() === ''
-      ? estados // 👈 si no hay texto, muestra todos
-      : estados.filter((m) =>
-          m.nombreEstado.toLowerCase().includes(query.toLowerCase())
-        )
-
-  const handleSelect = (estado: Estado | null) => {
+  const handleSelect = (estado: Estado) => {
     setSelectedEstado(estado)
     setOpen(false)
-    setQuery('')
-    onChange?.(estado ? estado.id : null)
+    onChange?.(estado.id)
+
+    // Notificar cierre externo (si existe)
+    onCloseExternally?.()
+  }
+
+  const closeModal = () => {
+    setOpen(false)
+    onCloseExternally?.()
   }
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="w-full p-3 font-bold border border-pra-300 bg-white text-orange-500 rounded-xl"
-      >
-        {selectedEstado ? selectedEstado.nombreEstado : 'Seleccionar Estado...'}
-      </button>
+
+      {/* BOTÓN INTERNO (solo si lo quieres seguir usando) */}
+      {!openExternally && (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="w-full p-3 font-semibold border bg-white text-sky-600 rounded-xl"
+        >
+          {selectedEstado ? selectedEstado.nombreEstado : "Seleccionar Estado..."}
+        </button>
+      )}
 
       <input type="hidden" name={name} value={selectedEstado?.id ?? ''} />
 
-      <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+      <Dialog open={open} onClose={closeModal} className="relative z-50">
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-lg rounded-2xl bg-white p-4 shadow-lg shadow-blue-400">
-            <h2 className="text-gray-700 mb-2">Selecciona un estado</h2>
 
-            <Combobox value={selectedEstado} onChange={handleSelect}>
-              <ComboboxInput
-                aria-label="Buscar Estado"
-                displayValue={(m: Estado | null) => m?.nombreEstado ?? ''}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full border p-2 rounded mb-2"
-                placeholder="Buscar Estado..."
-              />
+        <div className="fixed inset-0 flex items-center justify-center p-6">
+          <DialogPanel className="w-full max-w-md bg-white rounded-2xl shadow-lg p-4">
 
-              <div className="max-h-80 overflow-y-auto border rounded">
-                <ComboboxOptions>
-                  {filteredEstados.length === 0 ? (
-                    <p className="p-2 text-gray-500 text-sm text-center">
-                      No se encontraron estados
-                    </p>
-                  ) : (
-                    filteredEstados.map((m) => (
-                      <ComboboxOption
-                        key={m.id}
-                        value={m}
-                        className="px-4 py-2 cursor-pointer hover:bg-blue-100"
-                      >
-                        {m.nombreEstado}
-                      </ComboboxOption>
-                    ))
-                  )}
-                </ComboboxOptions>
-              </div>
+            <h2 className="text-gray-700 font-bold text-lg mb-3">
+              Selecciona un Estado
+            </h2>
 
-              <div className="flex justify-end mt-3">
+            <div className="max-h-96 overflow-y-auto border rounded">
+              {estados.map((estado) => (
                 <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="bg-blue-500 hover:bg-orange-500 text-white px-4 py-1 rounded"
+                  key={estado.id}
+                  onClick={() => handleSelect(estado)}
+                  className={`w-full text-left px-4 py-2 border-b hover:bg-blue-100 ${
+                    selectedEstado?.id === estado.id ? "bg-blue-50 font-semibold" : ""
+                  }`}
                 >
-                  Cerrar
+                  {estado.nombreEstado}
                 </button>
-              </div>
-            </Combobox>
+              ))}
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-500"
+              >
+                Cerrar
+              </button>
+            </div>
+
           </DialogPanel>
         </div>
       </Dialog>
+
     </div>
   )
 }

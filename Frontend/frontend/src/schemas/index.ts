@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {array, z, ZodString} from 'zod'
 
 export const RegistroSchema =z.object({
     correoUsuario: z.string().
@@ -36,7 +36,21 @@ export const CrearSolicitudSchema = z.object({
         municipiosId:z.string()
         .min(1,{message:'El municipio no puede estar vacio'}),
         clienteId:z.string()
-        .min(1,{message:'El cliente no puede estar vacio'})
+        .min(1,{message:'El cliente no puede estar vacio'}),
+        operacionesId:z.string()
+        .min(1,{message:'Debe Seleccionar la Operacion'}),
+        fechaEntregaResultado: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega")
+        .transform((value) => new Date(value)),
+        tipoServicio:z.string()
+        .min(1,{message:'El cliente no puede estar vacio'}),
+        placa:z.string().optional().nullable(),
+        matriculaInmobiliaria:z.string().optional().nullable(),
+        centroCostos:z.string()
+        .min(1,{message:'El centro de costos no puede estar vacio'})
+
+
+        
 })
 
 export const ContrasenaValidacionSchema =z.string().min(1,{message:'Ingrese una contraseña'})
@@ -80,15 +94,30 @@ export const estadosTramites=z.object({
 
 })
 
+export const Trazabilidad =z.object({
+        id:z.number(),
+        observacionTrazabilidad:z.string(),
+        nombreUsuario:z.string(),
+        createdAt:z.string()
+
+
+})
+
 export const SolicitudAPIRespuestaSchema = z.object({
         id:z.number(),
         detalleSolicitud: z.string(),
         direccionTramite: z.string(),
+        fechaEntregaResultado:z.string().nullable(),
+        matriculaInmobiliaria:z.string().nullable(),
+        placa:z.string().nullable(),
+        tipoServicio:z.string().nullable(),
+        centroCostos:z.string().nullable(),
         createdAt:z.string(),
         updatedAt:z.string(),
         clientes:ClienteSchema.optional(),
         municipios:MunicipioSchema.optional(),
-        estadosTramites:z.array(estadosTramites).optional()
+        estadosTramites:z.array(estadosTramites).optional(),
+        trazabilidad:array(Trazabilidad).optional()
         
         
         //userId: z.number(),

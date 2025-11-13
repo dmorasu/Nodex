@@ -51,12 +51,12 @@ class SolicitudTramites extends Model {
   declare detalleSolicitud: string;
 
   @Column({
-    type: DataType.STRING(20),
+    type: DataType.STRING(200),
   })
   declare placa: string;
 
   @Column({
-    type: DataType.STRING(20),
+    type: DataType.STRING(200),
   })
   declare tipoServicio: string;
 

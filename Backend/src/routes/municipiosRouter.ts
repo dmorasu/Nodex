@@ -8,6 +8,7 @@ const router =Router()
 router.param('municipioId',validateMunicipioExits)
 
 router.get('/',MunicipioController.getAll)
+router.get('/search',MunicipioController.search)
 
 router.post('/',
     validateMunicipioInput,

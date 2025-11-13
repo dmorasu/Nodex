@@ -91,16 +91,23 @@ static getAll = async (req: Request, res: Response) => {
       order: [['createdAt', 'DESC']],
       include: [
         {
+
+
           model: EstadosTramites,
-          separate: true, // 👈 Sequelize hace subconsultas por solicitud
-          limit: 1,       // 👈 solo el último estado
-          order: [['createdAt', 'DESC']],
+          as:'estadosTramites',
+         
+              
+         
           include: [
             {
               model: Estados,
               attributes: ['nombreEstado'], // 👈 solo queremos el nombre del estado
+              as:'estado'
             },
           ],
+          separate: true, // 👈 importante si quieres traer todos los registros correctamente
+          order: [['createdAt', 'DESC']],
+          
         },
         {
           model: Clientes,

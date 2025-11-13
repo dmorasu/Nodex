@@ -1,5 +1,6 @@
 import type {Request,Response} from 'express'
 import Cliente from '../models/clientes'
+import { Op,Sequelize } from 'sequelize'
 
 declare global{
     namespace Express{
@@ -26,6 +27,35 @@ export class ClienteController{
             
         }
     }
+
+    static search = async (req: Request, res: Response) => {
+    try {
+      const search = req.query.search?.toString().trim() || '';
+      const limit = Number(req.query.limit) || 20;
+
+      if (search.length < 2) {
+        return res.json([]);
+      }
+
+      const clientes = await Cliente.findAll({
+        where: {
+          nombreCliente: {
+            [Op.iLike]: `%${search}%`
+          }
+        },
+        order: [
+          [Sequelize.literal(`"nombreCliente" ILIKE '${search}%'`), 'DESC'],
+          ['nombreCliente', 'ASC']
+        ],
+        limit
+      });
+
+      res.json(clientes);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error buscando clientes' });
+    }
+  }
 
     static create  =async(req:Request,res:Response)=>{
         try {

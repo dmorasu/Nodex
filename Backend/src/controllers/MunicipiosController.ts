@@ -1,5 +1,6 @@
 import type {Request,Response} from 'express'
 import Municipio from '../models/municipios'
+import { Op,Sequelize } from 'sequelize'
 
 declare global{
     namespace Express{
@@ -10,8 +11,35 @@ declare global{
 }
 
 export class MunicipioController{
+static search = async (req, res) => {
+  try {
+    const search = req.query.search?.toString().trim() || '';
+    const limit = Number(req.query.limit) || 20;
 
+    if (search.length < 2) return res.json([]);
 
+    const municipios = await Municipio.findAll({
+      where: {
+        nombreMunicipio: {
+          [Op.iLike]: `%${search}%`
+        }
+      },
+      order: [
+        [Sequelize.literal(`"Municipios"."nombreMunicipio" ILIKE '${search}%'`), 'DESC'],
+        ['nombreMunicipio', 'ASC']
+      ],
+      limit
+    });
+
+    res.json(municipios);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error buscando municipios' });
+  }
+};
+
+    
     static getAll =async(req:Request, res:Response)=>{
         try {
                 const municipio=await Municipio.findAll({

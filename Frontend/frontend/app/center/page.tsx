@@ -13,7 +13,7 @@ async function getAllSolicitudes() {
   const req = await fetch(url, { cache: "no-store" })
   const json = await req.json()
   const solicitudes = SolicitudesAPIRespuestaSchema.parse(json)
-  console.log(solicitudes[0].estadosTramites)
+  //console.log(solicitudes[0].estadosTramites)
   return solicitudes
 }
 

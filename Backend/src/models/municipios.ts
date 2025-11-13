@@ -23,6 +23,16 @@ class Municipios extends Model{
     })
     declare regional:string
 
+    @Column({
+        type: DataType.DOUBLE
+    })
+    declare longitud:number
+
+    @Column({
+        type: DataType.DOUBLE
+    })
+    declare latitud:number
+
     @HasMany(()=>SolicitudTramites,{
         onUpdate:'CASCADE',
         onDelete:'CASCADE'

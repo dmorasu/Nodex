@@ -32,12 +32,9 @@ export default function CenterMenu({usuario}:{usuario:Usuario}) {
                 href='/center'
                 className='block p-2 hover:text-orange-500'
             >Tramites</Link>
+           
             <Link
-                href='/admin'
-                className='block p-2 hover:text-orange-500'
-            >Municipios</Link>
-            <Link
-                href='/admin'
+                href='/center/clientes/nuevo'
                 className='block p-2 hover:text-orange-500'
             >Clientes</Link>
             <button

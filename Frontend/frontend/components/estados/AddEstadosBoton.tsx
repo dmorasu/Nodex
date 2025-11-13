@@ -7,7 +7,7 @@ export default function AddEstadosBoton() {
   return (
     <button
         type="button"
-        className="bg-orange-400 px-10 py-2 rounded-lg text-white font-bold cursor-pointer"
+        className="bg-gray-400 px-10 py-2 rounded-lg text-white font-bold cursor-pointer"
         onClick={()=>router.push(location.pathname+'?addEstado=true&showModal=true')}
       
     >Estado</button>

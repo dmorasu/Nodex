@@ -11,6 +11,7 @@ router.param('clienteId',validateClienteExits)
 
 
 router.get('/',ClienteController.getAll)
+router.get('/search', ClienteController.search)
 
 router.post('/',
     validateClienteInput,

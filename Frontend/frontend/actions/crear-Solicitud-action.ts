@@ -19,7 +19,19 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
         detalleSolicitud: formData.get('detalleSolicitud'),
         direccionTramite: formData.get('direccionTramite'),
         municipiosId:formData.get('municipioId'),
-        clienteId:formData.get('clienteId')
+        clienteId:formData.get('clienteId'),
+        operacionesId:formData.get('operacionId'),
+        tipoServicio:formData.get('tipoServicio'),
+       
+        fechaEntregaResultado:formData.get('fechaEntregaResultado'),
+        placa:formData.get('placa'),
+        matriculaInmobiliaria:formData.get('matricula'),
+        centroCostos:formData.get('centroCostos'),
+
+
+        
+
+
     })
     if (!solicitud.success) {
         return {
@@ -42,7 +54,14 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
               detalleSolicitud:solicitud.data.detalleSolicitud,
               direccionTramite:solicitud.data.direccionTramite,
               municipiosId:solicitud.data.municipiosId,
-              clienteId :solicitud.data.clienteId
+              clienteId :solicitud.data.clienteId,
+              operacionesId:solicitud.data.operacionesId,
+              fechaEntregaResultado:solicitud.data.fechaEntregaResultado,
+              placa:solicitud.data.placa,
+              matriculaInmobiliaria:solicitud.data.matriculaInmobiliaria,
+              centroCostos:solicitud.data.centroCostos,
+              tipoServicio:solicitud.data.tipoServicio
+             
 
        })
     })
