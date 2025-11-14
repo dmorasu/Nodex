@@ -53,6 +53,18 @@ export const CrearSolicitudSchema = z.object({
         
 })
 
+export const CrearClienteSchema = z.object({
+       nombreCliente:z.string()
+                        .min(1,{message:'El nombre del Cliente no puede estar vacio'}),
+        identificacionCliente:z.string()
+                        .min(1,{message:'La identificacion del Cliente no puede estar vacia'}),
+        telefono:z.string()
+                        .min(1,{message:'El telefono no puede estar vacio'}),
+        telefonoMovil:z.string()
+                        .min(1,{message:'El telefonoMovi no puede estar vacio'}),
+
+})
+
 export const ContrasenaValidacionSchema =z.string().min(1,{message:'Ingrese una contraseña'})
 
 

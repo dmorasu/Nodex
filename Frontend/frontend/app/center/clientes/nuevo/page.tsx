@@ -1,7 +1,8 @@
 import CrearSolicitudesForm from "@/components/solicitudTramites/CrearSolicitudes";
 import Link from "next/link";
 import {Metadata} from 'next'
-import ClienteForm from "@/components/clientes/ClientesForm";
+
+import CrearClientesForm from "@/components/clientes/crearCliente";
 
 export const metadata :Metadata={
   title:'Nodex - Centro Admin',
@@ -16,8 +17,8 @@ export default function CrearClientesPage() {
           <h1 className='font-black text-4xl text-gray-900  my-5'>
             Nuevo Cliente
           </h1>
-          <p className="text-xl font-bold">Llena el formulario para crear un cliente {''}
-            <span className="text-blue-600">Trámite</span>
+          <p className="text-xl font-bold">Llena el formulario para crear un  {''}
+            <span className="text-blue-600">Ciente</span>
           </p>
         </div>
         <Link
@@ -29,7 +30,7 @@ export default function CrearClientesPage() {
       </div>
 
       <div className='p-10 mt-10  shadow-lg  border-2 shadow-blue-400'>
-            <ClienteForm/>
+            <CrearClientesForm/>
       </div>
     </>
   )

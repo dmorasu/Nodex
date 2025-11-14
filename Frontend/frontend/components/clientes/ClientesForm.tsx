@@ -1,18 +1,15 @@
 "use client";
 
-import { useState } from "react";
+
 import { SolicitudTramites } from "@/src/schemas";
-import ClientesComboBox from "./clientesCombobox";
-import MunicipiosComboBox from "../municipios/municipiosCombobox";
-import OperacionesComboBox from "../operaciones/operacionesCombobox";
-import { verificacionSesion } from "@/src/auth/dal";
 
 
-export default function ClienteForm({ solicitud }: { solicitud?: SolicitudTramites }) {
+export default function ClientesForm({ solicitud }: { solicitud?: SolicitudTramites }) {
 
-  const [tipoDocumento, setTipoDocumento] = useState("");
+ 
 
   return (
+    
     <div>
 
  
@@ -32,15 +29,15 @@ export default function ClienteForm({ solicitud }: { solicitud?: SolicitudTramit
       </div>
 
        <div className="space-y-3 mt-4">
-        <label htmlFor="identificacion" className="text-sm uppercase font-bold">
+        <label htmlFor="identificacionCliente" className="text-sm uppercase font-bold">
          Identificacion
         </label>
         <input
           type="text"
-          id="identificacion"
+          id="identificacionCliente"
           className="w-full p-3 border border-gray-300 bg-white text-gray-700 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all cursor-pointer"
           placeholder="Identificación"
-          name="identificacion"
+          name="identificacionCliente"
           defaultValue={solicitud?.direccionTramite}
         />
       </div>
@@ -78,17 +75,10 @@ export default function ClienteForm({ solicitud }: { solicitud?: SolicitudTramit
    
 
 
-     
-        <input
-        type="submit"
-        className="bg-blue-500 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"
-        value='Crear Cliente'
-        />
-      
-
       
         
 
     </div>
+   
   );
 }

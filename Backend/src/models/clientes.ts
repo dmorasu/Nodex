@@ -20,13 +20,13 @@ class Clientes extends Model{
     declare identificacionCliente:string
 
     @Column({
-        type:DataType.STRING(10)
+        type:DataType.STRING(100)
 
     })
     declare telefono:string
 
     @Column({
-        type:DataType.STRING(10)
+        type:DataType.STRING(100)
     })
     declare telefonoMovil:string
 

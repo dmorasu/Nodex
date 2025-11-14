@@ -1,21 +1,18 @@
 "use client"
 
-import { Textarea } from "@headlessui/react"
-import MunicipiosComboBox from "../municipios/municipiosCombobox"
+
 import { useActionState, useEffect } from "react"
 import { useFormState } from "react-dom"
-import { crearSolicitud } from "@/actions/crear-Solicitud-action"
-
+import { crearCliente } from "@/actions/crear-Cliente-action"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
-import ClientesComboBox from "../clientes/clientesCombobox"
-import ClientesForm from "./clientesForm"
+import ClientesForm from "./ClientesForm"
 
 
 
-export default function CrearSolicitudesForm() {
+export default function CrearClientesForm() {
   const router =useRouter()
-  const[state,dispatch] =useFormState(crearSolicitud,{
+  const[state,dispatch] =useFormState(crearCliente,{
     errors:[],
     success:''
   })
@@ -56,6 +53,7 @@ export default function CrearSolicitudesForm() {
        
 
       <ClientesForm/>
+
       <input
         type="submit"
         className="bg-blue-500 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"
