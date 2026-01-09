@@ -9,6 +9,7 @@ import Clientes from '../models/clientes'
 import Municipios from '../models/municipios'
 import {Op} from 'sequelize'
 import Estados from '../models/estados'
+import Usuarios from '../models/usuarios'
 
 
 
@@ -117,6 +118,10 @@ static getAll = async (req: Request, res: Response) => {
           model: Municipios,
           attributes: ['id', 'nombreMunicipio'],
         },
+        {
+          model: Usuarios,
+          attributes: ['id', 'nombreUsuario','correoUsuario'],
+        },
       ],
     });
 
@@ -149,16 +154,21 @@ static getAll = async (req: Request, res: Response) => {
                       Municipios,
                       Trazabilidad,
                       { 
+                       
                         model:EstadosTramites,
                           include:[{
                             model:Estados, attributes:["nombreEstado"]}],
                       
-                      limit:1,
+                      
                       order:[["createdAt","DESC"]]
                       },
                       CuentaCobros,
                       Logistica,
-                      Programacion]
+                      Programacion,
+                      {
+                        model:Usuarios,
+                        attributes:["id","nombreUsuario","correoUsuario"]
+                      }]
         })
         res.json(solicitudTramites)
     }

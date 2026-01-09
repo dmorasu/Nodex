@@ -47,7 +47,8 @@ export const CrearSolicitudSchema = z.object({
         placa:z.string().optional().nullable(),
         matriculaInmobiliaria:z.string().optional().nullable(),
         centroCostos:z.string()
-        .min(1,{message:'El centro de costos no puede estar vacio'})
+        .min(1,{message:'El centro de costos no puede estar vacio'}),
+        usuarioId:z.string().nullable()
 
 
         
@@ -115,6 +116,21 @@ export const Trazabilidad =z.object({
 
 })
 
+export const TrazabilidadSchema=z.object({
+        observacionTrazabilidad:z.string()
+                                        .min(1,{message:"Debe registar alguna observacion"}),
+        
+})
+
+
+
+
+export const UsuarioSchema =z.object({
+        id:z.number(),
+        nombreUsuario:z.string(),
+        correoUsuario:z.string()
+})
+
 export const SolicitudAPIRespuestaSchema = z.object({
         id:z.number(),
         detalleSolicitud: z.string(),
@@ -127,9 +143,11 @@ export const SolicitudAPIRespuestaSchema = z.object({
         createdAt:z.string(),
         updatedAt:z.string(),
         clientes:ClienteSchema.optional(),
+        usuario:UsuarioSchema.optional().nullable(),
         municipios:MunicipioSchema.optional(),
         estadosTramites:z.array(estadosTramites).optional(),
-        trazabilidad:array(Trazabilidad).optional()
+        trazabilidad:array(Trazabilidad).optional(),
+        
         
         
         //userId: z.number(),

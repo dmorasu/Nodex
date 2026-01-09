@@ -1,13 +1,16 @@
 import CrearSolicitudesForm from "@/components/solicitudTramites/CrearSolicitudes";
 import Link from "next/link";
 import {Metadata} from 'next'
+import { verificacionSesion } from "@/src/auth/dal";
 
 export const metadata :Metadata={
   title:'Nodex - Centro Admin',
   description: 'Nodex - Centro Admin'
 }
+const {usuario}=await verificacionSesion()
 
 export default function CrearSolicitudesPage() {
+  
   return (
     <>
       <div className='flex flex-col-reverse md:flex-row md:justify-between items-center'>
@@ -28,7 +31,7 @@ export default function CrearSolicitudesPage() {
       </div>
 
       <div className='p-10 mt-10  shadow-lg  border-2 shadow-blue-400'>
-            <CrearSolicitudesForm/>
+            <CrearSolicitudesForm usuario={usuario}/>
       </div>
     </>
   )

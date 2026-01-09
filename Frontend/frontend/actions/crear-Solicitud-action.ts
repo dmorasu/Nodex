@@ -27,6 +27,7 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
         placa:formData.get('placa'),
         matriculaInmobiliaria:formData.get('matricula'),
         centroCostos:formData.get('centroCostos'),
+        usuarioId:formData.get('usuarioId')
 
 
         
@@ -60,7 +61,8 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
               placa:solicitud.data.placa,
               matriculaInmobiliaria:solicitud.data.matriculaInmobiliaria,
               centroCostos:solicitud.data.centroCostos,
-              tipoServicio:solicitud.data.tipoServicio
+              tipoServicio:solicitud.data.tipoServicio,
+              usuarioId:solicitud.data.usuarioId
              
 
        })

@@ -4,12 +4,14 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Dialog, DialogPanel,  Transition, TransitionChild } from '@headlessui/react';
 import AddEstadosForm from '../estados/AddEstadosForm';
 import EditEstadosForm from '../estados/EditEstadosForm';
+import AddTrazabilidadForm from '../trazabilidad/AddTrazabilidadForm';
 
 
 
 const componenteMap={
     "AddEstado":AddEstadosForm,
-    "EditEstado":EditEstadosForm
+    "EditEstado":EditEstadosForm,
+    "AddTrazabilidad": AddTrazabilidadForm
 
 }
 
@@ -21,9 +23,11 @@ export default function ModalContainer() {
 
   const show = showModal ? true:false
   const addEstado= searchParams.get('addEstado')
+  const addTrazabilidad = searchParams.get('addTrazabilidad')
 
   const  getComponentName =()=>{
     if(addEstado) return 'AddEstado'
+    if (addTrazabilidad) return 'AddTrazabilidad'
   }
 
   const componenteName= getComponentName()

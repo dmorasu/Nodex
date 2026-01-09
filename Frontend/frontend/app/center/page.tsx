@@ -21,6 +21,7 @@ async function getAllSolicitudes() {
 
 export default async function CenterPage() {
   const solicitudes = await getAllSolicitudes()
+  console.log(solicitudes)
 
   return <CenterPageClient solicitudes={solicitudes} />
 }

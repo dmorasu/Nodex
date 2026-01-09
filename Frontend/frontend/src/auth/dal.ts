@@ -6,7 +6,7 @@ import {cookies} from 'next/headers'
 import { UserSchema } from '../schemas'
 
 
-export const verificacionSesion = cache(async ()=>{
+export const  verificacionSesion = cache(async ()=>{
     const token = cookies().get('TOKEN')?.value
     if(!token){
         redirect('/auth/login')

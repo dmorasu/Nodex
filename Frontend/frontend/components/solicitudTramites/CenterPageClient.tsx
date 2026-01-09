@@ -133,6 +133,12 @@ export default function CenterPageClient({ solicitudes }: Props) {
                         {formatoFecha(solicitud.updatedAt)}
                       </span>
                     </p>
+                    <p className="text-gray-400 text-sm">
+                       Creado por:{" "}
+                      <span className="font-bold">
+                        {solicitud.usuario?.nombreUsuario}
+                      </span>
+                    </p>
                   </div>
                 </div>
 

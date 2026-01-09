@@ -1,4 +1,5 @@
 import AddEstadosBoton from '@/components/estados/AddEstadosBoton';
+import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton';
 import ModalContainer from '@/components/ui/ModalContainer';
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas'
 import { formatoFecha } from '@/src/ultis';
@@ -46,6 +47,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
 
         </div>
         <AddEstadosBoton />
+        <AddTrazabilidadBoton/>
 
       </div>
       <>

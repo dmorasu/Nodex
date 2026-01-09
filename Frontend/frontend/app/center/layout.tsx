@@ -10,6 +10,7 @@ export default async function CenterLayout({
   children: React.ReactNode;
 }>) {
   const {usuario}=await verificacionSesion()
+ 
   return (
     <>
       <header className='bg-blue-600/80 py-1'>
@@ -25,7 +26,7 @@ export default async function CenterLayout({
         </div>
       </header>
       <section className='max-w-5xl mx-auto mt-20 p-3 py-10'>
-        {children}
+        {children }
       </section>
       <ToastNotificaciones/>
 

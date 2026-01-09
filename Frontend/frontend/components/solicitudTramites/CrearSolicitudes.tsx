@@ -10,10 +10,11 @@ import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
 import ClientesComboBox from "../clientes/clientesCombobox"
 import SolicitudTramitesForm from "./SolicitudTramitesForm"
+import { Usuario } from "@/src/schemas";
 
 
 
-export default function CrearSolicitudesForm() {
+export default function CrearSolicitudesForm({ usuario }: { usuario?: Usuario }) {
   const router =useRouter()
   const[state,dispatch] =useFormState(crearSolicitud,{
     errors:[],
@@ -56,6 +57,18 @@ export default function CrearSolicitudesForm() {
        
 
       <SolicitudTramitesForm/>
+      <div className="space-y-3 mt-4">
+       
+        <input
+          type="hidden"
+          id="usuarioId"
+          className="w-full p-3 border border-gray-300 bg-white text-gray-700 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all cursor-pointer"
+          
+          name="usuarioId"
+          defaultValue={usuario?.id}
+          
+        />
+      </div>
       <input
         type="submit"
         className="bg-blue-500 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"
