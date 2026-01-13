@@ -33,14 +33,14 @@ router.param('cuentaCobroId',validateCuentaCobroId)
 
 
 router.get('/', SolicitudTramitesController.getAll)
-//router.get('/',SolicitudTramitesController.obtenerSolicitudes)
+router.get('/',SolicitudTramitesController.obtenerSolicitudes)
 router.post('/', 
     validateSolicitudTramitesInput,
     handleInputErrors,
     SolicitudTramitesController.create)
 router.get('/:solicitudTramitesId',
     
-     SolicitudTramitesController.getById)
+    SolicitudTramitesController.getById)
 router.put('/:solicitudTramitesId',
     validateSolicitudTramitesInput,
     SolicitudTramitesController.updateById)

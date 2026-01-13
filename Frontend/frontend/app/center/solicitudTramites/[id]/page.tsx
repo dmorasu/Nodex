@@ -131,9 +131,11 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
               <li key={solicitudTramite.id} className="flex justify-between gap-x-6 p-5">
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto space-y-2">
-                    <p className="text-base font-semibold text-gray-900">
+                    <p className="text-base font-semibold ">
                       {solicitudTramite.observacionTrazabilidad}
                     </p>
+                    <span className="text-orange-500">Creado por :</span>{" "}
+                        {solicitudTramite.nombreUsuario} 
                     <p className="text-sm font-bold text-sky-400">
                       {formatoFecha(solicitudTramite.createdAt)}
 

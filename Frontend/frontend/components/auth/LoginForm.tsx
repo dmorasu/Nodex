@@ -39,7 +39,7 @@ export default function LoginForm() {
                         id="correoUsuario"
                         type="email"
                         placeholder="Correo Electronico"
-                        className="w-full border border-gray-300 p-3 rounded-lg"
+                        className="w-full border border-gray-300 p-3 rounded-lg bg-background text-foreground"
                         name="correoUsuario"
                     />
                 </div>
@@ -53,7 +53,7 @@ export default function LoginForm() {
                         id="contrasena"
                         type="password"
                         placeholder="Contraseña"
-                        className="w-full border border-gray-300 p-3 rounded-lg"
+                        className="w-full border border-gray-300 p-3 rounded-lg bg-background text-foreground"
                         name="contrasena"
                     />
                 </div>

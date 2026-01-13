@@ -10,6 +10,7 @@ import Municipios from '../models/municipios'
 import {Op} from 'sequelize'
 import Estados from '../models/estados'
 import Usuarios from '../models/usuarios'
+import { CreatedAt } from 'sequelize-typescript'
 
 
 
@@ -152,7 +153,13 @@ static getAll = async (req: Request, res: Response) => {
         const solicitudTramites =await SolicitudTramites.findByPk(req.solicitudTramites.id, {
             include:[ Clientes,
                       Municipios,
-                      Trazabilidad,
+                      {
+                        model:Trazabilidad,
+                        separate:true,
+                        order:[["createdAt","DESC"]],
+                        limit:20
+                      },
+                     
                       { 
                        
                         model:EstadosTramites,

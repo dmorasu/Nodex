@@ -1,6 +1,9 @@
 "use server"
 
 import { ErrorResponoseSchema,TrazabilidadSchema,SuccessSchema } from "@/src/schemas"
+import { verificacionSesion } from "@/src/auth/dal"
+import { cookies } from "next/headers"
+import { revalidatePath } from "next/cache"
 
 
 type ActionStateType ={
@@ -8,13 +11,16 @@ type ActionStateType ={
     success:string
 }
 
+// 1. Validar sesión y obtener usuario
+const { usuario } = await verificacionSesion()
+
 export default async function CrearTrazabilidad(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
-    const estadoTramiteData={
+    const trazabilidadData={
         solicitudTramitesId:solicitudTramitesId, 
         observacionTrazabilidad:formData.get('observacionTrazabilidad')
     }
     
-    const trazabilidad=TrazabilidadSchema.safeParse(estadoTramiteData)
+    const trazabilidad=TrazabilidadSchema.safeParse(trazabilidadData)
 
     if(!trazabilidad.success){
         return{
@@ -23,15 +29,19 @@ export default async function CrearTrazabilidad(solicitudTramitesId:number,prevS
         }
     }
 
+    const token = cookies().get("TOKEN")?.value
     // Generar Trazabilidad
     const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/trazabilidad`
     const req =await fetch(url,{
         method:'POST',
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body:JSON.stringify({
-            solicitudTramitesId:solicitudTramitesId
+            solicitudTramitesId:solicitudTramitesId,
+            nombreUsuario:usuario.nombreUsuario,
+            observacionTrazabilidad:trazabilidadData.observacionTrazabilidad
         })
     })
 
@@ -45,6 +55,7 @@ export default async function CrearTrazabilidad(solicitudTramitesId:number,prevS
         }
     }
     
+    revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
     const success = SuccessSchema.parse(json)
 
     return{
