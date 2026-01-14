@@ -1,9 +1,14 @@
+import AddCuentaCobroBoton from '@/components/cuentacobro/AddCuentaCobroBoton';
 import AddEstadosBoton from '@/components/estados/AddEstadosBoton';
+import AddLogisticatoBoton from '@/components/logistica/AddLogistica';
+import AddLogisticaton from '@/components/logistica/AddLogistica';
+import AddProgramacionBoton from '@/components/programacion/AddProgramacionBoton';
 import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton';
 import ModalContainer from '@/components/ui/ModalContainer';
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas'
 import { formatoFecha } from '@/src/ultis';
 import { Metadata } from 'next'
+import Link from 'next/link';
 import React from 'react'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
@@ -41,41 +46,68 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
   //console.log(solicitudTramite.tra)
   return (
     <>
-      <div className='flex justify-between items-center'>
+      <div className=' bg-white  border-slate-200 rounded-lg  px-6 py-4 flex justify-between items-center divide-gray-300 border shadow-lg mt-10'>
+        
         <div>
-          <h1 className="font-black text-4xl text-sky-400">Trámite N: {solicitudTramite.id}</h1>
+          <h1 className="  text-2xl font-semibold text-slate-800">Trámite N: {solicitudTramite.id}</h1>
+         
+        </div>
+        <div className="flex items-center gap-3">
+          <AddEstadosBoton />
+          <AddProgramacionBoton/>
+          <AddLogisticatoBoton/>
+          <AddCuentaCobroBoton/>
+          <AddTrazabilidadBoton/>
+          <Link
+           href={'/center'}
+             className="
+              px-4 py-2
+            hover:bg-white
+            hover:text-slate-600
+              hover:border border-red-400
+              rounded-md
+              font-medium
+            bg-red-400
+            text-slate-50
+              transition
+      "
+        >
+          Volver
+        </Link>
 
         </div>
-        <AddEstadosBoton />
-        <AddTrazabilidadBoton/>
+        
 
       </div>
-      <>
-          <h1 className='font-black text-3xl text-orage-400 mt-10'>
-            Detalle de la Solicitud
-          </h1>
+      <>  
+          
+          <div>
+             <h4 className=' text-2xl text-orage-400 mt-10 text-center'>
+            Detalle de la Solicitud:
+          </h4>
+          </div>
           <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">
-            
+              
               <li key={solicitudTramite.id} className="flex justify-center gap-x-6 p-5 ">
                 <div className="flex min-w-0 gap-x-4">
-                  <div className="min-w-0 flex-auto space-y-2">
-                    <p className="text-xl font-semibold leading-6 text-gray-900">
-                        <span className="text-orange-500">Cliente:</span>{" "}
+                  <div className="min-w-0 flex-auto space-y-2"> 
+                    <p className="text-lg font-semibold leading-6 text-gray-900">
+                        <span className="text-black">Cliente:</span>{" "}
                         {solicitudTramite.clientes?.nombreCliente}
                     </p>
-                    <p className="text-sm  leading-6 text-gray-900">
-                        <span className="text-orange-500">Detalle:</span>{" "}
-                        {solicitudTramite.detalleSolicitud}
+                    <p className="text-base  leading-6 text-gray-900">
+                        <span className="text-black font-bold ">Detalle: </span>{" "}
+                        <span className='text-justify'>{solicitudTramite.detalleSolicitud}</span>
                     </p>
                     
                     
                      <p className='text-gray-500  text-sm'>
-                        <span className="text-orange-500">Placa:</span>{" "}
-                        {solicitudTramite.placa}
+                        <span className="text-black font-bold">Placa:</span>{" "}
+                        <span className='text-justify'> {solicitudTramite.placa}</span>
                     </p>
                      <p className='text-gray-500  text-sm'>
-                        <span className="text-orange-500">Matricula Inmobiliaria:</span>{" "}
-                        {solicitudTramite.matriculaInmobiliaria}
+                        <span className="text-black font-bold">Matricula Inmobiliaria:</span>{" "}
+                        <span className='text-justify'>{solicitudTramite.matriculaInmobiliaria}</span>
                     </p>
                      <p className='text-gray-500  text-sm'>
                         <span className="text-orange-500">Fecha Posible Entrega:</span>{" "}
@@ -122,7 +154,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
 
 
 
-          <h6 className='font-black text-2xl text-orage-400 mt-10'>
+          <h6 className='text-2xl text-orage-400 mt-10 text-center'>
             Historial de Trazabilidad:
           </h6>
 

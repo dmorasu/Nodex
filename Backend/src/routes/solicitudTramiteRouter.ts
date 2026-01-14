@@ -32,7 +32,7 @@ router.param('cuentaCobroId',validateCuentaCobroId)
 
 
 
-router.get('/', SolicitudTramitesController.getAll)
+//router.get('/', SolicitudTramitesController.getAll)
 router.get('/',SolicitudTramitesController.obtenerSolicitudes)
 router.post('/', 
     validateSolicitudTramitesInput,

@@ -5,13 +5,20 @@ import { Dialog, DialogPanel,  Transition, TransitionChild } from '@headlessui/r
 import AddEstadosForm from '../estados/AddEstadosForm';
 import EditEstadosForm from '../estados/EditEstadosForm';
 import AddTrazabilidadForm from '../trazabilidad/AddTrazabilidadForm';
+import AddCuentaCobroForm from '../cuentacobro/AddCuentaCobroForm';
+import AddLogisticaForm from '../logistica/AddLogisticaForm';
+import AddProgramacionForm from '../programacion/AddProgramacionForm';
 
 
 
 const componenteMap={
     "AddEstado":AddEstadosForm,
     "EditEstado":EditEstadosForm,
-    "AddTrazabilidad": AddTrazabilidadForm
+    "AddTrazabilidad": AddTrazabilidadForm,
+    "AddCuentaCobro":AddCuentaCobroForm,
+    "AddLogistica":AddLogisticaForm,
+    "AddProgramacion":AddProgramacionForm
+    
 
 }
 
@@ -24,10 +31,16 @@ export default function ModalContainer() {
   const show = showModal ? true:false
   const addEstado= searchParams.get('addEstado')
   const addTrazabilidad = searchParams.get('addTrazabilidad')
+  const addCuentaCobro = searchParams.get('addCuentaCobro')
+  const addLogistica = searchParams.get('addLogistica')
+  const addProgramacion = searchParams.get('addProgramacion')
 
   const  getComponentName =()=>{
     if(addEstado) return 'AddEstado'
     if (addTrazabilidad) return 'AddTrazabilidad'
+    if (addCuentaCobro) return 'AddCuentaCobro'
+    if (addLogistica) return 'AddLogistica'
+    if (addProgramacion) return 'AddProgramacion'
   }
 
   const componenteName= getComponentName()

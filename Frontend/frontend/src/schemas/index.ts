@@ -122,6 +122,44 @@ export const TrazabilidadSchema=z.object({
         
 })
 
+export const CuentaCobroSchema=z.object({
+        fechaRadicadaCuentaCobro: z.string()
+        .min(1, "Debe seleccionar la fecha de Radicaci{on"),
+        fechaMaximaPagoCuentaCobro: z.string()
+        .min(1, "Debe seleccionar la fecha de Maxima de Pago"),
+        fechaReciboCuentaCobroTramitador: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega"),
+        fechaPagoCuentaCobro: z.string()
+        .min(1, "Debe seleccionar la fecha de Pago"),
+        numeroCuentaCobro: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega")
+})
+
+export const logisticaSchema=z.object({
+        numeroGuia: z.string()
+        .min(1, "Debe seleccionar la fecha de Radicaci{on"),
+        valorEnvio: z.number()
+        .min(1, "Debe seleccionar la fecha de Maxima de Pago"),
+        horaProgramada: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega"),
+        fechaProgramacionLogistica: z.string()
+        .min(1, "Debe seleccionar la fecha de Pago"),
+        fechaEntregaTransportadora: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega")
+})
+
+
+export const ProgramacionSchema=z.object({
+        fechaRealizacionDiligencia: z.string()
+        .min(1, "Debe seleccionar la fecha de Radicaci{on"),
+        fechaProbableEntrega: z.number()
+        .min(1, "Debe seleccionar la fecha de Maxima de Pago"),
+        fechaFinalizaiconServicio: z.string()
+        .min(1, "Debe seleccionar la fecha de entrega")
+})
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 
-export default function AddTrazabilidadBoton(){
+export default function AddCuentaCobroBoton(){
     const router =useRouter()
 
     return(
@@ -17,10 +17,10 @@ export default function AddTrazabilidadBoton(){
                   hover:bg-white hover:text-sky-400
                     focus:outline-none focus:ring-2 focus:ring-blue-400
                   bg-sky-400"
-            onClick={()=>router.push(location.pathname+'?addTrazabilidad=true&showModal=true')}
+            onClick={()=>router.push(location.pathname+'?addCuentaCobro=true&showModal=true')}
       
         >
-            Trazabilidad
+            Cuenta de Cobro
 
         </button>
     )
@@ -28,6 +28,4 @@ export default function AddTrazabilidadBoton(){
 
     
         
-
-    
 }

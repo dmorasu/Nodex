@@ -1,27 +1,33 @@
-import { SolicitudesAPIRespuestaSchema } from "@/src/schemas"
 import CenterPageClient from "@/components/solicitudTramites/CenterPageClient"
 import { Metadata } from "next"
-
 
 export const metadata: Metadata = {
   title: "Nodex - Inicio",
 }
 
-// 🔹 Carga de solicitudes en el servidor
-async function getAllSolicitudes() {
-  const url = `${process.env.API_URL}/solicitudTramites`
+// 🔹 Carga de solicitudes desde backend con paginación y búsqueda
+async function getSolicitudes(searchParams: any) {
+  const query = new URLSearchParams()
+
+  if (searchParams.page) query.append("page", searchParams.page)
+  if (searchParams.search) query.append("search", searchParams.search)
+
+  const url = `${process.env.API_URL}/solicitudTramites?${query.toString()}`
   const req = await fetch(url, { cache: "no-store" })
   const json = await req.json()
-  const solicitudes = SolicitudesAPIRespuestaSchema.parse(json)
-  //console.log(solicitudes[0].estadosTramites)
-  return solicitudes
+
+  return json
 }
 
+export default async function CenterPage({ searchParams }: { searchParams: any }) {
+  const response = await getSolicitudes(searchParams)
 
-
-export default async function CenterPage() {
-  const solicitudes = await getAllSolicitudes()
-  console.log(solicitudes)
-
-  return <CenterPageClient solicitudes={solicitudes} />
+  return (
+    <CenterPageClient
+      solicitudes={response.data}
+      totalPages={response.totalPages}
+      currentPage={response.currentPage}
+      searchInitial={searchParams.search || ""}
+    />
+  )
 }

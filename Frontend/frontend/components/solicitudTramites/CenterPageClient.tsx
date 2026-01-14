@@ -1,7 +1,8 @@
-'use client'
+"use client"
 
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import SolicitudTramiteMenu from "@/components/solicitudTramites/MenuSolicitudTramites"
 import { formatoFecha } from "@/src/ultis"
 import { SolicitudTramites } from "@/src/schemas"
@@ -10,40 +11,40 @@ import clsx from "clsx"
 
 interface Props {
   solicitudes: SolicitudTramites[]
+  totalPages: number
+  currentPage: number
+  searchInitial: string
 }
 
-export default function CenterPageClient({ solicitudes }: Props) {
-  const [busqueda, setBusqueda] = useState("")
-  const [paginaActual, setPaginaActual] = useState(1)
-  const itemsPorPagina = 6 // 🔹 Puedes ajustar este valor
- 
+export default function CenterPageClient({
+  solicitudes,
+  totalPages,
+  currentPage,
+  searchInitial
+}: Props) {
 
-  // 🔍 Filtrado inteligente
-  const solicitudesFiltradas = solicitudes.filter((solicitud) => {
-    const texto = busqueda.toLowerCase()
-    return (
-      solicitud.id?.toString().includes(texto) ||
-      solicitud.clientes?.nombreCliente?.toLowerCase().includes(texto) ||
-      solicitud.municipios?.nombreMunicipio?.toLowerCase().includes(texto) ||
-      solicitud.detalleSolicitud?.toLowerCase().includes(texto)
-    )
-  })
+  const router = useRouter()
+  const params = useSearchParams()
 
-  // 🔢 Paginación
-  const totalPaginas = Math.ceil(solicitudesFiltradas.length / itemsPorPagina)
-  const indiceInicio = (paginaActual - 1) * itemsPorPagina
-  const solicitudesPaginadas = solicitudesFiltradas.slice(
-    indiceInicio,
-    indiceInicio + itemsPorPagina
-  )
+  const [search, setSearch] = useState(searchInitial)
 
-  const cambiarPagina = (nuevaPagina: number) => {
-    if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
-      setPaginaActual(nuevaPagina)
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    }
+  // 🔹 Ejecutar búsqueda en backend
+  const ejecutarBusqueda = () => {
+    const query = new URLSearchParams(params.toString())
+
+    if (search) query.set("search", search)
+    else query.delete("search")
+
+    query.set("page", "1")
+    router.push(`?${query.toString()}`)
   }
-  
+
+  // 🔹 Cambiar página en backend
+  const cambiarPagina = (page: number) => {
+    const query = new URLSearchParams(params.toString())
+    query.set("page", page.toString())
+    router.push(`?${query.toString()}`)
+  }
 
   return (
     <>
@@ -67,48 +68,45 @@ export default function CenterPageClient({ solicitudes }: Props) {
       </div>
 
       {/* 🔹 Barra de búsqueda */}
-      <div className="my-6">
+      <div className="my-6 flex gap-2">
         <input
           type="text"
-          placeholder="Buscar solicitud por cliente, municipio o detalle..."
-          value={busqueda}
-          onChange={(e) => {
-            setBusqueda(e.target.value)
-            setPaginaActual(1) // Reiniciar a la primera página al buscar
-          }}
+          placeholder="Buscar por ID solicitud o identificación cliente..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           className="w-full md:w-1/2 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
+        <button
+          onClick={ejecutarBusqueda}
+          className="bg-sky-400 px-4 rounded-lg text-white font-bold"
+        >
+          Buscar
+        </button>
       </div>
 
-      {solicitudesPaginadas.length ? (
+      {solicitudes.length ? (
         <>
           <ul
             role="list"
             className="divide-y divide-gray-300 border shadow-lg mt-4 bg-white p-4 shadow-blue-400 rounded-xl"
           >
-            {solicitudesPaginadas.map((solicitud) => (
-              
+            {solicitudes.map((solicitud) => (
               <li
                 key={solicitud.id}
                 className="flex justify-between gap-x-6 p-5 hover:bg-gray-50 transition"
               >
-                
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto space-y-2">
-                    
+
                     <p className="text-sm font-semibold leading-6 text-gray-900">
                       <Link
                         href={`/center/solicitudTramites/${solicitud.id}`}
                         className="cursor-pointer hover:underline text-lg font-bold"
                       >
                         <span className="text-sky-500">ST</span>: {solicitud.id}
-                        
-                        
- 
-                        
                       </Link>
                     </p>
-                    
 
                     <p className="text-sm font-semibold leading-6 text-gray-900">
                       <span className="text-sky-500">Cliente:</span>{" "}
@@ -127,14 +125,15 @@ export default function CenterPageClient({ solicitudes }: Props) {
                       {solicitud.detalleSolicitud}
                     </p>
 
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-sky-400 text-sm ">
                       Actualizado el:{" "}
                       <span className="font-bold">
                         {formatoFecha(solicitud.updatedAt)}
                       </span>
                     </p>
+
                     <p className="text-gray-400 text-sm">
-                       Creado por:{" "}
+                      Creado por:{" "}
                       <span className="font-bold">
                         {solicitud.usuario?.nombreUsuario}
                       </span>
@@ -143,54 +142,56 @@ export default function CenterPageClient({ solicitudes }: Props) {
                 </div>
 
                 <div className="flex shrink-0 flex-col items-end gap-y-8">
-                <div>
                   <div
                     className={clsx(
                       "p-2 rounded-lg font-bold w-full md:w-auto text-center",
                       {
-                        "bg-red-400 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Sin Iniciar",
-                        "bg-amber-400 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "En Curso",
-                        "bg-green-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Finalizado",
-                        "bg-blue-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Reprogramado",
-                        "bg-orange-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Desistido",
-                        "bg-purple-500 text-white": solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Suspendido",
-                        "bg-gray-400 text-white": !["Sin Iniciar", "En Curso", "Finalizado", "Reprogramado","Desistido","Suspendido"].includes(
-                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? ""
-                        ),
+                        "bg-red-400 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Sin Iniciar",
+                        "bg-amber-400 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "En Curso",
+                        "bg-green-500 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Finalizado",
+                        "bg-blue-500 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Reprogramado",
+                        "bg-orange-500 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Desistido",
+                        "bg-purple-500 text-white":
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Suspendido",
+                        "bg-gray-400 text-white":
+                          !["Sin Iniciar","En Curso","Finalizado","Reprogramado","Desistido","Suspendido"]
+                          .includes(solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? "")
                       }
                     )}
                   >
-                    <span>
-                      {solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
-                    </span>
+                    {solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
                   </div>
-                </div>
 
                   <SolicitudTramiteMenu solicitudId={solicitud.id} />
                 </div>
               </li>
             ))}
+
             <EliminarSolicitudTramiteModal />
           </ul>
-          
 
           {/* 🔹 Controles de paginación */}
           <div className="flex justify-center items-center gap-3 mt-6">
             <button
-              onClick={() => cambiarPagina(paginaActual - 1)}
-              disabled={paginaActual === 1}
+              onClick={() => cambiarPagina(currentPage - 1)}
+              disabled={currentPage === 1}
               className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
             >
               ← Anterior
             </button>
 
             <span className="font-semibold">
-              Página {paginaActual} de {totalPaginas}
+              Página {currentPage} de {totalPages}
             </span>
 
             <button
-              onClick={() => cambiarPagina(paginaActual + 1)}
-              disabled={paginaActual === totalPaginas}
+              onClick={() => cambiarPagina(currentPage + 1)}
+              disabled={currentPage === totalPages}
               className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
             >
               Siguiente →

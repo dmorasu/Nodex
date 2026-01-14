@@ -37,7 +37,7 @@ export default function AddTrazabilidadForm({closeModal}:{closeModal:()=>void}){
           </p>
           {state.errors.map(error=><ErrorMessage key={error}>{error}</ErrorMessage>)}
           <form
-            className="bg-gray-100 shadow-lg rounded-lg p-10 mt-10 border"
+            className="b shadow-lg rounded-lg p-10 mt-10 border"
             noValidate
             action={distpach}
           >

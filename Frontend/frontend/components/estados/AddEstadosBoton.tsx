@@ -7,9 +7,19 @@ export default function AddEstadosBoton() {
   return (
     <button
         type="button"
-        className="bg-gray-400 px-10 py-2 rounded-lg text-white font-bold cursor-pointer"
+        className="
+          px-4 py-2
+          hover:border border-sky-400
+        text-white
+          rounded-md
+          font-medium
+          transition-all
+        hover:bg-white hover:text-sky-400
+          focus:outline-none focus:ring-2 focus:ring-blue-400
+        bg-sky-400"
         onClick={()=>router.push(location.pathname+'?addEstado=true&showModal=true')}
       
-    >Estado</button>
+    >Estado         
+    </button>
   )
 }
