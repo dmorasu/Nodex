@@ -128,6 +128,12 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         <span className="text-orange-500">direccion:</span>{" "}
                         {solicitudTramite.direccionTramite} 
                     </p>
+                     <p className='text-gray-500  text-sm'>
+                        
+
+                        <span className="text-orange-500">Fecha Probable Entrega:</span>{" "}
+                        {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
+                    </p>
                     <p className="text-gray-400 text-sm">
                       Actualizado el:{" "}
                       <span className="font-bold">

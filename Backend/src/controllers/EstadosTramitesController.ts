@@ -1,5 +1,6 @@
 import type { Request,Response } from "express";
 import EstadosTramites from "../models/estadosTramites";
+import Programacion from "../models/programacion";
 
 declare global{
     namespace Express{
@@ -21,13 +22,43 @@ export class EstadosTramitesController{
           try {
                 const estadosTramites = new EstadosTramites(req.body)
                 estadosTramites.solicitudTramiteId =req.solicitudTramites.id
+
+                
                 await estadosTramites.save()
+
+                if(Number(estadosTramites.estadoId)===6){
+                    const fechaFinalizacionServicio=new Date()
+                    let programacion= await Programacion.findOne({
+                        where:{solicitudTramitesId:req.solicitudTramites.id}
+                    })
+                     if (programacion?.fechaFinalizacionServicio) {
+                            return res.status(400).json({ 
+                            error: "El trámite ya fue finalizado previamente" 
+                                });
+                    }
+
+                    if(!programacion){
+
+                        // Se crea si no existe
+                        await Programacion.create({
+                            solicitudTramitesId:req.solicitudTramites.id,
+                            fechaFinalizacionServicio:fechaFinalizacionServicio
+                        })
+                    }else{
+                        //Actualizar el servicio
+                        programacion.fechaFinalizacionServicio=fechaFinalizacionServicio,
+                        await programacion.save()
+                    }
+                }
+
+                
                 res.status(201).json('Registro Guardado')
 
 
           } catch (error) {
-                res.status(500).json({error:"Hubo un error"})
-          }
+             //console.error("ERROR CREANDO ESTADO:", error);
+             res.status(500).json({ error: "Hubo un error" });
+    }
          
          
 

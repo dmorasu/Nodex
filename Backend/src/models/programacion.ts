@@ -1,35 +1,29 @@
-import {Table,Column,ForeignKey,HasMany, Model, DataType,} from 'sequelize-typescript'
+import {
+  Table, Column, Model, DataType,
+  ForeignKey, BelongsTo
+} from 'sequelize-typescript'
 import SolicitudTramites from './solicitudTramites'
 
-@Table({
-    tableName:'Programacion'
-})
+@Table({ tableName:'Programacion' })
+class Programacion extends Model {
 
-class Programacion extends Model{
-    @Column({
-        type: DataType.DATE
-    })
-    declare fechaRealizacionDiligencia:Date
+  @Column({ type: DataType.DATE })
+  declare fechaRealizacionDiligencia: Date | null
 
-    @Column({
-        type:  DataType.DATE
-    })
-    declare fechaProbableEntrega:Date
+  @Column({ type: DataType.DATE })
+  declare fechaProbableEntrega: Date | null
 
-    @Column({
-        type: DataType.DATE
-    })
-    declare fechaFinalizacionServicio:Date
+  @Column({ type: DataType.DATE })
+  declare fechaFinalizacionServicio: Date | null
 
-    
-    @HasMany(()=>SolicitudTramites,{
-         onUpdate:'CASCADE',
-         onDelete:'CASCADE'
+  @ForeignKey(()=> SolicitudTramites)
+  @Column(
+    {unique:true}
+  )
+  declare solicitudTramitesId: number
 
-      })
-     declare solicitudTramitesId:SolicitudTramites
-
-
+  @BelongsTo(()=> SolicitudTramites)
+  declare solicitudTramite: SolicitudTramites
 }
 
 export default Programacion

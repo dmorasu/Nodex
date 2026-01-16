@@ -7,6 +7,7 @@ import {
   ForeignKey,
   BelongsTo,
   HasMany,
+  HasOne
 } from "sequelize-typescript";
 import Usuarios from "./usuarios";
 import Tarifa from "./tarifa";
@@ -113,10 +114,7 @@ class SolicitudTramites extends Model {
   @BelongsTo(() => Logistica)
   declare logistica: Logistica;
 
-  @ForeignKey(() => Programacion)
-  declare programacionId: number;
-
-  @BelongsTo(() => Programacion)
+  @HasOne(() => Programacion)
   declare programacion: Programacion;
 
   @ForeignKey(() => Operaciones)
@@ -149,6 +147,8 @@ class SolicitudTramites extends Model {
 
   @BelongsTo(() => CuentaCobros)
   declare cuentaCobro: CuentaCobros;
+
+ 
 }
 
 export default SolicitudTramites;

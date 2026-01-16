@@ -39,21 +39,12 @@ export default function AddProgramacionForm({closeModal}:{closeModal:()=>void}){
           </p>
           {state.errors.map(error=><ErrorMessage key={error}>{error}</ErrorMessage>)}
          <form
-  className="b shadow-lg rounded-lg p-10 mt-10 border"
+        className="b shadow-lg rounded-lg p-10 mt-10 border"
   noValidate
   action={distpach}
 >
   
-  <div className="py-3">
-    <label className="text-sm uppercase font-bold">
-      Fecha Realización Diligencia:
-    </label>
-    <input
-      type="date"
-      name="fechaRealizacionDiligencia"
-      className="w-full p-3 border border-gray-100 bg-slate-100"
-    />
-  </div>
+ 
 
   <div className="py-3">
     <label className="text-sm uppercase font-bold">
@@ -66,16 +57,7 @@ export default function AddProgramacionForm({closeModal}:{closeModal:()=>void}){
     />
   </div>
 
-  <div className="py-3">
-    <label className="text-sm uppercase font-bold">
-      Fecha Finalización Servicio:
-    </label>
-    <input
-      type="date"
-      name="fechaFinalizacionServicio"
-      className="w-full p-3 border border-gray-100 bg-slate-100"
-    />
-  </div>
+
 
   <input
     type="submit"

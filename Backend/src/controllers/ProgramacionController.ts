@@ -14,24 +14,36 @@ export class ProgramacionController{
         
     }
 
-    static create =async (req: Request, res:Response) =>{
-         // console.log("req.params.solicitudTramiteId");
-         //console.log(req.params.solicitudTramitesId);
-         //console.log(req.solicitudTramites.id);
-          try {
-                const programacion = new Programacion(req.body)
-                programacion.solicitudTramitesId =req.solicitudTramites.id
-                await programacion.save()
-                res.status(201).json('Registro Guardado')
+    static create = async (req: Request, res: Response) => {
+  try {
+    const solicitudId = req.solicitudTramites.id;
 
+    // Buscar si ya existe programación
+    let programacion = await Programacion.findOne({
+      where: { solicitudTramitesId: solicitudId }
+    });
 
-          } catch (error) {
-                res.status(500).json({error:"Hubo un error"})
-          }
-         
-         
-
+    if (!programacion) {
+      // Crear si no existe
+      programacion = await Programacion.create({
+        solicitudTramitesId: solicitudId,
+        fechaProbableEntrega: req.body.fechaProbableEntrega || null
+      });
+    } else {
+      // Actualizar solo los campos permitidos
+      
+      programacion.fechaProbableEntrega = req.body.fechaProbableEntrega || programacion.fechaProbableEntrega;
+      await programacion.save();
     }
+
+    res.status(201).json("Programación guardada correctamente");
+
+  } catch (error) {
+    console.error("ERROR PROGRAMACION:", error);
+    res.status(500).json({ error: "Hubo un error" });
+  }
+};
+
 
 
     static getById =async (req: Request, res:Response) =>{
@@ -50,5 +62,7 @@ export class ProgramacionController{
         res.json('Registro Eliminado')
 
     }
+
+    
 
 }

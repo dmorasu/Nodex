@@ -16,9 +16,8 @@ type ActionStateType ={
 export default async function CrearProgramacion(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
     const programacionData={
         solicitudTramitesId:solicitudTramitesId, 
-        fechaRealizacionDiligencia:formData.get('fechaRealizacionDiligencia'),
         fechaProbableEntrega:formData.get('fechaProbableEntrega'),
-        fechaFinalizacionServicio:formData.get('fechaFinalizacionServicio'),
+        
         
 
     }
@@ -43,9 +42,9 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
         },
         body:JSON.stringify({
             solicitudTramitesId:solicitudTramitesId,
-            fechaRealizacionDiligencia:programacionData.fechaRealizacionDiligencia,
+           
             fechaProbableEntrega:programacionData.fechaProbableEntrega,
-            fechaFinalizacionServicio:programacionData.fechaFinalizacionServicio,
+           
         })
     })
 

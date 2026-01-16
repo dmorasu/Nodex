@@ -71,47 +71,22 @@ export default function AddCuentaCobroForm({ closeModal }:{ closeModal:()=>void 
           />
         </div>
 
-        <div className="py-3">
+       <div className="py-3">
           <label className="text-sm uppercase font-bold">
-            Fecha Radicación:
+            Valor de la Cuenta de Cobro:
           </label>
           <input
-            type="date"
-            name="fechaRadicacionCuentaCobro"
+            type="text"
+            name="valorCuentaCobro"
             className="w-full p-3 border border-gray-100 bg-slate-100"
+            placeholder="Valor cuenta de cobro"
           />
         </div>
 
-        <div className="py-3">
-          <label className="text-sm uppercase font-bold">
-            Fecha Máxima Pago:
-          </label>
-          <input
-            type="date"
-            name="fechaMaximaPagoCuentaCobro"
-            className="w-full p-3 border border-gray-100 bg-slate-100"
-          />
-        </div>
+        
 
-        {/* CHECKBOX PAGADO */}
-        <div className="py-3 flex items-center gap-3">
-          <input
-            type="checkbox"
-            className="w-5 h-5 accent-sky-500"
-            onChange={handlePagadoChange}
-          />
-          <label className="text-sm uppercase font-bold">
-            Cuenta Pagada
-          </label>
-        </div>
-
-        {/* INPUT HIDDEN QUE VIAJA EN EL FORM */}
-        <input
-          type="hidden"
-          name="fechaPagoCuentacobro"
-          value={fechaPago}
-          readOnly
-        />
+       
+        
 
         <div className="py-3">
           <label className="text-sm uppercase font-bold">

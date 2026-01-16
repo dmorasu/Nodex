@@ -115,6 +115,14 @@ router.put('/:solicitudTramitesId/programacion/:programacionId',
 router.delete('/:solicitudTramitesId/programacion/:programacionId',ProgramacionController.deleteById)
 
 
+router.post('/:solicitudTramitesId/programacion',
+  validateProgramacionInput,
+  handleInputErrors,
+  ProgramacionController.create
+)
+  
+
+
 
 //--------------------------------------------------- Rutas para Cuenta Cobro -----------------------------------------------------------------------
 

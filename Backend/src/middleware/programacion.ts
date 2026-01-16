@@ -32,7 +32,7 @@ export const  validateProgramacionExits= async(req:Request,res:Response,next:Nex
 }
 
 export const  validateProgramacionInput =async(req:Request,res:Response,next:NextFunction)=>{
-        await body('fechaRealizacionDiligencia').notEmpty().withMessage('La fecha de dilgencia no puede estar vacia').run(req)
+
         await body('fechaProbableEntrega').notEmpty().withMessage('La fecha probable de entrega no puede estar vacia').run(req)
         
     next()

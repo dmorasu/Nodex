@@ -116,6 +116,15 @@ export const Trazabilidad =z.object({
 
 })
 
+export const Programacion =z.object({
+        id:z.number(),
+        fechaProbableEntrega:z.string().nullable().optional(),
+        fechaFinalizacionServicio:z.string().nullable().optional(),
+        fechaRealizacionDiligencia:z.string().nullable().optional()
+
+
+})
+
 export const TrazabilidadSchema=z.object({
         observacionTrazabilidad:z.string()
                                         .min(1,{message:"Debe registar alguna observacion"}),
@@ -150,12 +159,10 @@ export const logisticaSchema=z.object({
 
 
 export const ProgramacionSchema=z.object({
-        fechaRealizacionDiligencia: z.string()
-        .min(1, "Debe seleccionar la fecha de Radicaci{on"),
-        fechaProbableEntrega: z.number()
-        .min(1, "Debe seleccionar la fecha de Maxima de Pago"),
-        fechaFinalizaiconServicio: z.string()
-        .min(1, "Debe seleccionar la fecha de entrega")
+        
+        fechaProbableEntrega: z.string()
+        .min(1, "Debe seleccionar la fecha de Entrega"),
+       
 })
 
 
@@ -185,6 +192,7 @@ export const SolicitudAPIRespuestaSchema = z.object({
         municipios:MunicipioSchema.optional(),
         estadosTramites:z.array(estadosTramites).optional(),
         trazabilidad:array(Trazabilidad).optional(),
+        programacion:Programacion.optional().nullable()
         
         
         
