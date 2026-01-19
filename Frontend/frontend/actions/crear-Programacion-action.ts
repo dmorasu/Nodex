@@ -17,6 +17,8 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
     const programacionData={
         solicitudTramitesId:solicitudTramitesId, 
         fechaProbableEntrega:formData.get('fechaProbableEntrega'),
+        valorTramite:formData.get('valorTramite'),
+        valorViaticos:formData.get("valorViaticos")
         
         
 
@@ -42,7 +44,8 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
         },
         body:JSON.stringify({
             solicitudTramitesId:solicitudTramitesId,
-           
+            valorTramite:programacionData.valorTramite,
+            valorViaticos:programacionData.valorViaticos,
             fechaProbableEntrega:programacionData.fechaProbableEntrega,
            
         })

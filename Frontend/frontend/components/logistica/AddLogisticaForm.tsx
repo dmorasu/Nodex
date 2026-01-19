@@ -7,9 +7,11 @@ import { useEffect } from "react";
 
 import { toast } from "react-toastify";
 import CrearLogistica from "@/actions/crear-logistica-action";
+import { LogisticaType } from "@/src/type/solicitudes";
+import { toDateInput } from "@/src/ultis";
 
 
-export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
+export default function AddLogisticaForm({closeModal, logistica}:{closeModal:()=>void , logistica?:LogisticaType | null}){
     const {id}=useParams()
 
     const crearLogisticaconId=CrearLogistica.bind(null,+id)
@@ -52,6 +54,7 @@ export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
       name="numeroGuia"
       className="w-full p-3 border border-gray-100 bg-slate-100"
       placeholder="Ingrese número de guía"
+      defaultValue={logistica?.numeroGuia??""}
     />
   </div>
 
@@ -64,6 +67,7 @@ export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
       name="valorEnvio"
       className="w-full p-3 border border-gray-100 bg-slate-100"
       placeholder="Valor del envío"
+      defaultValue={logistica?.valorEnvio??""}
     />
   </div>
 
@@ -75,6 +79,7 @@ export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
       type="time"
       name="horaProgramada"
       className="w-full p-3 border border-gray-100 bg-slate-100"
+      defaultValue={logistica?.horaProgramada??""}
     />
   </div>
 
@@ -86,6 +91,7 @@ export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
       type="date"
       name="fechaProgramacionLogistica"
       className="w-full p-3 border border-gray-100 bg-slate-100"
+      defaultValue={toDateInput(logistica?.fechaProgramacionLogistica ?? "") }
     />
   </div>
 
@@ -97,6 +103,7 @@ export default function AddLogisticaForm({closeModal}:{closeModal:()=>void}){
       type="date"
       name="fechaEntregaTransportadora"
       className="w-full p-3 border border-gray-100 bg-slate-100"
+      defaultValue={toDateInput(logistica?.fechaEntregaTransportadora?? "")}
     />
   </div>
 

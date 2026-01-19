@@ -1,54 +1,34 @@
-import {Table,Column,DataType,HasMany,Model,ForeignKey,BelongsTo} from 'sequelize-typescript'
-import SolicitudTramites from './solicitudTramites'
+import { Table, Column, DataType, Model, ForeignKey, BelongsTo } from "sequelize-typescript"
+import SolicitudTramites from "./solicitudTramites"
 
-@Table({
-    tableName:'CuentaCobros'
-})
+@Table({ tableName: "CuentaCobros" })
+class CuentaCobros extends Model {
 
-class CuentaCobros extends Model{
-    
-   declare valorCuentaCobro: number
-    @Column({
-        type:DataType.DATE
+  @Column({ type: DataType.DECIMAL(10,2) })
+  declare valorCuentaCobro: number | null
 
+  @Column({ type: DataType.DATEONLY })
+  declare fechaRadicacionCuentaCobro: string | null
 
-     })
-     declare fechaRadicacionCuentaCobro: Date
+  @Column({ type: DataType.DATEONLY })
+  declare fechaMaximaPagoCuentaCobro: string | null
 
-     @Column({
-        type:DataType.DATE
+  @Column({ type: DataType.DATEONLY })
+  declare fechaPagoCuentaCobro: string | null
 
+  @Column({ type: DataType.DATEONLY })
+  declare fechaRecibidaCuentaCobroTramitador: string | null
 
-     })
-     declare fechaMaximaPagoCuentaCobro: Date
+  @Column({ type: DataType.STRING(20) })
+  declare numeroCuentaCobro: string | null
 
-     @Column({
-        type:DataType.DATE
+  // 🔹 FK real
+  @ForeignKey(() => SolicitudTramites)
+  @Column({ unique: true })
+  declare solicitudTramiteId: number
 
-
-     })
-     declare fechaPagoCuentaCobro: Date
-
-     @Column({
-        type:DataType.DATE
-
-
-     })
-     declare fechaRecibidaCuentaCobroTramitador: Date
-
-     @Column({
-         type:DataType.STRING(20)
-
-     })
-     declare numeroCuentaCobro:string
-
-      @HasMany(()=>SolicitudTramites,{
-         onUpdate:'CASCADE',
-         onDelete:'CASCADE'
-
-      })
-     declare solicitudTramitesId:SolicitudTramites
-
+  @BelongsTo(() => SolicitudTramites)
+  declare solicitudTramite: SolicitudTramites
 }
 
-export  default CuentaCobros
+export default CuentaCobros

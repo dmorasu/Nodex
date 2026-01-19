@@ -7,8 +7,11 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import CrearCuentaCobro from "@/actions/crear-CuentaCobro-action"
+import { CuentaCobroType } from "@/src/type/solicitudes"
+import { toDateInput } from "@/src/ultis"
+import { toDateOnly } from "@/src/ultis/fechasHabiles"
 
-export default function AddCuentaCobroForm({ closeModal }:{ closeModal:()=>void }) {
+export default function AddCuentaCobroForm({ closeModal , cuentaCobro}:{ closeModal:()=>void ,cuentaCobro?:CuentaCobroType | null }) {
 
   const { id } = useParams()
   const crearCuentaCobroconId = CrearCuentaCobro.bind(null, +id)
@@ -68,6 +71,7 @@ export default function AddCuentaCobroForm({ closeModal }:{ closeModal:()=>void 
             name="numeroCuentaCobro"
             className="w-full p-3 border border-gray-100 bg-slate-100"
             placeholder="Número de cuenta de cobro"
+            defaultValue={cuentaCobro?.numeroCuentaCobro??""}
           />
         </div>
 
@@ -80,6 +84,7 @@ export default function AddCuentaCobroForm({ closeModal }:{ closeModal:()=>void 
             name="valorCuentaCobro"
             className="w-full p-3 border border-gray-100 bg-slate-100"
             placeholder="Valor cuenta de cobro"
+            defaultValue={cuentaCobro?.valorCuentaCobro??""}
           />
         </div>
 
@@ -94,8 +99,9 @@ export default function AddCuentaCobroForm({ closeModal }:{ closeModal:()=>void 
           </label>
           <input
             type="date"
-            name="FechaRecibidadCuentaCobroTramitador"
+            name="fechaRecibidaCuentaCobroTramitador"
             className="w-full p-3 border border-gray-100 bg-slate-100"
+            defaultValue={toDateInput(cuentaCobro?.fechaRecibidaCuentaCobroTramitador??"") }
           />
         </div>
 

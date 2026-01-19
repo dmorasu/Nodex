@@ -18,7 +18,6 @@ export class ProgramacionController{
   try {
     const solicitudId = req.solicitudTramites.id;
 
-    // Buscar si ya existe programación
     let programacion = await Programacion.findOne({
       where: { solicitudTramitesId: solicitudId }
     });
@@ -27,12 +26,25 @@ export class ProgramacionController{
       // Crear si no existe
       programacion = await Programacion.create({
         solicitudTramitesId: solicitudId,
-        fechaProbableEntrega: req.body.fechaProbableEntrega || null
+        fechaProbableEntrega: req.body.fechaProbableEntrega || null,
+        valorTramite: req.body.valorTramite || null,
+        valorViaticos: req.body.valorViaticos || null
       });
     } else {
-      // Actualizar solo los campos permitidos
-      
-      programacion.fechaProbableEntrega = req.body.fechaProbableEntrega || programacion.fechaProbableEntrega;
+      // Actualizar solo lo que venga en el body
+
+      if (req.body.fechaProbableEntrega !== undefined) {
+        programacion.fechaProbableEntrega = req.body.fechaProbableEntrega || null;
+      }
+
+      if (req.body.valorTramite !== undefined) {
+        programacion.valorTramite = req.body.valorTramite || null;
+      }
+
+      if (req.body.valorViaticos !== undefined) {
+        programacion.valorViaticos = req.body.valorViaticos || null;
+      }
+
       await programacion.save();
     }
 
@@ -43,6 +55,7 @@ export class ProgramacionController{
     res.status(500).json({ error: "Hubo un error" });
   }
 };
+
 
 
 

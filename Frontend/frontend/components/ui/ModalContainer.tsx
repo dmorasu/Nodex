@@ -8,6 +8,10 @@ import AddTrazabilidadForm from '../trazabilidad/AddTrazabilidadForm';
 import AddCuentaCobroForm from '../cuentacobro/AddCuentaCobroForm';
 import AddLogisticaForm from '../logistica/AddLogisticaForm';
 import AddProgramacionForm from '../programacion/AddProgramacionForm';
+import { formatoFecha } from '@/src/ultis';
+import { SolicitudTramiteType } from '@/src/type/solicitudes';
+import { SolicitudAPIRespuestaSchema } from '@/src/schemas';
+import { json } from 'zod';
 
 
 
@@ -22,7 +26,8 @@ const componenteMap={
 
 }
 
-export default function ModalContainer() {
+
+export default function ModalContainer({solicitudTramite}:{solicitudTramite:SolicitudTramiteType}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -53,7 +58,7 @@ export default function ModalContainer() {
     });
     router.replace(`${pathname}?${hideModal}`)
   }
-
+  //console.log(solicitudTramite)
   return (
     <>
       <Transition appear show={show} as={Fragment}>
@@ -82,7 +87,14 @@ export default function ModalContainer() {
                 leaveTo="opacity-0 scale-95"
               >
                 <DialogPanel className="w-full max-w-5xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
-                    {ComponenteRender? <ComponenteRender closeModal={closeModal}/> :null}
+                    {ComponenteRender ? (
+                      <ComponenteRender
+                        closeModal={closeModal}
+                        programacion={componenteName === "AddProgramacion" ? solicitudTramite.programacion : undefined}
+                        logistica={componenteName === "AddLogistica" ? solicitudTramite.logistica : undefined}
+                        cuentaCobro={componenteName === "AddCuentaCobro" ? solicitudTramite.cuentaCobro : undefined}
+  />
+) : null}
                 </DialogPanel>
               </TransitionChild>
             </div>

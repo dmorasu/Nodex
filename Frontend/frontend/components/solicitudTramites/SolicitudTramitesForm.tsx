@@ -49,7 +49,7 @@ export default function SolicitudTramitesForm({ solicitud }: { solicitud?: Solic
         </label>
         <MunicipiosComboBox
           name="municipioId"
-          defaultValue={solicitud?.municipios?.nombreMunicipio}
+          defaultValue={solicitud?.municipios?.id}
         />
       </div>
 
@@ -59,7 +59,7 @@ export default function SolicitudTramitesForm({ solicitud }: { solicitud?: Solic
         </label>
         <ClientesComboBox
           name="clienteId"
-          defaultValue={solicitud?.clientes?.nombreCliente}
+          defaultValue={solicitud?.clientes?.id}
         />
       </div>
 

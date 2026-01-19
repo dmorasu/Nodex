@@ -1,4 +1,4 @@
-import{ Table,Column,Model,ForeignKey,HasMany,BelongsTo, DataType, AllowNull} from 'sequelize-typescript'
+import{ Table,Column,Model,ForeignKey,HasMany,BelongsTo, DataType, AllowNull, HasOne} from 'sequelize-typescript'
 import SolicitudTramites from './solicitudTramites'
 
 
@@ -20,25 +20,32 @@ class Logistica extends Model{
     declare valorEnvio:number
 
     @Column({
-        type: DataType.DATE,
+        type: DataType.TIME,
         
 
     })
     declare horaProgramada: string
 
     @Column({
-        type: DataType.DATE
+        type: DataType.DATEONLY
     })
     declare fechaProgramacionLogistica:string
 
+ 
+
     @Column({
-        type: DataType.DATE
+        type: DataType.DATEONLY,
+        
     })
     declare fechaEntregaTransportadora:string
 
-     @HasMany(()=>SolicitudTramites,{
-         onUpdate:'CASCADE',
-         onDelete:'CASCADE'
+     // 🔹 FK REAL hacia SolicitudTramites
+    @ForeignKey(() => SolicitudTramites)
+    @Column({ unique: true }) 
+    declare solicitudTramiteId: number
+
+     @BelongsTo(()=>SolicitudTramites,{
+       
 
       })
      declare solicitudTramites:SolicitudTramites

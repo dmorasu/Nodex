@@ -14,24 +14,40 @@ export class CuentaCobroController{
         
     }
 
-    static create =async (req: Request, res:Response) =>{
-         // console.log("req.params.solicitudTramiteId");
-         //console.log(req.params.solicitudTramitesId);
-         //console.log(req.solicitudTramites.id);
-          try {
-                const cuentaCobro = new CuentaCobro(req.body)
-                cuentaCobro.solicitudTramitesId =req.solicitudTramites.id
-                await cuentaCobro.save()
-                res.status(201).json('Registro Guardado')
+    static create = async (req: Request, res: Response) => {
+    try {
+      const solicitudId = req.solicitudTramites.id
 
+      // Buscar si ya existe cuentaCobro para esta solicitud
+      let cuentaCobro = await CuentaCobro.findOne({
+        where: { solicitudTramiteId: solicitudId }
+      })
 
-          } catch (error) {
-                res.status(500).json({error:"Hubo un error"})
+      if (!cuentaCobro) {
+        // 👉 Crear si no existe
+        cuentaCobro = await CuentaCobro.create({
+          solicitudTramiteId: solicitudId,
+          ...req.body
+        })
+      } else {
+        // 👉 Actualizar solo campos enviados
+        Object.keys(req.body).forEach((key) => {
+          if (req.body[key] !== undefined) {
+            cuentaCobro[key] = req.body[key] || null
           }
-         
-         
+        })
+        await cuentaCobro.save()
+      }
+
+      res.status(201).json("Registro  guardado correctamente");
+
+
+    } catch (error) {
+      console.error("ERROR PROGRAMACION:", error);
+    res.status(500).json({ error: "Hubo un error" });
 
     }
+  }
 
 
     static getById =async (req: Request, res:Response) =>{

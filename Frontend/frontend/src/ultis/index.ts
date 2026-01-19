@@ -12,3 +12,9 @@ export function formatoFecha(isoString:string){
     return fromatear.format(fecha)
 
 }
+
+
+export function toDateInput(value?: string | null) {
+  if (!value) return ""
+  return value.split("T")[0]   // "2026-02-13"
+}

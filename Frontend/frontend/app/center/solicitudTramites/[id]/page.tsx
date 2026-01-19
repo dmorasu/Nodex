@@ -1,15 +1,23 @@
 import AddCuentaCobroBoton from '@/components/cuentacobro/AddCuentaCobroBoton';
 import AddEstadosBoton from '@/components/estados/AddEstadosBoton';
 import AddLogisticatoBoton from '@/components/logistica/AddLogistica';
-import AddLogisticaton from '@/components/logistica/AddLogistica';
+
 import AddProgramacionBoton from '@/components/programacion/AddProgramacionBoton';
 import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton';
-import ModalContainer from '@/components/ui/ModalContainer';
+
+import dynamic from "next/dynamic";
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas'
 import { formatoFecha } from '@/src/ultis';
 import { Metadata } from 'next'
 import Link from 'next/link';
 import React from 'react'
+import clsx from "clsx"
+
+
+const ModalContainer = dynamic(
+  () => import('@/components/ui/ModalContainer'),
+  { ssr: false }
+);
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   // 1️⃣ Primero obtener los datos de la solicitud
@@ -33,6 +41,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
+
+
 export default async function DetalleSolicitudTramite({ params }: { params: { id: string } }) {
 
   const solicitudTramiteId = params.id
@@ -43,7 +53,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
   })
   const json = await req.json()
   const solicitudTramite = SolicitudAPIRespuestaSchema.parse(json)
-  //console.log(solicitudTramite.tra)
+  //console.log(solicitudTramite)
   return (
     <>
       <div className=' bg-white  border-slate-200 rounded-lg  px-6 py-4 flex justify-between items-center divide-gray-300 border shadow-lg mt-10'>
@@ -54,7 +64,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
         </div>
         <div className="flex items-center gap-3">
           <AddEstadosBoton />
-          <AddProgramacionBoton/>
+          <AddProgramacionBoton />
           <AddLogisticatoBoton/>
           <AddCuentaCobroBoton/>
           <AddTrazabilidadBoton/>
@@ -128,12 +138,37 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         <span className="text-orange-500">direccion:</span>{" "}
                         {solicitudTramite.direccionTramite} 
                     </p>
+                    
                      <p className='text-gray-500  text-sm'>
                         
 
                         <span className="text-orange-500">Fecha Probable Entrega:</span>{" "}
                         {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
                     </p>
+                    {/* <p
+                                        className={clsx(
+                                          "p-2 rounded-lg font-bold w-full md:w-auto text-center",
+                                          {
+                                            "bg-red-400 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "Sin Iniciar",
+                                            "bg-amber-400 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "En Curso",
+                                            "bg-green-500 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "Finalizado",
+                                            "bg-blue-500 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "Reprogramado",
+                                            "bg-orange-500 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "Desistido",
+                                            "bg-purple-500 text-white":
+                                              solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado === "Suspendido",
+                                            "bg-gray-400 text-white":
+                                              !["Sin Iniciar","En Curso","Finalizado","Reprogramado","Desistido","Suspendido"]
+                                              .includes(solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado ?? "")
+                                          }
+                                        )}
+                                      >
+                                        {solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
+                                      </p> */}
                     <p className="text-gray-400 text-sm">
                       Actualizado el:{" "}
                       <span className="font-bold">
@@ -196,7 +231,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
         <p className='text-center py-20'> No se han registrado observaciones en la Trazabilidad</p>
         
       )}
-      <ModalContainer />
+      <ModalContainer solicitudTramite={solicitudTramite} />
 
 
     </>

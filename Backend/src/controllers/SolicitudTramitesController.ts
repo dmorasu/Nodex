@@ -172,36 +172,58 @@ static getAll = async (req: Request, res: Response) => {
     }
 
 
-     static getById = async (req:Request, res:Response)=>{
-        const solicitudTramites =await SolicitudTramites.findByPk(req.solicitudTramites.id, {
-            include:[ Clientes,
-                      Municipios,
-                      {
-                        model:Trazabilidad,
-                        separate:true,
-                        order:[["createdAt","DESC"]],
-                        limit:20
-                      },
-                     
-                      { 
-                       
-                        model:EstadosTramites,
-                          include:[{
-                            model:Estados, attributes:["nombreEstado"]}],
-                      
-                      
-                      order:[["createdAt","DESC"]]
-                      },
-                      CuentaCobros,
-                      Logistica,
-                      Programacion,
-                      {
-                        model:Usuarios,
-                        attributes:["id","nombreUsuario","correoUsuario"]
-                      }]
-        })
-        res.json(solicitudTramites)
-    }
+     static getById = async (req: Request, res: Response) => {
+  try {
+    const solicitudTramites = await SolicitudTramites.findByPk(
+      req.solicitudTramites.id,
+      {
+        include: [
+          Clientes,
+          Municipios,
+
+          {
+            model: Trazabilidad,
+            separate: true,
+            order: [["createdAt", "DESC"]],
+            limit: 20
+          },
+
+          {
+            model: EstadosTramites,
+            include: [{
+              model: Estados,
+              attributes: ["nombreEstado"]
+            }],
+            order: [["createdAt", "DESC"]]
+          },
+
+          // 🔹 Relaciones 1–1 ya corregidas
+          {
+            model: Programacion
+          },
+          {
+            model: Logistica
+          },
+          {
+            model: CuentaCobros
+          },
+
+          {
+            model: Usuarios,
+            attributes: ["id", "nombreUsuario", "correoUsuario"]
+          }
+        ]
+      }
+    )
+
+    res.json(solicitudTramites)
+
+  } catch (error) {
+    console.error("ERROR GET SOLICITUD:", error)
+    res.status(500).json({ error: error.message })
+  }
+}
+
 
      static updateById = async (req:Request, res:Response)=>{
         await req.solicitudTramites.update(req.body)

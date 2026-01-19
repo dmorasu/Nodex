@@ -1,69 +1,83 @@
 "use server"
 
-import { ErrorResponoseSchema,TrazabilidadSchema,SuccessSchema, CuentaCobroSchema } from "@/src/schemas"
+import { 
+  ErrorResponoseSchema,
+  SuccessSchema,
+  CuentaCobroSchema 
+} from "@/src/schemas"
 
-import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
-import { error } from "console"
-import { success } from "zod"
+import { sumarDiasHabilesColombia } from "@/src/ultis/fechasHabiles"
 
-type ActionStateType ={
-    errors:string[],
-    success:string
+type ActionStateType = {
+  errors: string[],
+  success: string
 }
 
+function toDateOnly(date: Date) {
+  return date.toISOString().split("T")[0]
+}
 
-export default async function CrearCuentaCobro(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
-    const cuentaCobroData={
-        solicitudTramitesId:solicitudTramitesId,
-        fechaRadicacionCuentaCobro:formData.get('fechaRadicacionCuentaCobro'),
-        fechaRecibidaCuentaCobroTramitador:formData.get('fechaRecibidaCuentaCobroTramitador'),
-        fechaMaximaPagoCuentaCobro:formData.get('fechaMaximaPagoCuentaCobro'),
-        fechaPagoCuentaCobro:formData.get('fechaPagoCuentaCobro'),
-        numeroCuentaCobro:formData.get('numeroCuentaCobro')
+export default async function CrearCuentaCobro(
+  solicitudTramitesId: number,
+  prevState: ActionStateType,
+  formData: FormData
+) {
 
+  // 🔹 Generadas automáticamente
+  const ahora = new Date()
+  const fechaMaxPago = sumarDiasHabilesColombia(ahora, 10)
+
+  const cuentaCobroData = {
+    solicitudTramitesId,
+
+    fechaRadicacionCuentaCobro: toDateOnly(ahora),
+    fechaMaximaPagoCuentaCobro: toDateOnly(fechaMaxPago),
+
+    numeroCuentaCobro: formData.get("numeroCuentaCobro"),
+    valorCuentaCobro: formData.get("valorCuentaCobro"),
+    fechaRecibidaCuentaCobroTramitador: formData.get("fechaRecibidaCuentaCobroTramitador"),
+    fechaPagoCuentaCobro: formData.get("fechaPagoCuentaCobro")
+  }
+
+  // ✅ Validación flexible
+  const parsed = CuentaCobroSchema.safeParse(cuentaCobroData)
+
+  if (!parsed.success) {
+    return {
+      errors: parsed.error.issues.map(issue => issue.message),
+      success: ""
     }
+  }
 
-    const cuentaCobro=CuentaCobroSchema.safeParse(cuentaCobroData)
-    if(!cuentaCobro.success){
-        return{
-            errors:cuentaCobro.error.issues.map(issue=>issue.message),
-            success:''
-        }
-    }
+  // ✅ Enviar al backend
+  
+  const url= `${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/cuentaCobro`
 
-    const url= `${process.env.API_URL}/solicitudesTramites/${solicitudTramitesId}/cuentaCobro`
-    const req = await fetch(url,{
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json',
-        },
-        body:JSON.stringify({
-            solicitudTramitesId:solicitudTramitesId,
-            fechaRadicacionCuentaCobro:cuentaCobroData.fechaRadicacionCuentaCobro,
-            fechaMaximaPagoCuentaCobro:cuentaCobroData.fechaMaximaPagoCuentaCobro,
-            fechaRecibidaCuentaCobroTramitador:cuentaCobroData.fechaRecibidaCuentaCobroTramitador,
-            fechaPagoCuentaCobro:cuentaCobroData.fechaPagoCuentaCobro,
-            numeroCuentaCobro:cuentaCobroData.numeroCuentaCobro
-        })
-        
-    })
-    const json =await req.json()
-    console.log(json)
-    if(!req.ok){
-        const {error}=ErrorResponoseSchema.parse(json)
-        return{
-            errors:[error],
-            success:''
-        }
-    }
-    
-    revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
-    const success = SuccessSchema.parse(json)
 
-   return{
-        errors:[],
-        success
+
+  const req = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(parsed.data)
+  })
+
+  const json = await req.json()
+
+  if (!req.ok) {
+    const { error } = ErrorResponoseSchema.parse(json)
+    return {
+      errors: [error],
+      success: ""
     }
-    
+  }
+
+  revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
+
+  const success = SuccessSchema.parse(json)
+
+  return {
+    errors: [],
+    success
+  }
 }
