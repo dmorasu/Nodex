@@ -16,6 +16,8 @@ export class OperacionesController{
                     order:[
                         ['createdAt','DESC']
                     ],
+                    attributes:["id","nombreOperacion"]
+                    
 
                 })
                 res.json(operaciones)

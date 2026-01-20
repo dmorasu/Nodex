@@ -33,7 +33,7 @@ const app = express()
 app.use(morgan('dev'))
 
 app.use(cors({
-  origin: 'http://localhost:3000',  // dominio del frontend
+  origin: 'http://192.168.4.77:3000',  // dominio del frontend
   credentials: true,                // si usas cookies o auth headers
 }))
 

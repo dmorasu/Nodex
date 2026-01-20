@@ -14,6 +14,12 @@ class Operaciones extends Model{
 
     declare nombreOperacion:string
 
+    @Column({
+        type: DataType.STRING(10)
+    })
+
+    declare centroDeCostos:string
+
 
     @HasMany(()=>SolicitudTramites,{
          onUpdate:'CASCADE',

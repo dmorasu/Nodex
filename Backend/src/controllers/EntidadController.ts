@@ -16,6 +16,7 @@ export class EntidadController{
                     order:[
                         ['createdAt','DESC']
                     ],
+                    attributes:["id","nombreEntidad"]
 
                 })
                 res.json(entidad)

@@ -21,6 +21,7 @@ import Municipios from "./municipios";
 import EstadosTramites from "./estadosTramites";
 import Trazabilidad from "./trazabilidad";
 import CuentaCobros from "./cuentaCobro";
+import Tramite from "./tramite";
 
 @Table({
   tableName: "SolicitudTramites",
@@ -45,14 +46,11 @@ class SolicitudTramites extends Model {
   @Column({ type: DataType.STRING(200) })
   declare placa: string;
 
-  @Column({ type: DataType.STRING(200) })
-  declare tipoServicio: string;
-
+  
   @Column({ type: DataType.STRING(100) })
   declare direccionTramite: string;
 
-  @Column({ type: DataType.STRING(20) })
-  declare centroCostos: string;
+
 
   @Column({ type: DataType.TEXT })
   declare documentosAportados: string;
@@ -103,6 +101,12 @@ class SolicitudTramites extends Model {
 
   @BelongsTo(() => Municipios)
   declare municipios: Municipios;
+
+  @ForeignKey(()=>Tramite)
+declare tramiteId:number
+
+@BelongsTo(()=>Tramite)
+declare tramite: Tramite
 
   // ===== Relaciones 1 - N =====
 
