@@ -12,6 +12,7 @@ import { formatoFecha } from '@/src/ultis';
 import { SolicitudTramiteType } from '@/src/type/solicitudes';
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas';
 import { json } from 'zod';
+import AddTramitadorForm from '../tramitador/AddTramitadorForm';
 
 
 
@@ -21,7 +22,8 @@ const componenteMap={
     "AddTrazabilidad": AddTrazabilidadForm,
     "AddCuentaCobro":AddCuentaCobroForm,
     "AddLogistica":AddLogisticaForm,
-    "AddProgramacion":AddProgramacionForm
+    "AddProgramacion":AddProgramacionForm,
+    "AddTramitador":AddTramitadorForm
     
 
 }
@@ -39,6 +41,7 @@ export default function ModalContainer({solicitudTramite}:{solicitudTramite:Soli
   const addCuentaCobro = searchParams.get('addCuentaCobro')
   const addLogistica = searchParams.get('addLogistica')
   const addProgramacion = searchParams.get('addProgramacion')
+  const addTramitador = searchParams.get('addTramitador')
 
   const  getComponentName =()=>{
     if(addEstado) return 'AddEstado'
@@ -46,6 +49,7 @@ export default function ModalContainer({solicitudTramite}:{solicitudTramite:Soli
     if (addCuentaCobro) return 'AddCuentaCobro'
     if (addLogistica) return 'AddLogistica'
     if (addProgramacion) return 'AddProgramacion'
+    if (addTramitador) return 'AddTramitador'
   }
 
   const componenteName= getComponentName()
@@ -93,6 +97,8 @@ export default function ModalContainer({solicitudTramite}:{solicitudTramite:Soli
                         programacion={componenteName === "AddProgramacion" ? solicitudTramite.programacion : undefined}
                         logistica={componenteName === "AddLogistica" ? solicitudTramite.logistica : undefined}
                         cuentaCobro={componenteName === "AddCuentaCobro" ? solicitudTramite.cuentaCobro : undefined}
+                     
+                        tramitador={componenteName === "AddTramitador"? solicitudTramite.tramitador: undefined}
   />
 ) : null}
                 </DialogPanel>

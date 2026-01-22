@@ -53,7 +53,7 @@ app.use('/api/tramites',tramiteRouter)
 
 app.use('/api/tarifa',tarifaRouter)
 
-app.use('/api/tramitador',tramitadorRouter)
+app.use('/api/tramitador', tramitadorRouter)
 
 app.use('/api/solicitudTramites/',solicitudTramiteRouter)
 

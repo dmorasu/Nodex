@@ -12,6 +12,7 @@ import { Metadata } from 'next'
 import Link from 'next/link';
 import React from 'react'
 import clsx from "clsx"
+import AddTramitadorBoton from '@/components/tramitador/AddTramitadorBoton';
 
 
 const ModalContainer = dynamic(
@@ -62,30 +63,41 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
           <h1 className="  text-2xl font-semibold text-slate-800">Trámite N: {solicitudTramite.id}</h1>
          
         </div>
-        <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end items-center">
-          <AddEstadosBoton />
-          <AddProgramacionBoton />
-          <AddLogisticatoBoton/>
-          <AddCuentaCobroBoton/>
-          <AddTrazabilidadBoton/>
-          <Link
-           href={'/center'}
-             className="
-              px-4 py-2
-            hover:bg-white
-            hover:text-slate-600
-              hover:border border-red-400
-              rounded-md
-              font-medium
-            bg-red-400
-            text-slate-50
-              transition
-      "
-        >
-          Volver
-        </Link>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
 
-        </div>
+  {/* Fila 1 */}
+  <AddEstadosBoton />
+  <AddTramitadorBoton />
+  <AddProgramacionBoton />
+  <AddLogisticatoBoton />
+
+  {/* Fila 2 → alineados a la derecha */}
+  <div className="md:col-start-2">
+    <AddCuentaCobroBoton />
+  </div>
+
+  <div className="md:col-start-3">
+    <AddTrazabilidadBoton />
+  </div>
+
+  <div className="md:col-start-4">
+    <Link
+      href="/center"
+      className="
+        px-4 py-2
+        bg-red-400 text-slate-50 font-medium rounded-md
+        hover:bg-white hover:text-slate-600 
+        hover:border hover:border-red-400
+        transition
+        text-center
+        block
+      "
+    >
+      Volver
+    </Link>
+  </div>
+
+</div>
         
 
       </div>
@@ -144,6 +156,12 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
 
                         <span className="text-orange-500">Fecha Probable Entrega:</span>{" "}
                         {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
+                    </p>
+                    <p className='text-gray-500  text-sm'>
+                        
+
+                        <span className="text-orange-500">Tramitador Asignado:</span>{" "}
+                        {solicitudTramite.tramitador?.nombreTramitador??"No se ha asignado un Tramitador "} 
                     </p>
                     {/* <p
                                         className={clsx(

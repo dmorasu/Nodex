@@ -13,4 +13,9 @@ export type CuentaCobroType = NonNullable<
   z.infer<typeof SolicitudAPIRespuestaSchema>["cuentaCobro"]
 >
 
+export type TramitadorType = NonNullable<
+  z.infer<typeof SolicitudAPIRespuestaSchema>["tramitador"]
+>
+ 
+
 export type SolicitudTramiteType = z.infer<typeof SolicitudAPIRespuestaSchema>

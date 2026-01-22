@@ -1,4 +1,5 @@
-import { array, z, ZodString } from 'zod'
+import { array, nullable, z, ZodString } from 'zod'
+import { id } from 'zod/v4/locales'
 
 export const RegistroSchema = z.object({
         correoUsuario: z.string().
@@ -121,6 +122,11 @@ export const UserSchema = z.object({
 export const ClienteSchema = z.object({
         id: z.number(),
         nombreCliente: z.string()
+})
+
+export const TramitadorSchema=z.object({
+        id:z.number(),
+        nombreTramitador:z.string()
 })
 
 export const MunicipioSchema = z.object({
@@ -291,8 +297,9 @@ export const SolicitudAPIRespuestaSchema = z.object({
         cuentaCobro:cuentaCobro.optional().nullable(),
         operaciones:operaciones.optional().nullable(),
         entidad:Entidad.optional().nullable(),
-        tramite:Tramites.optional().nullable()
-
+        tramite:Tramites.optional().nullable(),
+        tramitador:TramitadorSchema.optional().nullable()
+        
 
 
         //userId: z.number(),

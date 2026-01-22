@@ -138,6 +138,14 @@ router.put('/:solicitudTramitesId/cuentaCobro/:cuentaCobroId',
 router.delete('/:solicitudTramitesId/cuentaCobro/:cuentaCobroId',CuentaCobroController.deleteById)
 
 
+//------------------------------------------------Rutas para Tramitador --------------------------------------------------------------------------------
+router.patch(
+  '/:solicitudTramitesId/asignar-tramitador',
+  validateSolicitudTramiteExits,
+  SolicitudTramitesController.asignarTramitador
+)
+
+
 
 
 

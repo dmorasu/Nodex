@@ -14,6 +14,7 @@ import { CreatedAt } from 'sequelize-typescript'
 import Entidad from '../models/entidad'
 import Operaciones from '../models/operaciones'
 import Tramite from '../models/tramite'
+import Tramitador from '../models/tramitador'
 
 
 
@@ -112,7 +113,27 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
   }
 }
 
-    
+static asignarTramitador = async (req: Request, res: Response) => {
+  try {
+    const { tramitadorId } = req.body
+
+    if (!tramitadorId) {
+      return res.status(400).json({ error: 'Debe enviar tramitadorId' })
+    }
+
+    // req.solicitudTramites ya viene cargado por middleware
+    req.solicitudTramites.tramitadorId = tramitadorId
+    await req.solicitudTramites.save()
+
+    res.status(201).json( 'Tramitador asignado correctamente' )
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('No se puede guardar el registro')
+  }
+}
+   
 static getAll = async (req: Request, res: Response) => {
   try {
     const solicitudTramites = await SolicitudTramites.findAll({
@@ -229,6 +250,10 @@ static getAll = async (req: Request, res: Response) => {
             model:Tramite,
             attributes:['id','nombreTramite']
           },
+          {
+            model:Tramitador,
+            attributes:['id','nombreTramitador']
+          }
         ]
       }
     )

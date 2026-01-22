@@ -7,7 +7,7 @@ const router =Router()
 
 router.param('tramitadorId',validateTramitadorExits)
 
-router.get('/',TramitadorController.getAll)
+router.get('/',TramitadorController.search)
 
 router.post('/',
     validateTramitadorInput,

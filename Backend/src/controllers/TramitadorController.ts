@@ -1,5 +1,6 @@
 import type {Request,Response} from 'express'
 import Tramitador from '../models/tramitador'
+import { Op,Sequelize } from 'sequelize'
 
 declare global{
     namespace Express{
@@ -38,6 +39,39 @@ export class TramitadorController{
             
         }
     }
+
+   static search = async (req: Request, res: Response) => {
+  try {
+    const search = req.query.search?.toString().trim() || ''
+    const limit = Number(req.query.limit) || 20
+
+    if (search.length < 2) {
+      return res.json([])
+    }
+
+    const tramitadores = await Tramitador.findAll({
+      where: {
+        activo: true,   // ✅ filtro booleano correcto
+        nombreTramitador: {
+          [Op.iLike]: `%${search}%`
+        }
+      },
+      order: [
+        [Sequelize.literal(`"nombreTramitador" ILIKE '${search}%'`), 'DESC'],
+        ['nombreTramitador', 'ASC']
+      ],
+      limit
+    })
+
+    res.json(tramitadores)
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error buscando tramitadores' })
+  }
+}
+
+
     static getById= async (req:Request,res:Response)=>{
         
          res.json(req.tramitador)
