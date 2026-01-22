@@ -8,6 +8,9 @@ import { formatoFecha } from "@/src/ultis"
 import { SolicitudTramites } from "@/src/schemas"
 import EliminarSolicitudTramiteModal from "./EliminarSolicitudTramiteModal"
 import clsx from "clsx"
+import CargaMasivaSolicitudes from "./CargaMasivaSolicitudes"
+
+import ModalContainer from "../ui/ModalContainer"
 
 interface Props {
   solicitudes: SolicitudTramites[]
@@ -65,6 +68,8 @@ export default function CenterPageClient({
         >
           Crear Trámite
         </Link>
+       
+        
       </div>
 
       {/* 🔹 Barra de búsqueda */}
@@ -92,6 +97,7 @@ export default function CenterPageClient({
             className="divide-y divide-gray-300 border shadow-lg mt-4 bg-white p-4 shadow-blue-400 rounded-xl"
           >
             {solicitudes.map((solicitud) => (
+              
               <li
                 key={solicitud.id}
                 className="flex justify-between gap-x-6 p-5 hover:bg-gray-50 transition"
@@ -121,7 +127,7 @@ export default function CenterPageClient({
                       {solicitud.direccionTramite}
                     </p>
 
-                    <p className="text-base text-gray-500">
+                    <p className="text-base text-gray-500 text-justify">
                       {solicitud.detalleSolicitud}
                     </p>
 
@@ -208,6 +214,7 @@ export default function CenterPageClient({
             Crea una solicitud
           </Link>
         </p>
+        
       )}
     </>
   )

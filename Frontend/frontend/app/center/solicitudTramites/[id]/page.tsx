@@ -117,7 +117,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         <span className="text-black">Cliente:</span>{" "}
                         {solicitudTramite.clientes?.nombreCliente}
                     </p>
-                    <p className="text-base  leading-6 text-gray-900">
+                    <p className="text-base  leading-6 text-gray-900 text-justify">
                         <span className="text-black font-bold ">Detalle: </span>{" "}
                         <span className='text-justify'>{solicitudTramite.detalleSolicitud}</span>
                     </p>

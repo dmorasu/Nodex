@@ -1,5 +1,7 @@
 
 import {Router} from 'express'
+import multer from'multer'
+import {cargaMasivaSolicitudes, generarPlantillaExcel, validarSolicitudesExcel} from '../controllers/CargaMasivaController'
 import { SolicitudTramitesController } from "../controllers/SolicitudTramitesController"
 import { TrazabilidadController } from '../controllers/TrazabilidadController'
 import { validateSolicitudTramiteExits,validateSolicitudTramitesInput } from '../middleware/solicitudTramites'
@@ -19,6 +21,7 @@ import { CuentaCobroController } from '../controllers/CuentaCobroController'
 
 
 const router =Router()
+const upload=multer({storage:multer.memoryStorage()})
 router.param('solicitudTramitesId',validateSolicitudTramiteExits)
 router.param('trazabilidadId', validateTrazabilidadId)
 router.param('trazabilidadId',validateTrazabilidadExits )
@@ -27,6 +30,19 @@ router.param('logisticaId',validatelogisticaId)
 router.param('programacionId',validateProgramacionId)
 router.param('cuentaCobroId',validateCuentaCobroId)
 
+//--------------------------------------------Ruta de Cargue Masivo -------------------------------------------------------------
+
+router.post('/carga-masiva',
+    upload.single('file'),
+    cargaMasivaSolicitudes
+)
+router.get('/plantilla', generarPlantillaExcel)
+
+
+router.post('/validar-excel',
+  upload.single('file'),
+  validarSolicitudesExcel
+)
 
 //--------------------------------------------Rutas de SolicitudTramites  ----------------------------------------------------------
 

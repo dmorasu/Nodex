@@ -33,7 +33,7 @@ export class SolicitudTramitesController{
 static obtenerSolicitudes = async (req: Request, res: Response) => {
   try {
     const page = Number(req.query.page) || 1
-    const limit = 30
+    const limit = 10
     const offset = (page - 1) * limit
 
     const search = (req.query.search as string)?.trim()

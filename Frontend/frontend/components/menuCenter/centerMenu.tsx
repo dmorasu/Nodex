@@ -50,6 +50,13 @@ export default function CenterMenu({ usuario }: { usuario: Usuario }) {
                 >
                   Clientes
                 </Link>
+                <Link
+                  href="/center/cargueMasiva"
+                  onClick={() => close()}
+                  className="block p-2 hover:text-orange-500"
+                >
+                  Cargue Masiva
+                </Link>
 
                 <button
                   className="block w-full text-left p-2 hover:text-orange-500"

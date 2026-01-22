@@ -7,11 +7,13 @@ import { useFormState } from "react-dom";
 import { useParams } from "next/navigation";
 import ErrorMessage from "../ui/ErrorMessage";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 
-export default function AddExpenseForm({closeModal}:{closeModal:()=>void}) {
 
+export default function AddExpenseForm({closeModal}:{closeModal:()=>void}) {
+    const router=useRouter()
   const {id}= useParams()
 
   const crearEstadoconId=CrearEstadoTramite.bind(null,+id)
@@ -27,6 +29,7 @@ export default function AddExpenseForm({closeModal}:{closeModal:()=>void}) {
     if(state.success){
       toast.success(state.success)
       closeModal()
+      router.refresh()
     }
   },[state])
   return (

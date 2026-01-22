@@ -23,7 +23,9 @@ const componenteMap={
     "AddCuentaCobro":AddCuentaCobroForm,
     "AddLogistica":AddLogisticaForm,
     "AddProgramacion":AddProgramacionForm,
-    "AddTramitador":AddTramitadorForm
+    "AddTramitador":AddTramitadorForm,
+   
+
     
 
 }
@@ -42,6 +44,7 @@ export default function ModalContainer({solicitudTramite}:{solicitudTramite:Soli
   const addLogistica = searchParams.get('addLogistica')
   const addProgramacion = searchParams.get('addProgramacion')
   const addTramitador = searchParams.get('addTramitador')
+  
 
   const  getComponentName =()=>{
     if(addEstado) return 'AddEstado'
@@ -50,6 +53,7 @@ export default function ModalContainer({solicitudTramite}:{solicitudTramite:Soli
     if (addLogistica) return 'AddLogistica'
     if (addProgramacion) return 'AddProgramacion'
     if (addTramitador) return 'AddTramitador'
+    
   }
 
   const componenteName= getComponentName()
