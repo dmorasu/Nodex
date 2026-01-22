@@ -16,7 +16,7 @@ export class OperacionesController{
                     order:[
                         ['createdAt','DESC']
                     ],
-                    attributes:["id","nombreOperacion"]
+                    attributes:["id","nombreOperacion",'centroDeCostos']
                     
 
                 })

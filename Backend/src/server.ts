@@ -13,6 +13,7 @@ import tramitadorRouter from "./routes/tramitadorRouter"
 import solicitudTramiteRouter from  "./routes/solicitudTramiteRouter"
 import estadosRouter from './routes/estadosRouter'
 import authRouter from './routes/authRouter'
+import tramiteRouter from './routes/tramiteRouter'
 
 async function connectDB() {
     try {
@@ -48,6 +49,7 @@ app.use('/api/clientes', clienteRouter)
 app.use('/api/municipios', municipiosRouter)
 
 app.use('/api/operaciones',operacionesRouter)
+app.use('/api/tramites',tramiteRouter)
 
 app.use('/api/tarifa',tarifaRouter)
 

@@ -1,5 +1,5 @@
 "use client"
-import { SolicitudTramites } from '@/src/schemas'
+import { SolicitudTramites, Usuario } from '@/src/schemas'
 import SolicitudTramitesForm from './SolicitudTramitesForm'
 import { useFormState } from 'react-dom'
 import { EditarSolicitudTramite } from '@/actions/editar-Solicitud-action'
@@ -9,7 +9,12 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 
-export default function EditarSolicitudTramiteForm({solicitud}:{solicitud:SolicitudTramites}) {
+type Props = {
+  solicitud: SolicitudTramites
+  usuario?: Usuario
+}
+
+export default function EditarSolicitudTramiteForm({solicitud,usuario}:Props ) {
   
   const router = useRouter()
   const  editarSolicitudTramiteid =EditarSolicitudTramite.bind(null,solicitud.id)
@@ -41,6 +46,18 @@ export default function EditarSolicitudTramiteForm({solicitud}:{solicitud:Solici
             
           
           />
+          <div className="space-y-3 mt-4">
+       
+        <input
+          type="hidden"
+          id="usuarioId"
+          className="w-full p-3 border border-gray-300 bg-white text-gray-700 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all cursor-pointer"
+          
+          name="usuarioId"
+          defaultValue={usuario?.id}
+          
+        />
+      </div>
           <input
             type="submit"
             className="bg-blue-500 w-full p-3 text-white uppercase font-bold hover:bg-amber-600 cursor-pointer transition-colors"

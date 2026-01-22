@@ -42,13 +42,51 @@ export const CrearSolicitudSchema = z.object({
         fechaEntregaResultado: z.string()
                 .min(1, "Debe seleccionar la fecha de entrega")
                 .transform((value) => new Date(value)),
-        tipoServicio: z.string()
-                .min(1, { message: 'El cliente no puede estar vacio' }),
+        tramiteId: z.string()
+                .min(1, { message: 'El trámite no puede estar vacio.' }),
         placa: z.string().optional().nullable(),
         matriculaInmobiliaria: z.string().optional().nullable(),
-        centroCostos: z.string()
-                .min(1, { message: 'El centro de costos no puede estar vacio' }),
-        usuarioId: z.string().nullable()
+        entidadId:z.string()
+                  .min(1, { message: 'La Entidad no puede estar vacio' }),
+        documentosAportados:z.string()
+                  .min(1, { message: 'DocumentosAportados no puede estar vacio' }),
+        usuarioId:z.string()
+                  .min(1, { message: 'El Usuario no puede estar vacio' }),
+        
+        
+       
+
+
+
+})
+export const EditarSolicitudSchema = z.object({
+        detalleSolicitud: z.string()
+                .min(1, { message: 'El detalle de la solicitud no puede estar vacio' }),
+        /* amount: z.coerce. --> Me sirve para convertir de string a int para validacion 
+                 number({message: 'Cantidad no válida'})*/
+        direccionTramite: z.string()
+                .min(1, { message: 'La direccion de Diligencia no puede estar vacia' }),
+        municipiosId: z.string()
+                .min(1, { message: 'El municipio no puede estar vacio' }),
+        clienteId: z.string()
+                .min(1, { message: 'El cliente no puede estar vacio' }),
+        operacionesId: z.string()
+                .min(1, { message: 'Debe Seleccionar la Operacion' }),
+        fechaEntregaResultado: z.string()
+                .min(1, "Debe seleccionar la fecha de entrega")
+                .transform((value) => new Date(value)),
+        tramiteId: z.string()
+                .min(1, { message: 'El trámite no puede estar vacio.' }),
+        placa: z.string().optional().nullable(),
+        matriculaInmobiliaria: z.string().optional().nullable(),
+        entidadId:z.string()
+                  .min(1, { message: 'La Entidad no puede estar vacio' }),
+        documentosAportados:z.string()
+                  .min(1, { message: 'DocumentosAportados no puede estar vacio' }),
+    
+        
+        
+       
 
 
 
@@ -151,6 +189,24 @@ export const  cuentaCobro =z.object({
 
 })
 
+export const Entidad =z.object({
+        id: z.number(),
+        nombreEntidad:z.string()
+
+})
+
+export const operaciones =z.object({
+        id:z.number(),
+        nombreOperacion:z.string(),
+        centroDeCostos:z.string()
+})
+
+export const Tramites =z.object({
+        id:z.number(),
+        nombreTramite:z.string(),
+       
+})
+
 export const TrazabilidadSchema = z.object({
         observacionTrazabilidad: z.string()
                 .min(1, { message: "Debe registar alguna observacion" }),
@@ -187,7 +243,25 @@ export const ProgramacionSchema = z.object({
 
 })
 
+export const OperacionSchema = z.object({
+  id: z.number(),
+  nombreOperacion: z.string(),
+  centroDeCostos:z.string()
+});
+export const OperacionesSchema = z.array(OperacionSchema);
 
+export const TramiteSchema= z.object({
+        id:z.number(),
+        nombreTramite:z.string()
+});
+
+export const TramitesSchema =z.array(TramiteSchema);
+
+export const EntidadSchema = z.object({
+  id: z.number(),
+  nombreEntidad: z.string()
+});
+export const EntidadesSchema = z.array(EntidadSchema);
 
 
 
@@ -205,8 +279,6 @@ export const SolicitudAPIRespuestaSchema = z.object({
         fechaEntregaResultado: z.string().nullable(),
         matriculaInmobiliaria: z.string().nullable(),
         placa: z.string().nullable(),
-        tipoServicio: z.string().nullable(),
-        centroCostos: z.string().nullable(),
         createdAt: z.string(),
         updatedAt: z.string(),
         clientes: ClienteSchema.optional(),
@@ -216,7 +288,10 @@ export const SolicitudAPIRespuestaSchema = z.object({
         trazabilidad: array(Trazabilidad).optional(),
         programacion: Programacion.optional().nullable(),
         logistica: logistica.optional().nullable(),
-        cuentaCobro:cuentaCobro.optional().nullable()
+        cuentaCobro:cuentaCobro.optional().nullable(),
+        operaciones:operaciones.optional().nullable(),
+        entidad:Entidad.optional().nullable(),
+        tramite:Tramites.optional().nullable()
 
 
 

@@ -62,7 +62,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
           <h1 className="  text-2xl font-semibold text-slate-800">Trámite N: {solicitudTramite.id}</h1>
          
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-end items-center">
           <AddEstadosBoton />
           <AddProgramacionBoton />
           <AddLogisticatoBoton/>
@@ -121,13 +121,13 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                     </p>
                      <p className='text-gray-500  text-sm'>
                         <span className="text-orange-500">Fecha Posible Entrega:</span>{" "}
-                        {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado)}
+                        {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
 
                     </p>
                      <p className='text-gray-500  text-sm'>
                         
                         <span className="text-orange-500">Centro de Costos:</span>{" "}
-                        {solicitudTramite.centroCostos}
+                        
                     </p>
                     <p className="text-sm font-bold text-sky-400">
                          

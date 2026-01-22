@@ -1,6 +1,6 @@
 "use server"
 
-import { CrearSolicitudSchema, ErrorResponoseSchema, SolicitudTramites, SuccessSchema } from "@/src/schemas"
+import { CrearSolicitudSchema, ErrorResponoseSchema, SolicitudTramites, SuccessSchema ,EditarSolicitudSchema} from "@/src/schemas"
 import { error } from "console"
 import { revalidatePath } from "next/cache"
 import { Solitreo } from "next/font/google"
@@ -15,21 +15,21 @@ type ActiosStateType={
 export async function EditarSolicitudTramite(solicitudTramiteId: SolicitudTramites['id'], prevState:ActiosStateType, formData:FormData) {
   
    const solicitudTramiteData={
-         detalleSolicitud: formData.get('detalleSolicitud'),
+        detalleSolicitud: formData.get('detalleSolicitud'),
         direccionTramite: formData.get('direccionTramite'),
         municipiosId:formData.get('municipioId'),
         clienteId:formData.get('clienteId'),
         operacionesId:formData.get('operacionId'),
-        tipoServicio:formData.get('tipoServicio'),
-       
+        tramiteId:formData.get('tramiteId'),
+        entidadId:formData.get("entidadId"),
         fechaEntregaResultado:formData.get('fechaEntregaResultado'),
         placa:formData.get('placa'),
         matriculaInmobiliaria:formData.get('matricula'),
-        centroCostos:formData.get('centroCostos'),
+        documentosAportados:formData.get('documentosAportados'),
         usuarioId:formData.get('usuarioId')
    }
 
-   const solicitudTramite = CrearSolicitudSchema.safeParse(solicitudTramiteData)
+   const solicitudTramite = EditarSolicitudSchema.safeParse(solicitudTramiteData)
 
    if(!solicitudTramite.success){
         return{
@@ -45,7 +45,7 @@ export async function EditarSolicitudTramite(solicitudTramiteId: SolicitudTramit
         'Content-Type':'application/json'
     },
     body:JSON.stringify({
-         detalleSolicitud:solicitudTramiteData.detalleSolicitud,
+              detalleSolicitud:solicitudTramiteData.detalleSolicitud,
               direccionTramite:solicitudTramiteData.direccionTramite,
               municipiosId:solicitudTramiteData.municipiosId,
               clienteId :solicitudTramiteData.clienteId,
@@ -53,8 +53,9 @@ export async function EditarSolicitudTramite(solicitudTramiteId: SolicitudTramit
               fechaEntregaResultado:solicitudTramiteData.fechaEntregaResultado,
               placa:solicitudTramiteData.placa,
               matriculaInmobiliaria:solicitudTramiteData.matriculaInmobiliaria,
-              centroCostos:solicitudTramiteData.centroCostos,
-              tipoServicio:solicitudTramiteData.tipoServicio,
+              entidadId:solicitudTramiteData.entidadId,
+              tramiteId:solicitudTramiteData.tramiteId,
+              documentosAportados:solicitudTramiteData.documentosAportados,
               usuarioId:solicitudTramiteData.usuarioId
     })
    })

@@ -1,4 +1,5 @@
 import EditarSolicitudTramiteForm from "@/components/solicitudTramites/EditarSolicitudTramiteForm"
+import { verificacionSesion } from "@/src/auth/dal"
 import { SolicitudAPIRespuestaSchema } from "@/src/schemas"
 import Link from "next/link"
 
@@ -33,7 +34,8 @@ export default  async function EditarSolicitudTramitePage({params}:{params:{id:s
   const id= params.id
 
   const solicitud =await getSolicitudTramites(id)
-
+  
+  const {usuario}=await verificacionSesion()
   return (
      <>
       <div className='flex flex-col-reverse md:flex-row md:justify-between items-center'>
@@ -55,6 +57,7 @@ export default  async function EditarSolicitudTramitePage({params}:{params:{id:s
       <div className='p-10 mt-10  shadow-lg border '>
           <EditarSolicitudTramiteForm
               solicitud={solicitud}
+              usuario={usuario}
           />
       </div>
     </>

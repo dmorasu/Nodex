@@ -21,12 +21,12 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
         municipiosId:formData.get('municipioId'),
         clienteId:formData.get('clienteId'),
         operacionesId:formData.get('operacionId'),
-        tipoServicio:formData.get('tipoServicio'),
-       
+        tramiteId:formData.get('tramiteId'),
+        entidadId:formData.get("entidadId"),
         fechaEntregaResultado:formData.get('fechaEntregaResultado'),
         placa:formData.get('placa'),
         matriculaInmobiliaria:formData.get('matricula'),
-        centroCostos:formData.get('centroCostos'),
+        documentosAportados:formData.get('documentosAportados'),
         usuarioId:formData.get('usuarioId')
 
 
@@ -60,8 +60,9 @@ export async function crearSolicitud(prevState: ActionStateType, formData: FormD
               fechaEntregaResultado:solicitud.data.fechaEntregaResultado,
               placa:solicitud.data.placa,
               matriculaInmobiliaria:solicitud.data.matriculaInmobiliaria,
-              centroCostos:solicitud.data.centroCostos,
-              tipoServicio:solicitud.data.tipoServicio,
+              entidadId:solicitud.data.entidadId,
+              tramiteId:solicitud.data.tramiteId,
+              documentosAportados:solicitud.data.documentosAportados,
               usuarioId:solicitud.data.usuarioId
              
 

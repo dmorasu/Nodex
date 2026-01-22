@@ -11,6 +11,9 @@ import {Op} from 'sequelize'
 import Estados from '../models/estados'
 import Usuarios from '../models/usuarios'
 import { CreatedAt } from 'sequelize-typescript'
+import Entidad from '../models/entidad'
+import Operaciones from '../models/operaciones'
+import Tramite from '../models/tramite'
 
 
 
@@ -211,7 +214,21 @@ static getAll = async (req: Request, res: Response) => {
           {
             model: Usuarios,
             attributes: ["id", "nombreUsuario", "correoUsuario"]
-          }
+          },
+          {
+            model:Entidad,
+            attributes:["id","nombreEntidad"]
+
+          },
+          {
+            model:Operaciones,
+            attributes:['id','nombreOperacion',"centroDeCostos"]
+
+          },
+          {
+            model:Tramite,
+            attributes:['id','nombreTramite']
+          },
         ]
       }
     )
