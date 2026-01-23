@@ -15,54 +15,50 @@ export class EstadosTramitesController{
         
     }
 
-    static create =async (req: Request, res:Response) =>{
-         // console.log("req.params.solicitudTramiteId");
-         //console.log(req.params.solicitudTramitesId);
-         //console.log(req.solicitudTramites.id);
-          try {
-                const estadosTramites = new EstadosTramites(req.body)
-                estadosTramites.solicitudTramiteId =req.solicitudTramites.id
+      static create = async (req: Request, res: Response) => {
 
-                
-                await estadosTramites.save()
+    try {
+      // Guardar estado
+      const estadosTramites = new EstadosTramites(req.body)
+      estadosTramites.solicitudTramiteId = req.solicitudTramites.id
+      await estadosTramites.save()
 
-                if(Number(estadosTramites.estadoId)===6){
-                    const fechaFinalizacionServicio=new Date()
-                    let programacion= await Programacion.findOne({
-                        where:{solicitudTramitesId:req.solicitudTramites.id}
-                    })
-                     if (programacion?.fechaFinalizacionServicio) {
-                            return res.status(400).json({ 
-                            error: "El trámite ya fue finalizado previamente" 
-                                });
-                    }
+      // --- Si estado = Finalizado ---
+      if (Number(estadosTramites.estadoId) === 6) {
 
-                    if(!programacion){
+        const fechaFinalizacionServicio = new Date()
 
-                        // Se crea si no existe
-                        await Programacion.create({
-                            solicitudTramitesId:req.solicitudTramites.id,
-                            fechaFinalizacionServicio:fechaFinalizacionServicio
-                        })
-                    }else{
-                        //Actualizar el servicio
-                        programacion.fechaFinalizacionServicio=fechaFinalizacionServicio,
-                        await programacion.save()
-                    }
-                }
+        let programacion = await Programacion.findOne({
+          where: { solicitudTramiteId: req.solicitudTramites.id }
+        })
 
-                
-                res.status(201).json('Registro Guardado')
+        // Si ya fue finalizado antes
+        if (programacion && programacion.fechaFinalizacionServicio) {
+          return res.status(400).json({ error: "El trámite ya fue finalizado previamente" })
+        }
 
+        // Si no existe programación → crear registro
+        if (!programacion) {
+          await Programacion.create({
+            solicitudTramiteId: req.solicitudTramites.id,
+            fechaFinalizacionServicio: fechaFinalizacionServicio
+          })
+        } 
+        // Si existe → actualizar fecha de finalización
+        else {
+          programacion.fechaFinalizacionServicio = fechaFinalizacionServicio
+          await programacion.save()
+        }
+      }
 
-          } catch (error) {
-             //console.error("ERROR CREANDO ESTADO:", error);
-             res.status(500).json({ error: "Hubo un error" });
+      return res.status(201).json("Registro Guardado")
+
+    } catch (error) {
+      console.error("ERROR CREANDO ESTADO:", error)
+      return res.status(500).json({ error: "Hubo un error" })
     }
-         
-         
+  }
 
-    }
 
 
     static getById =async (req: Request, res:Response) =>{

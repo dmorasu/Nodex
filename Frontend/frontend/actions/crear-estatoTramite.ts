@@ -8,10 +8,10 @@ type ActionStateType ={
     success:string
 }
 
-export default  async function CrearEstadoTramite(solicitudTramiteId:number,prevState:ActionStateType,formData:FormData) {
+export default  async function CrearEstadoTramite(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
     const estadoTramiteData={
         estadoId:formData.get('estadoId'),
-        solicitudTramitesId:solicitudTramiteId
+        solicitudTramitesId:solicitudTramitesId
 
     }
     
@@ -25,7 +25,7 @@ export default  async function CrearEstadoTramite(solicitudTramiteId:number,prev
     }
 
     //Generar Estado de Tramites
-    const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramiteId}/estadosTramites`
+    const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/estadosTramites`
     const req =await fetch(url,{
         method:'POST',
         headers:{
@@ -33,7 +33,7 @@ export default  async function CrearEstadoTramite(solicitudTramiteId:number,prev
         },
         body:JSON.stringify({
             estadoId:estadoTramite.data.estadoId,
-            solicitudTramiteId:solicitudTramiteId
+            solicitudTramiteId:solicitudTramitesId
             
             
         })

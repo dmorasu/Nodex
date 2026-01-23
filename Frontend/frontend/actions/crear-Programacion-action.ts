@@ -13,9 +13,9 @@ type ActionStateType ={
 
 
 
-export default async function CrearProgramacion(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
+export default async function CrearProgramacion(solicitudTramiteId:number,prevState:ActionStateType,formData:FormData) {
     const programacionData={
-        solicitudTramitesId:solicitudTramitesId, 
+        solicitudTramiteId:solicitudTramiteId, 
         fechaProbableEntrega:formData.get('fechaProbableEntrega'),
         valorTramite:formData.get('valorTramite'),
         valorViaticos:formData.get("valorViaticos")
@@ -35,7 +35,7 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
 
     const token = cookies().get("TOKEN")?.value
     // Generar Trazabilidad
-    const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/programacion`
+    const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramiteId}/programacion`
     const req =await fetch(url,{
         method:'POST',
         headers:{
@@ -43,7 +43,7 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
           
         },
         body:JSON.stringify({
-            solicitudTramitesId:solicitudTramitesId,
+            solicitudTramiteId:solicitudTramiteId,
             valorTramite:programacionData.valorTramite,
             valorViaticos:programacionData.valorViaticos,
             fechaProbableEntrega:programacionData.fechaProbableEntrega,
@@ -61,7 +61,7 @@ export default async function CrearProgramacion(solicitudTramitesId:number,prevS
         }
     }
     
-    revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
+    revalidatePath(`/center/solicitudTramites/${solicitudTramiteId}`)
     const success = SuccessSchema.parse(json)
 
     return{

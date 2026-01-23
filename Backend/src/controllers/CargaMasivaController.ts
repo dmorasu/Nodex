@@ -9,11 +9,59 @@ import Tramites from '../models/tramite'
 import SolicitudTramites from '../models/solicitudTramites'
 
 
+// ======================================================
+// 📄 GENERAR PLANTILLA EXCEL CON HOJAS AUXILIARES
+// ======================================================
+export const generarPlantillaExcel = async (req: Request, res: Response) => {
+
+  const dataSolicitudes = [{
+    detalleSolicitud: '',
+    direccionTramite: '',
+    clienteId: '',
+    municipiosId: '',
+    operacionesId: '',
+    entidadId: '',
+    tramiteId: '',
+    placa: '',
+    matriculaInmobiliaria: '',
+    documentosAportados: 'No',
+    fechaEntregaResultado: ''
+  }]
+
+  const [
+    clientes,
+    municipios,
+    operaciones,
+    entidades,
+    tramites
+  ] = await Promise.all([
+    Clientes.findAll({ attributes:['id','nombreCliente'], order:[['id','ASC']] }),
+    Municipios.findAll({ attributes:['id','nombreMunicipio','departamento'], order:[['id','ASC']] }),
+    Operaciones.findAll({ attributes:['id','nombreOperacion'], order:[['id','ASC']] }),
+    Entidad.findAll({ attributes:['id','nombreEntidad'], order:[['id','ASC']] }),
+    Tramites.findAll({ attributes:['id','nombreTramite'], order:[['id','ASC']] })
+  ])
+
+  const wb = XLSX.utils.book_new()
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataSolicitudes), 'Solicitudes')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clientes.map(c=>({id:c.id, nombre:c.nombreCliente}))), 'Clientes')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(municipios.map(m=>({id:m.id, municipio:m.nombreMunicipio, departamento:m.departamento}))), 'Municipios')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(operaciones.map(o=>({id:o.id, operacion:o.nombreOperacion}))), 'Operaciones')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(entidades.map(e=>({id:e.id, entidad:e.nombreEntidad}))), 'Entidades')
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tramites.map(t=>({id:t.id, tramite:t.nombreTramite}))), 'Tramites')
+
+  const buffer = XLSX.write(wb, { type:'buffer', bookType:'xlsx' })
+
+  res.setHeader('Content-Disposition','attachment; filename=plantilla_solicitudes.xlsx')
+  res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  res.send(buffer)
+}
 
 
-// ===============================
-// ✅ VALIDAR EXCEL (sin guardar)
-// ===============================
+// ======================================================
+// ✅ VALIDAR EXCEL (SIN GUARDAR)
+// ======================================================
 export const validarSolicitudesExcel = async (req: Request, res: Response) => {
 
   if (!req.file) {
@@ -31,17 +79,23 @@ export const validarSolicitudesExcel = async (req: Request, res: Response) => {
 
       const filaExcel = index + 2
 
-      const cliente   = await Clientes.findByPk(Number(row.clienteId))
-      const municipio = await Municipios.findByPk(Number(row.municipiosId))
-      const operacion = await Operaciones.findByPk(Number(row.operacionesId))
-      const entidad   = await Entidad.findByPk(Number(row.entidadId))
-      const tramite   = await Tramites.findByPk(Number(row.tramiteId))
+      const clienteId   = Number(row.clienteId)
+      const municipioId = Number(row.municipiosId)
+      const operacionId = Number(row.operacionesId)
+      const entidadId   = Number(row.entidadId)
+      const tramiteId   = Number(row.tramiteId)
 
-      if (!cliente)   errores.push({ fila: filaExcel, error:'clienteId no existe' })
-      if (!municipio) errores.push({ fila: filaExcel, error:'municipiosId no existe' })
-      if (!operacion) errores.push({ fila: filaExcel, error:'operacionesId no existe' })
-      if (!entidad)   errores.push({ fila: filaExcel, error:'entidadId no existe' })
-      if (!tramite)   errores.push({ fila: filaExcel, error:'tramiteId no existe' })
+      if (isNaN(clienteId))   errores.push({ fila:filaExcel, error:'clienteId inválido' })
+      if (isNaN(municipioId)) errores.push({ fila:filaExcel, error:'municipiosId inválido' })
+      if (isNaN(operacionId)) errores.push({ fila:filaExcel, error:'operacionesId inválido' })
+      if (isNaN(entidadId))   errores.push({ fila:filaExcel, error:'entidadId inválido' })
+      if (isNaN(tramiteId))   errores.push({ fila:filaExcel, error:'tramiteId inválido' })
+
+      if (!await Clientes.findByPk(clienteId))   errores.push({ fila:filaExcel, error:'clienteId no existe' })
+      if (!await Municipios.findByPk(municipioId)) errores.push({ fila:filaExcel, error:'municipiosId no existe' })
+      if (!await Operaciones.findByPk(operacionId)) errores.push({ fila:filaExcel, error:'operacionesId no existe' })
+      if (!await Entidad.findByPk(entidadId)) errores.push({ fila:filaExcel, error:'entidadId no existe' })
+      if (!await Tramites.findByPk(tramiteId)) errores.push({ fila:filaExcel, error:'tramiteId no existe' })
     }
 
     return res.json({
@@ -50,39 +104,8 @@ export const validarSolicitudesExcel = async (req: Request, res: Response) => {
     })
 
   } catch (err) {
-    return res.status(500).json({ error:'Error leyendo archivo' })
+    return res.status(500).json({ error:'Error leyendo archivo Excel' })
   }
-}
-
-// ======================================================
-// 📄 GENERAR PLANTILLA EXCEL (BASADA EN IDS)
-// ======================================================
-export const generarPlantillaExcel = async (req: Request, res: Response) => {
-
-  const data = [{
-    detalleSolicitud: '',
-    direccionTramite: '',
-    clienteId: '',
-    municipiosId: '',
-    operacionesId: '',
-    entidadId: '',
-    tramiteId: '',
-    tipoServicio: '',               // respaldo visual opcional
-    placa: '',
-    matriculaInmobiliaria: '',
-    documentosAportados: 'No',
-    fechaEntregaResultado: ''
-  }]
-
-  const wb = XLSX.utils.book_new()
-  const ws = XLSX.utils.json_to_sheet(data)
-  XLSX.utils.book_append_sheet(wb, ws, 'Solicitudes')
-
-  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
-
-  res.setHeader('Content-Disposition', 'attachment; filename=plantilla_solicitudes.xlsx')
-  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  res.send(buffer)
 }
 
 
@@ -98,10 +121,10 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
   try {
     const workbook = XLSX.read(req.file.buffer)
     const sheet = workbook.Sheets[workbook.SheetNames[0]]
-    const rows: any[] = XLSX.utils.sheet_to_json(sheet)
+    const rows:any[] = XLSX.utils.sheet_to_json(sheet)
 
-    const creados: number[] = []
-    const errores: any[] = []
+    const creados:number[] = []
+    const errores:any[] = []
 
     for (const [index, row] of rows.entries()) {
 
@@ -109,12 +132,11 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
 
       try {
 
-        // 🔎 Conversión segura a número
-        const clienteId     = Number(row.clienteId)
-        const municipioId   = Number(row.municipiosId)
-        const operacionId   = Number(row.operacionesId)
-        const entidadId     = Number(row.entidadId)
-        const tramiteId     = Number(row.tramiteId)
+        const clienteId   = Number(row.clienteId)
+        const municipioId = Number(row.municipiosId)
+        const operacionId = Number(row.operacionesId)
+        const entidadId   = Number(row.entidadId)
+        const tramiteId   = Number(row.tramiteId)
 
         if (
           isNaN(clienteId) ||
@@ -122,15 +144,11 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
           isNaN(operacionId) ||
           isNaN(entidadId) ||
           isNaN(tramiteId)
-        ) {
-          errores.push({
-            fila: filaExcel,
-            error: 'Alguno de los IDs no es numérico o está vacío'
-          })
+        ){
+          errores.push({ fila:filaExcel, error:'IDs inválidos o vacíos' })
           continue
         }
 
-        // 🔎 Validar existencia
         const [cliente, municipio, operacion, entidad, tramite] = await Promise.all([
           Clientes.findByPk(clienteId),
           Municipios.findByPk(municipioId),
@@ -139,15 +157,11 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
           Tramites.findByPk(tramiteId)
         ])
 
-        if (!cliente || !municipio || !operacion || !entidad || !tramite) {
-          errores.push({
-            fila: filaExcel,
-            error: 'Algún ID relacionado no existe en base de datos'
-          })
+        if (!cliente || !municipio || !operacion || !entidad || !tramite){
+          errores.push({ fila:filaExcel, error:'Algún ID no existe en base de datos' })
           continue
         }
 
-        // 📌 Crear registro
         await SolicitudTramites.create({
           detalleSolicitud: row.detalleSolicitud?.toString().trim(),
           direccionTramite: row.direccionTramite?.toString().trim(),
@@ -166,16 +180,13 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
 
         creados.push(filaExcel)
 
-      } catch (err: any) {
-        errores.push({
-          fila: filaExcel,
-          error: err?.message
-        })
+      } catch (err:any) {
+        errores.push({ fila:filaExcel, error: err.message })
       }
     }
 
     res.json({
-      message: 'Carga masiva finalizada',
+      message:'Carga masiva finalizada',
       totalProcesados: rows.length,
       creados,
       errores
@@ -183,6 +194,6 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Error procesando archivo' })
+    res.status(500).json({ error:'Error procesando archivo Excel' })
   }
 }

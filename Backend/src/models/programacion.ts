@@ -4,39 +4,46 @@ import {
 } from 'sequelize-typescript'
 import SolicitudTramites from './solicitudTramites'
 
-@Table({ tableName:'Programacion' })
+@Table({ tableName: 'Programacion' })
 class Programacion extends Model {
 
-  @Column({ type: DataType.DATEONLY })
+  @Column({ 
+    type: DataType.DATEONLY,
+    allowNull: true
+  })
   declare fechaRealizacionDiligencia: Date | null
 
-  @Column({ type: DataType.DATE })
+  @Column({ 
+    type: DataType.DATE,
+    allowNull: true
+  })
   declare fechaProbableEntrega: Date | null
 
-  @Column({ type: DataType.DATE })
+  @Column({ 
+    type: DataType.DATE,
+    allowNull: true
+  })
   declare fechaFinalizacionServicio: Date | null
 
-   @Column({
-        type:DataType.DECIMAL(12,2),
-        allowNull:true
+  @Column({
+    type: DataType.DECIMAL(12,2),
+    allowNull: true
+  })
+  declare valorTramite: number | null
 
-    })
-    declare valorTramite: number |null
+  @Column({
+    type: DataType.DECIMAL(12,2),
+    allowNull: true
+  })
+  declare valorViaticos: number | null
 
-    @Column({
-        type: DataType.DECIMAL(12,2),
-        allowNull:true
-
-    })
-    declare valorViaticos:number | null
-
-  @ForeignKey(()=> SolicitudTramites)
-  @Column(
-    {unique:true}
-  )
+  @ForeignKey(() => SolicitudTramites)
+  @Column({ unique: true,field: 'solicitudTramiteId'  })
   declare solicitudTramiteId: number
 
-  @BelongsTo(()=> SolicitudTramites)
+  @BelongsTo(() => SolicitudTramites,{
+    foreignKey: 'solicitudTramiteId'
+  })
   declare solicitudTramite: SolicitudTramites
 }
 

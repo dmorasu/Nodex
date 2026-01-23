@@ -19,13 +19,13 @@ export class ProgramacionController{
     const solicitudId = req.solicitudTramites.id;
 
     let programacion = await Programacion.findOne({
-      where: { solicitudTramitesId: solicitudId }
+      where: { solicitudTramiteId: solicitudId }
     });
 
     if (!programacion) {
       // Crear si no existe
       programacion = await Programacion.create({
-        solicitudTramitesId: solicitudId,
+        solicitudTramiteId: solicitudId,
         fechaProbableEntrega: req.body.fechaProbableEntrega || null,
         valorTramite: req.body.valorTramite || null,
         valorViaticos: req.body.valorViaticos || null
@@ -52,7 +52,7 @@ export class ProgramacionController{
 
   } catch (error) {
     console.error("ERROR PROGRAMACION:", error);
-    res.status(500).json({ error: "Hubo un error" });
+    res.status(500).json("Hubo un error" );
   }
 };
 
