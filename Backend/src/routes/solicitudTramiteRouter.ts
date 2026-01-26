@@ -7,7 +7,7 @@ import { TrazabilidadController } from '../controllers/TrazabilidadController'
 import { LogisticaController } from '../controllers/LogisticaController'
 import { ProgramacionController } from '../controllers/ProgramacionController'
 import { CuentaCobroController } from '../controllers/CuentaCobroController'
-
+import {cargaMasivaSolicitudes, generarPlantillaExcel, validarSolicitudesExcel} from '../controllers/CargaMasivaController'
 import { handleInputErrors } from '../middleware/validation'
 import { validateSolicitudTramiteExits, validateSolicitudTramitesInput } from '../middleware/solicitudTramites'
 import { validateTrazabilidadInput, validateTrazabilidadExits } from '../middleware/trazabilidad'
@@ -19,6 +19,9 @@ import { validateCuentaCobroInput, validateCuentaCobroExits } from '../middlewar
 const router = Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
+//--------------------------------------------Ruta de Cargue Masivo ------------------------------------------------------------- 
+
+
 // ================= PARAMS =================
 router.param('solicitudTramitesId', validateSolicitudTramiteExits)
 router.param('trazabilidadId', validateTrazabilidadExits)
@@ -26,6 +29,12 @@ router.param('estadosTramitesId', validateEstadosTramitesExits)
 router.param('logisticaId', validateLogisticaId)
 router.param('programacionId', validateProgramacionExits)
 router.param('cuentaCobroId', validateCuentaCobroExits)
+
+
+
+router.post('/carga-masiva', upload.single('file'), cargaMasivaSolicitudes )
+router.get('/plantilla', generarPlantillaExcel) 
+router.post('/validar-excel', upload.single('file'), validarSolicitudesExcel )
 
 // ================= SOLICITUDES =================
 router.get('/', SolicitudTramitesController.obtenerSolicitudes)
@@ -109,5 +118,7 @@ router.post('/:solicitudTramitesId/cuentaCobro',
 router.get('/:solicitudTramitesId/cuentaCobro/:cuentaCobroId',
   CuentaCobroController.getById
 )
+//------------------------------------------------Rutas para Tramitador -------------------------------------------------------------------------------- 
+router.patch( '/:solicitudTramitesId/asignar-tramitador', validateSolicitudTramiteExits, SolicitudTramitesController.asignarTramitador )
 
 export default router
