@@ -14,18 +14,18 @@ import ModalContainer from "../ui/ModalContainer"
 
 interface Props {
   solicitudes: SolicitudTramites[]
-  totalPages: number
-  paginaActual:number
   currentPage: number
+  totalPages: number
   searchInitial: string
 }
 
 export default function CenterPageClient({
   solicitudes,
-  totalPages,
   currentPage,
+  totalPages,
   searchInitial
 }: Props) {
+
 
   const router = useRouter()
   const params = useSearchParams()
