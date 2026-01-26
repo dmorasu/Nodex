@@ -15,6 +15,7 @@ import ModalContainer from "../ui/ModalContainer"
 interface Props {
   solicitudes: SolicitudTramites[]
   totalPages: number
+  paginaActual:number
   currentPage: number
   searchInitial: string
 }
