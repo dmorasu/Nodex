@@ -189,7 +189,8 @@ export const  cuentaCobroSchema =z.object({
         numeroCuentaCobro: z.string()
                 .min(1, { message: 'Ingrese un numero de Cuenta de Cobro' }),
         valorCuentaCobro: z.string()
-                .min(1, { message: 'El Valor de la cuenta de Cobro no puede estar cero' })
+                .min(1, { message: 'El Valor de la cuenta de Cobro no puede estar cero' }),
+                fechaMaximaPagoCuentaCobro: z.string().nullable().optional()
         
        
         
