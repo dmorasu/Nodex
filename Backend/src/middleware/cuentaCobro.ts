@@ -48,6 +48,10 @@ export const validateCuentaCobroInput = async (
     .notEmpty()
     .withMessage("El número de la cuenta de cobro no puede estar vacío")
     .run(req);
+  await body("fechaRecibidaCuentaCobroTramitador")
+    .notEmpty()
+    .withMessage("la Fecha de Recbiidad cuenta de cobro no puede estar vacía")
+    .run(req);
 
   next();
 };

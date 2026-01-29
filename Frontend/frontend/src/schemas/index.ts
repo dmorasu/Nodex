@@ -182,16 +182,18 @@ export const logistica = z.object({
 
 })
 
-export const  cuentaCobro =z.object({
-        solicitudTramiteId: z.number(),
-
-        fechaRadicacionCuentaCobro: z.string(),
-        fechaMaximaPagoCuentaCobro: z.string(),
-
-        fechaRecibidaCuentaCobroTramitador: z.string().nullable().optional(),
-        fechaPagoCuentaCobro: z.string().nullable().optional(),
-        numeroCuentaCobro: z.string().nullable().optional(),
-        valorCuentaCobro: z.coerce.number().nullable().optional()
+export const  cuentaCobroSchema =z.object({
+        
+        fechaRecibidaCuentaCobroTramitador: z.string()
+                .min(1, { message: 'La fecha de recibida no puede estar vacia' }),
+        numeroCuentaCobro: z.string()
+                .min(1, { message: 'Ingrese un numero de Cuenta de Cobro' }),
+        valorCuentaCobro: z.string()
+                .min(1, { message: 'El Valor de la cuenta de Cobro no puede estar cero' })
+        
+       
+        
+        
 
 })
 
@@ -219,11 +221,11 @@ export const TrazabilidadSchema = z.object({
 
 })
 
-export const CuentaCobroSchema = z.object({
-        solicitudTramitesId: z.number(),
+export const CuentaCobro = z.object({
+        solicitudTramiteId: z.number(),
 
-        fechaRadicacionCuentaCobro: z.string(),
-        fechaMaximaPagoCuentaCobro: z.string(),
+        fechaRadicacionCuentaCobro: z.string().nullable().optional(),
+        fechaMaximaPagoCuentaCobro: z.string().nullable().optional(),
 
         fechaRecibidaCuentaCobroTramitador: z.string().nullable().optional(),
         fechaPagoCuentaCobro: z.string().nullable().optional(),
@@ -231,7 +233,7 @@ export const CuentaCobroSchema = z.object({
         valorCuentaCobro: z.coerce.number().nullable().optional()
 })
 const emptyToNull = (val: unknown) => (val === "" ? null : val);
-export const logisticaSchema = z.object({
+export const logisticaApiSchema = z.object({
         numeroGuia: z.preprocess(emptyToNull, z.string().nullable().optional()),
         valorEnvio: z.preprocess(emptyToNull, z.coerce.number().nullable().optional()),
         horaProgramda: z.preprocess(emptyToNull, z.string().nullable().optional()),
@@ -239,6 +241,11 @@ export const logisticaSchema = z.object({
         fechaEntregaTransportadora: z.preprocess(emptyToNull, z.string().nullable().optional()),
 
 
+})
+
+export const logisticaSchema =z.object({
+         numeroGuia:  z.string()
+                .min(1, "Debe Digitar el nuemro de guia")
 })
 
 
@@ -258,7 +265,7 @@ export const OperacionesSchema = z.array(OperacionSchema);
 
 export const TramiteSchema= z.object({
         id:z.number(),
-        nombreTramite:z.string()
+        nombreOperacion:z.string()
 });
 
 export const TramitesSchema =z.array(TramiteSchema);
@@ -294,7 +301,7 @@ export const SolicitudAPIRespuestaSchema = z.object({
         trazabilidad: array(Trazabilidad).optional(),
         programacion: Programacion.optional().nullable(),
         logistica: logistica.optional().nullable(),
-        cuentaCobro:cuentaCobro.optional().nullable(),
+        cuentaCobro:CuentaCobro.optional().nullable(),
         operaciones:operaciones.optional().nullable(),
         entidad:Entidad.optional().nullable(),
         tramite:Tramites.optional().nullable(),

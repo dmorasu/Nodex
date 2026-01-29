@@ -2,8 +2,9 @@
 
 import { 
   ErrorResponoseSchema,
-  SuccessSchema,
-  CuentaCobroSchema 
+  SuccessSchema, 
+
+  cuentaCobroSchema
 } from "@/src/schemas"
 
 import { revalidatePath } from "next/cache"
@@ -41,7 +42,7 @@ export default async function CrearCuentaCobro(
   }
 
   // ✅ Validación flexible
-  const parsed = CuentaCobroSchema.safeParse(cuentaCobroData)
+  const parsed = cuentaCobroSchema.safeParse(cuentaCobroData)
 
   if (!parsed.success) {
     return {
