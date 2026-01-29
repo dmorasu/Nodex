@@ -266,7 +266,7 @@ export const OperacionesSchema = z.array(OperacionSchema);
 
 export const TramiteSchema= z.object({
         id:z.number(),
-        nombreOperacion:z.string()
+        nombreTramite:z.string()
 });
 
 export const TramitesSchema =z.array(TramiteSchema);
