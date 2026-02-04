@@ -37,6 +37,19 @@ class Programacion extends Model {
   })
   declare valorViaticos: number | null
 
+  
+  @Column({
+    type: DataType.STRING,
+    allowNull: true
+  })
+  declare conceptoHonorarios: string | null
+  
+  @Column({
+    type: DataType.STRING,
+    allowNull: true
+  })
+  declare conceptoViaticos: string | null
+
   @ForeignKey(() => SolicitudTramites)
   @Column({ unique: true,field: 'solicitudTramiteId'  })
   declare solicitudTramiteId: number

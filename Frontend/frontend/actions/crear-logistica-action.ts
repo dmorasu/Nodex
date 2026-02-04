@@ -18,7 +18,7 @@ export default async function CrearLogistica(solicitudTramitesId:number,prevStat
         solicitudTramitesId:solicitudTramitesId, 
         numeroGuia:formData.get('numeroGuia'),
         valorEnvio:formData.get('valorEnvio'),
-        horaProgramada:formData.get('horaProgramada'),
+        transportadora:formData.get('transportadora'),
         fechaProgramacionLogistica:formData.get("fechaProgramacionLogistica"),
         fechaEntregaTransportadora:formData.get('fechaEntregaTransportadora'),
 
@@ -46,7 +46,7 @@ export default async function CrearLogistica(solicitudTramitesId:number,prevStat
             solicitudTramitesId:solicitudTramitesId,
             numeroGuia:logisticaData.numeroGuia,
             valorEnvio:logisticaData.valorEnvio,
-            horaProgramada:logisticaData.horaProgramada,
+            transportadora:logisticaData.transportadora,
             fechaProgramacionLogistica:logisticaData.fechaProgramacionLogistica,
             fechaEntregaTransportadora:logisticaData.fechaEntregaTransportadora,
         })

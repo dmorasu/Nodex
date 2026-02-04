@@ -166,7 +166,9 @@ export const Programacion = z.object({
         fechaFinalizacionServicio: z.string().nullable().optional(),
         fechaRealizacionDiligencia: z.string().nullable().optional(),
         valorTramite: z.string().nullable().optional(),
-        valorViaticos: z.string().nullable().optional()
+        valorViaticos: z.string().nullable().optional(),
+        conceptoViaticos:z.string().nullable().optional(),
+        conceptoHonorarios:z.string().nullable().optional()
 
 
 })
@@ -175,7 +177,7 @@ export const logistica = z.object({
         id: z.number(),
         numeroGuia: z.string().nullable().optional(),
         valorEnvio: z.string().nullable().optional(),
-        horaProgramada: z.string().nullable().optional(),
+        transportadora: z.string().nullable().optional(),
         fechaProgramacionLogistica: z.string().nullable().optional(),
         fechaEntregaTransportadora: z.string().nullable().optional()
 
@@ -207,12 +209,13 @@ export const Entidad =z.object({
 export const operaciones =z.object({
         id:z.number(),
         nombreOperacion:z.string(),
-        centroDeCostos:z.string()
+        centroDeCostos:z.string().nullable().optional()
 })
 
 export const Tramites =z.object({
         id:z.number(),
         nombreTramite:z.string(),
+        responsable:z.string().nullable().optional()
        
 })
 
@@ -254,13 +257,15 @@ export const ProgramacionSchema = z.object({
 
         fechaProbableEntrega: z.string()
                 .min(1, "Debe seleccionar la fecha de Entrega"),
+        conceptoHonorarios: z.string()
+                .min(1, "Debe inserta el concepto de los Honorarios"),
 
 })
 
 export const OperacionSchema = z.object({
   id: z.number(),
   nombreOperacion: z.string(),
-  centroDeCostos:z.string()
+  centroDeCostos:z.string().nullable().optional()
 });
 export const OperacionesSchema = z.array(OperacionSchema);
 

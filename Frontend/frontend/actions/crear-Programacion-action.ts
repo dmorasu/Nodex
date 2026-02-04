@@ -4,6 +4,7 @@ import { ErrorResponoseSchema,SuccessSchema,  ProgramacionSchema } from "@/src/s
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
+import { formatoMoneda } from "@/src/ultis"
 
 
 type ActionStateType ={
@@ -18,7 +19,9 @@ export default async function CrearProgramacion(solicitudTramiteId:number,prevSt
         solicitudTramiteId:solicitudTramiteId, 
         fechaProbableEntrega:formData.get('fechaProbableEntrega'),
         valorTramite:formData.get('valorTramite'),
-        valorViaticos:formData.get("valorViaticos")
+        valorViaticos:formData.get("valorViaticos"),
+        conceptoViaticos:formData.get('conceptoViaticos'),
+        conceptoHonorarios:formData.get('conceptoHonorarios')
         
         
 
@@ -47,6 +50,8 @@ export default async function CrearProgramacion(solicitudTramiteId:number,prevSt
             valorTramite:programacionData.valorTramite,
             valorViaticos:programacionData.valorViaticos,
             fechaProbableEntrega:programacionData.fechaProbableEntrega,
+            conceptoHonorarios:programacionData.conceptoHonorarios,
+            conceptoViaticos:programacionData.conceptoViaticos
            
         })
     })

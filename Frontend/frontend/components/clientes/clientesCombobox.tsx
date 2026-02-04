@@ -9,6 +9,7 @@ import {
   DialogBackdrop,
   DialogPanel
 } from '@headlessui/react'
+import { useRouter } from 'next/navigation'
 import { useClientesSearch } from '@/hooks/useClientesSearch'
 
 interface Cliente {
@@ -23,31 +24,41 @@ interface Props {
   defaultValue?: number
 }
 
-export default function ClientesComboBox({ onChange, name = 'clienteId', defaultValue }: Props) {
+export default function ClientesComboBox({
+  onChange,
+  name = 'clienteId',
+  defaultValue
+}: Props) {
+  const router = useRouter() // ✅ hook correctamente ubicado
   const { search, setSearch, results, loading } = useClientesSearch()
   const [selected, setSelected] = useState<Cliente | null>(null)
   const [open, setOpen] = useState(false)
 
   // Cargar cliente inicial si viene defaultValue
   useEffect(() => {
+    if (!defaultValue) return
+
     const load = async () => {
-      if (!defaultValue) return
-      const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clientes/${defaultValue}`)
+      const r = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/clientes/${defaultValue}`
+      )
       const data = await r.json()
       setSelected(data)
     }
+
     load()
   }, [defaultValue])
 
   const handleSelect = (c: Cliente | null) => {
     setSelected(c)
     setOpen(false)
-    setSearch('')          // 🔥 IMPORTANTE: limpiar búsqueda
+    setSearch('')
     onChange?.(c ? c.id : null)
   }
 
   return (
     <div>
+      {/* Botón principal */}
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -58,7 +69,7 @@ export default function ClientesComboBox({ onChange, name = 'clienteId', default
           : 'Seleccionar Cliente...'}
       </button>
 
-      {/* Hidden Input */}
+      {/* Hidden input para formularios */}
       <input type="hidden" name={name} value={selected?.id ?? ''} />
 
       <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
@@ -78,17 +89,30 @@ export default function ClientesComboBox({ onChange, name = 'clienteId', default
                 onChange={(e) => setSearch(e.target.value)}
               />
 
-              {/* Estado de carga */}
               {loading && (
                 <p className="p-2 text-gray-500 text-sm">Buscando...</p>
               )}
 
-              {/* Lista de resultados */}
               <div className="border rounded max-h-64 overflow-y-auto">
                 {search.length >= 2 && results.length === 0 && !loading ? (
-                  <p className="p-2 text-gray-400 text-sm text-center">
-                    No se encontraron clientes
-                  </p>
+                  <div className="p-4 text-center space-y-2">
+                    <p className="text-gray-400 text-sm">
+                      No se encontraron clientes
+                    </p>
+
+                    <button
+  type="button"
+  onMouseDown={(e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.location.href = '/center/clientes/nuevo'
+  }}
+  className="text-orange-600 font-semibold hover:underline"
+>
+  ➕ Crear nuevo cliente
+</button>
+
+                  </div>
                 ) : (
                   results.map((c) => (
                     <ComboboxOption

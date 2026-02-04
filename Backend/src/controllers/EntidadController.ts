@@ -14,7 +14,7 @@ export class EntidadController{
         try {
                 const entidad=  await Entidad.findAll({
                     order:[
-                        ['createdAt','DESC']
+                        ['nombreEntidad','ASC']
                     ],
                     attributes:["id","nombreEntidad"]
 

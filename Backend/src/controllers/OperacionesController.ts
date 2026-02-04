@@ -14,7 +14,7 @@ export class OperacionesController{
         try {
                 const operaciones=  await Operaciones.findAll({
                     order:[
-                        ['createdAt','DESC']
+                        ['nombreOperacion','ASC']
                     ],
                     attributes:["id","nombreOperacion",'centroDeCostos']
                     

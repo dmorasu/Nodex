@@ -14,9 +14,9 @@ export class TramiteController{
         try {
                 const tramites=  await Tramite.findAll({
                     order:[
-                        ['createdAt','DESC']
+                        ['nombreTramite','ASC']
                     ],
-                    attributes:["id","nombreTramite"]
+                    attributes:["id","nombreTramite","responsable"]
                     
 
                 })

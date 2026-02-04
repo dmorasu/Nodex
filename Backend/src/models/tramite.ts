@@ -8,6 +8,9 @@ class Tramite extends Model {
   @Column({ type:DataType.STRING(150) })
   declare nombreTramite:string
 
+  @Column({ type:DataType.STRING(150) })
+  declare responsable:string
+
   @HasMany(()=>SolicitudTramites)
   declare solicitudes: SolicitudTramites[]
 }

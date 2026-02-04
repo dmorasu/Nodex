@@ -1,16 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { OperacionesSchema,  } from "@/src/schemas"
+import { OperacionesSchema, OperacionSchema,  } from "@/src/schemas"
 
 type Props = {
   name: string
   defaultValue?: number
+  
 }
 
 export default function OperacionesSelect({ name, defaultValue }: Props) {
 
-  const [data, setData] = useState<{ id: number; nombreOperacion: string }[]>([])
+  const [data, setData] = useState<{ id: number; nombreOperacion: string}[]>([])
   const [selected, setSelected] = useState("")
 
   // Cargar opciones

@@ -82,8 +82,24 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
           attributes: ["id","nombreMunicipio"]
         },
         {
+          model: Operaciones,
+          attributes: ["id","nombreOperacion","centroDeCostos"]
+        },
+        {
+          model: Tramite,
+          attributes: ["id","nombreTramite","responsable"]
+        },
+        {
+          model: Logistica,
+          attributes: ["id","transportadora"]
+        },
+        {
           model: Usuarios,
           attributes:["id","nombreUsuario"]
+        },
+        {
+          model: Programacion,
+          attributes:["id","fechaFinalizacionServicio"]
         },
         {
           model: EstadosTramites,
@@ -248,7 +264,7 @@ static getAll = async (req: Request, res: Response) => {
           },
           {
             model:Tramite,
-            attributes:['id','nombreTramite']
+            attributes:['id','nombreTramite','responsable']
           },
           {
             model:Tramitador,

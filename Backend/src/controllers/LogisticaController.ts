@@ -43,7 +43,7 @@ export class LogisticaController{
         solicitudTramiteId: solicitudId,
         numeroGuia: req.body.numeroGuia || null,
         valorEnvio: req.body.valorEnvio || null,
-        horaProgramada: req.body.horaProgramada || null,
+        transportadora: req.body.transportadora|| null,
         fechaProgramacionLogistica: req.body.fechaProgramacionLogistica || null,
         fechaEntregaTransportadora: req.body.fechaEntregaTransportadora || null
       });
@@ -59,7 +59,7 @@ export class LogisticaController{
       }
 
       if (req.body.horaProgramada !== undefined) {
-        logistica.horaProgramada = req.body.horaProgramada || null;
+        logistica.transportadora = req.body.transportadora || null;
       }
 
       if (req.body.fechaProgramacionLogistica !== undefined) {

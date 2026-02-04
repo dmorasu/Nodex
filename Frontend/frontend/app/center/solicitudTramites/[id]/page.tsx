@@ -7,7 +7,7 @@ import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton
 
 import dynamic from "next/dynamic";
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas'
-import { formatoFecha } from '@/src/ultis';
+import { formatoFecha, formatoFechaFinaizacion, formatoMoneda } from '@/src/ultis';
 import { Metadata } from 'next'
 import Link from 'next/link';
 import React from 'react'
@@ -104,7 +104,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
       <>  
           
           <div>
-             <h4 className=' text-2xl text-orage-400 mt-10 text-center'>
+             <h4 className="text-2xl text-gray-600 mt-10 text-center font-bold "  >
             Detalle de la Solicitud:
           </h4>
           </div>
@@ -113,54 +113,86 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
               <li key={solicitudTramite.id} className="flex justify-center gap-x-6 p-5 ">
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto space-y-2"> 
-                    <p className="text-lg font-semibold leading-6 text-gray-900">
-                        <span className="text-black">Cliente:</span>{" "}
+                    <p className="text-lg  leading-6 text-red-500 font-bold">
+                        <span className="text-red-500 font-bold ">Número de Solicitud : </span>{" "}
+                        {solicitudTramite.id}
+                    </p>
+                    <p className="text-sm font-normal leading-6 text-gray-900">
+                        <span className="text-red-500 font-semibold ">Cliente:</span>{" "}
                         {solicitudTramite.clientes?.nombreCliente}
                     </p>
-                    <p className="text-base  leading-6 text-gray-900 text-justify">
-                        <span className="text-black font-bold ">Detalle: </span>{" "}
+                    <p className="text-sm font-normal leading-6 text-gray-900 text-justify">
+                        <span className="text-black font-bold ">Detalle Solicitud: </span>{" "}
                         <span className='text-justify'>{solicitudTramite.detalleSolicitud}</span>
                     </p>
                     
                     
-                     <p className='text-gray-500  text-sm'>
+                     <p className='text-gray-600  text-sm'>
                         <span className="text-black font-bold">Placa:</span>{" "}
-                        <span className='text-justify'> {solicitudTramite.placa}</span>
+                        <span className='text-justify'> {solicitudTramite.placa?? "Sin Placa"}</span>
                     </p>
-                     <p className='text-gray-500  text-sm'>
+                     <p className='text-gray-600  text-sm'>
                         <span className="text-black font-bold">Matricula Inmobiliaria:</span>{" "}
-                        <span className='text-justify'>{solicitudTramite.matriculaInmobiliaria}</span>
+                        <span className='text-justify'>{solicitudTramite.matriculaInmobiliaria??"Sin Matricula"}</span>
                     </p>
-                     <p className='text-gray-500  text-sm'>
-                        <span className="text-orange-500">Fecha Posible Entrega:</span>{" "}
-                        {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
-
-                    </p>
+                     
                      <p className='text-gray-500  text-sm'>
                         
-                        <span className="text-orange-500">Centro de Costos:</span>{" "}
+                        <span className="text-black font-semibold">Centro de Costos:</span>{" "}
+                        {solicitudTramite.operaciones?.centroDeCostos??"El tipo de trámite no se le ha asignado Centro de Costos"}
                         
                     </p>
                     <p className="text-sm font-bold text-sky-400">
                          
                     </p>
                     <p className='text-gray-500  text-sm'>
-                        {solicitudTramite.municipios?.nombreMunicipio}, 
+                        
 
-                        <span className="text-orange-500">direccion:</span>{" "}
+                        <span className="text-black font-semibold">Cuidad:</span>{" "}
+                        {solicitudTramite.municipios?.nombreMunicipio}
+                    </p>
+                    <p className='text-gray-500  text-sm'>
+
+                        <span className="text-black font-semibold">Dirección:</span>{" "}
                         {solicitudTramite.direccionTramite} 
+                    </p>
+                    <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Valor Trámite:</span>{" "}
+                        {formatoMoneda(   solicitudTramite.programacion?.valorTramite??"0")}
+
+                    </p>
+                    <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Valor Viaticos:</span>{" "}
+                          {formatoMoneda(   solicitudTramite.programacion?.valorViaticos??"0")}
+
+                    </p>
+                    <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Fecha Realizacion Servicio Servicio:</span>{" "}
+                        {solicitudTramite.fechaEntregaResultado && formatoFechaFinaizacion(solicitudTramite.programacion?.fechaRealizacionDiligencia??"Sin Fecha")}
+
+                    </p>
+                    <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Fecha Entrega Resultado:</span>{" "}
+                        {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
+
                     </p>
                     
                      <p className='text-gray-500  text-sm'>
                         
 
-                        <span className="text-orange-500">Fecha Probable Entrega:</span>{" "}
+                        <span className="text-black font-semibold">Fecha Probable Entrega:</span>{" "}
                         {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
                     </p>
                     <p className='text-gray-500  text-sm'>
                         
 
-                        <span className="text-orange-500">Tramitador Asignado:</span>{" "}
+                        <span className="text-black font-semibold">Fecha de Creación:</span>{" "}
+                        {formatoFecha(solicitudTramite.createdAt)} 
+                    </p>
+                    <p className='text-red-500  text-sm font-bold'>
+                        
+
+                        <span className="text-black font-semibold">Tramitador Asignado:</span>{" "}
                         {solicitudTramite.tramitador?.nombreTramitador??"No se ha asignado un Tramitador "} 
                     </p>
                     {/* <p
@@ -187,11 +219,19 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                                       >
                                         {solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
                                       </p> */}
-                    <p className="text-gray-400 text-sm">
-                      Actualizado el:{" "}
-                      <span className="font-bold">
+                    <p className="text-black font-semibold text-sm">
+                      Última Actualización:{" "}
+                      <span className="font-normal text-gray-600">
                   {formatoFecha(solicitudTramite.updatedAt)}
                 </span>
+
+              </p>
+              <p className="text-black font-semibold text-sm">
+                      Programador:{" "}
+                      <span className="font-normal text-gray-600">
+                  {solicitudTramite.tramite?.responsable??"Sin asingar"}
+                </span>
+                
               </p>
                   </div>
                 </div>

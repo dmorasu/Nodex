@@ -28,7 +28,9 @@ export class ProgramacionController{
         solicitudTramiteId: solicitudId,
         fechaProbableEntrega: req.body.fechaProbableEntrega || null,
         valorTramite: req.body.valorTramite || null,
-        valorViaticos: req.body.valorViaticos || null
+        valorViaticos: req.body.valorViaticos || null,
+        conceptoHonorarios:req.body.conceptoHonorarios || null,
+        conceptoViaticos:req.body.conceptoViaticos || null
       });
     } else {
       // Actualizar solo lo que venga en el body
@@ -43,6 +45,13 @@ export class ProgramacionController{
 
       if (req.body.valorViaticos !== undefined) {
         programacion.valorViaticos = req.body.valorViaticos || null;
+      }
+
+      if (req.body.conceptoViaticos !== undefined) {
+        programacion.conceptoViaticos = req.body.conceptoViaticos || null;
+      }
+      if (req.body.conceptoHonorarios !== undefined) {
+        programacion.conceptoHonorarios = req.body.conceptoHonorarios || null;
       }
 
       await programacion.save();

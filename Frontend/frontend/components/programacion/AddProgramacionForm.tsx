@@ -73,8 +73,20 @@ export default function AddProgramacionForm({ closeModal ,programacion}: { close
           </input>
         </div>
          <div className="mb-3">
+          <label className="text-sm uppercase font-bold"> Concepto de Honorarios:</label>
+          <input type="text" step={0.01} min={0} name="conceptoHonorarios" className="w-full p-3 border border-gray-100 bg-slate-100" defaultValue={programacion?.conceptoHonorarios??""} >
+
+          </input>
+        </div>
+         <div className="mb-3">
           <label className="text-sm uppercase font-bold"> Valor de los Viaticos</label>
           <input type="number" step={0.01} min={0} name="valorViaticos" className="w-full p-3 border border-gray-100 bg-slate-100"defaultValue={programacion?.valorViaticos??""}>
+
+          </input>
+        </div>
+        <div className="mb-3">
+          <label className="text-sm uppercase font-bold"> Concepto de Viaticos:</label>
+          <input type="text" step={0.01} min={0} name="conceptoViaticos" className="w-full p-3 border border-gray-100 bg-slate-100" defaultValue={programacion?.conceptoViaticos??""} >
 
           </input>
         </div>

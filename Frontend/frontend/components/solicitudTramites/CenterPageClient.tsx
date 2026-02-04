@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import SolicitudTramiteMenu from "@/components/solicitudTramites/MenuSolicitudTramites"
-import { formatoFecha } from "@/src/ultis"
+import { formatoFecha, formatoFechaFinaizacion } from "@/src/ultis"
 import { SolicitudTramites } from "@/src/schemas"
 import EliminarSolicitudTramiteModal from "./EliminarSolicitudTramiteModal"
 import clsx from "clsx"
@@ -111,38 +111,68 @@ export default function CenterPageClient({
                         href={`/center/solicitudTramites/${solicitud.id}`}
                         className="cursor-pointer hover:underline text-lg font-bold"
                       >
-                        <span className="text-sky-500">ST</span>: {solicitud.id}
+                        <span className="text-red-500">Solicitud de Trámite N: </span>: {solicitud.id}
                       </Link>
                     </p>
 
-                    <p className="text-sm font-semibold leading-6 text-gray-900">
-                      <span className="text-sky-500">Cliente:</span>{" "}
+                    <p className="text-sm font-semibold leading-6 text-gray-600">
+                      <span className="text-red-600">Cliente:</span>{" "}
                       {solicitud.clientes?.nombreCliente}
                     </p>
 
-                    <p className="text-base font-bold">
+                    <p className="text-sm font-bold">
                       {solicitud.municipios?.nombreMunicipio}
                     </p>
 
-                    <p className="text-base font-semibold text-gray-600">
+                    <p className="text-sm font-semibold text-gray-600">
                       {solicitud.direccionTramite}
                     </p>
 
-                    <p className="text-base text-gray-500 text-justify">
+                    <p className="text-sm text-gray-500 text-justify">
                       {solicitud.detalleSolicitud}
                     </p>
-
-                    <p className="text-sky-400 text-sm ">
-                      Actualizado el:{" "}
-                      <span className="font-bold">
-                        {formatoFecha(solicitud.updatedAt)}
+                    <p className="text-gray-800 text-sm font-bold">
+                     Asignado a:{" "}
+                      <span className="font-normal text-gray-600">
+                        {solicitud.tramite?.responsable??"El Trámite no tiene un analista asingado "}
+                      </span>
+                    </p>
+                    <p className="text-gray-800 text-sm font-bold">
+                      Operacion:{" "}
+                      <span className="font-normal text-gray-600">
+                        {solicitud.operaciones?.nombreOperacion}
+                      </span>
+                    </p>
+                    <p className="text-gray-800 text-sm font-bold">
+                      Fecha Espera Resultado:{" "}
+                      <span className="font-normal text-gray-600">
+                        {formatoFecha(solicitud.fechaEntregaResultado)}
                       </span>
                     </p>
 
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-800 text-sm font-bold">
                       Creado por:{" "}
-                      <span className="font-bold">
+                      <span className=" text-gray-600 font-normal">
                         {solicitud.usuario?.nombreUsuario}
+                      </span>
+                    </p>
+                    
+                    <p className="text-gray-800 text-sm font-bold">
+                      Fecha de Creacion:{" "}
+                      <span className="font-normal text-gray-600 ">
+                        {formatoFecha(solicitud.createdAt)}
+                      </span>
+                    </p>
+                    <p className="text-gray-800 text-sm font-bold">
+                      Última Actualizacion:{" "}
+                      <span className="font-normal text-gray-600">
+                        {formatoFecha(solicitud.updatedAt)}
+                      </span>
+                    </p>
+                    <p className="text-red-500 text-sm font-bold">
+                      Fecha de Finalización:{" "}
+                      <span className="font-normal text-gray-600">
+                        {formatoFechaFinaizacion(solicitud.programacion?.fechaFinalizacionServicio?? "")}
                       </span>
                     </p>
                   </div>
@@ -160,13 +190,13 @@ export default function CenterPageClient({
                         "bg-green-500 text-white":
                           solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Finalizado",
                         "bg-blue-500 text-white":
-                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Reprogramado",
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Novedad Subsanada Continuar Trámite",
                         "bg-orange-500 text-white":
                           solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Desistido",
                         "bg-purple-500 text-white":
-                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "Suspendido",
+                          solicitud.estadosTramites?.[0]?.estado?.nombreEstado === "En espera por novedad",
                         "bg-gray-400 text-white":
-                          !["Sin Iniciar","En Curso","Finalizado","Reprogramado","Desistido","Suspendido"]
+                          !["Sin Iniciar","En Curso","Finalizado","Novedad Subsanada Continuar Trámite","Desistido","En espera por novedad"]
                           .includes(solicitud.estadosTramites?.[0]?.estado?.nombreEstado ?? "")
                       }
                     )}

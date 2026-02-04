@@ -24,7 +24,7 @@ class Logistica extends Model{
         
 
     })
-    declare horaProgramada: string
+    declare transportadora: string
 
     @Column({
         type: DataType.DATEONLY

@@ -73,13 +73,13 @@ export default function AddLogisticaForm({closeModal, logistica}:{closeModal:()=
 
   <div className="py-3">
     <label className="text-sm uppercase font-bold">
-      Hora Programada:
+      Transportadora:
     </label>
     <input
-      type="time"
-      name="horaProgramada"
+      type="text"
+      name="transportadora"
       className="w-full p-3 border border-gray-100 bg-slate-100"
-      defaultValue={logistica?.horaProgramada??""}
+      defaultValue={logistica?.transportadora??""}
     />
   </div>
 
