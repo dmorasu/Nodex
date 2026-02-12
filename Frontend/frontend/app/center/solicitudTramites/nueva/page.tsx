@@ -28,7 +28,7 @@ export default async function CrearSolicitudesPage() {
         </div>
 
         <Link
-          href="/center"
+          href="/center/dashboard"
           className="bg-gray-400 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center"
         >
           Volver

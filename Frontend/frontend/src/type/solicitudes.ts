@@ -19,3 +19,4 @@ export type TramitadorType = NonNullable<
  
 
 export type SolicitudTramiteType = z.infer<typeof SolicitudAPIRespuestaSchema>
+

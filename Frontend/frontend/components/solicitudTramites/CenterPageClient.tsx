@@ -12,6 +12,10 @@ import CargaMasivaSolicitudes from "./CargaMasivaSolicitudes"
 
 import ModalContainer from "../ui/ModalContainer"
 
+import { useOperaciones } from '@/hooks/useOperaciones'
+import { useTramites } from '@/hooks/useTramites'
+import { useTramitadores } from '@/hooks/useTramitadores'
+
 interface Props {
   solicitudes: SolicitudTramites[]
   currentPage: number
@@ -49,15 +53,18 @@ export default function CenterPageClient({
     query.set("page", page.toString())
     router.push(`?${query.toString()}`)
   }
+  const { data: operaciones, loading: loadingOperaciones } = useOperaciones()
+  const { data: tramites, loading: loadingTramites } = useTramites()
+  const { data: tramitadores, loading: loadingTramitadores } = useTramitadores()
 
   return (
     <>
       <div className="flex flex-col-reverse md:flex-row md:justify-between items-center">
         <div className="w-full md:w-auto">
-          <h1 className="font-black text-4xl text-gray-900 my-5">
+          <h1 className=" text-3xl text-gray-900 my-5">
             Solicitudes Creadas
           </h1>
-          <p className="text-xl font-bold">
+          <p className="text-l font-semibold">
             Tienes los siguientes{" "}
             <span className="text-sky-500">Trámites:</span>
           </p>
@@ -90,6 +97,9 @@ export default function CenterPageClient({
           Buscar
         </button>
       </div>
+
+        
+
 
       {solicitudes.length ? (
         <>

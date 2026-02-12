@@ -14,9 +14,9 @@ export default async function CenterLayout({
   return (
     <>
       <header className='bg-blue-600/80 py-1'>
-        <div className='max-w-4xl mx-auto flex flex-col lg:flex-row justify-between items-center'>
+        <div className='max-w-4xl mx-auto flex flex-col lg:flex-row justify-end items-center'>
           <div className='w-96'>
-            <Link href={'/center'}>
+            <Link href={'/center/dashboard'}>
                 <LogoEncabezado />
             </Link>
           </div>

@@ -59,7 +59,7 @@ export async function autenticacion(prevState:ActionStateType, formData:FormData
         path:'/'
 
     })
-    redirect('/center')
+    redirect('/center/dashboard')
 
     
     

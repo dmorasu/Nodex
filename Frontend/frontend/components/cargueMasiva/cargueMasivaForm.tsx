@@ -1,65 +1,104 @@
 'use client'
+
 import { useState } from 'react'
+
+type ErrorExcel = {
+  fila: number
+  error: string
+}
+
+type ResultadoCarga = {
+  message: string
+  totalProcesados: number
+  creados: number[]
+  errores: ErrorExcel[]
+}
 
 export default function CargaMasivaSolicitudes() {
 
   const [file, setFile] = useState<File | null>(null)
   const [progress, setProgress] = useState(0)
-  const [resultado, setResultado] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [modo, setModo] = useState<'validar' | 'cargar' | null>(null)
 
-  // ==========================
-  // 📄 Descargar plantilla
-  // ==========================
+  const [resultado, setResultado] = useState<ResultadoCarga>({
+    message: '',
+    totalProcesados: 0,
+    creados: [],
+    errores: []
+  })
+
   const descargarPlantilla = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/plantilla`
+    window.location.href =
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/plantilla`
   }
 
   // ==========================
-  // ✅ VALIDAR EXCEL
+  // VALIDAR
   // ==========================
-  const validarArchivo = () => {
+  const validarArchivo = async () => {
     if (!file) return
 
-    setLoading(true)
-    setResultado(null)
-    setModo('validar')
+    try {
+      setLoading(true)
+      setModo('validar')
 
-    const formData = new FormData()
-    formData.append('file', file)
+      const formData = new FormData()
+      formData.append('file', file)
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/validar-excel`, {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(json => {
-        setResultado(json)
-        setLoading(false)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/validar-excel`,
+        {
+          method: 'POST',
+          body: formData,
+          credentials: 'include' // 🔐 ENVÍA COOKIES
+        }
+      )
+
+      const json = await res.json()
+
+      if (!res.ok) {
+        alert(json.message || 'Error validando archivo')
+        return
+      }
+
+      setResultado({
+        message: json.message ?? '',
+        totalProcesados: json.totalProcesados ?? 0,
+        creados: json.creados ?? [],
+        errores: json.errores ?? []
       })
-      .catch(() => {
-        setLoading(false)
-        alert('Error validando archivo')
-      })
+
+    } catch (error) {
+      console.error(error)
+      alert('Error validando archivo')
+    } finally {
+      setLoading(false)
+    }
   }
 
   // ==========================
-  // 📥 CARGAR EXCEL
+  // CARGAR
   // ==========================
   const subirArchivo = () => {
     if (!file) return
 
     setLoading(true)
     setProgress(0)
-    setResultado(null)
     setModo('cargar')
 
     const formData = new FormData()
     formData.append('file', file)
 
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/carga-masiva`)
+
+    xhr.open(
+      'POST',
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudTramites/carga-masiva`
+    )
+
+    // 🔐 IMPORTANTE CUANDO USAS COOKIES
+    xhr.withCredentials = true
 
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
@@ -69,9 +108,28 @@ export default function CargaMasivaSolicitudes() {
     }
 
     xhr.onload = () => {
-      const json = JSON.parse(xhr.responseText)
-      setResultado(json)
-      setLoading(false)
+      try {
+        const json = JSON.parse(xhr.responseText)
+
+        if (xhr.status !== 200) {
+          alert(json.message || 'Error del servidor')
+          setLoading(false)
+          return
+        }
+
+        setResultado({
+          message: json.message ?? '',
+          totalProcesados: json.totalProcesados ?? 0,
+          creados: json.creados ?? [],
+          errores: json.errores ?? []
+        })
+
+      } catch (error) {
+        console.error(error)
+        alert('Respuesta inválida del servidor')
+      } finally {
+        setLoading(false)
+      }
     }
 
     xhr.onerror = () => {
@@ -82,16 +140,14 @@ export default function CargaMasivaSolicitudes() {
     xhr.send(formData)
   }
 
-  // ==========================
+  const { totalProcesados, creados, errores } = resultado
 
   return (
     <div className="border p-6 rounded-xl shadow-lg space-y-6 max-w-xl bg-white">
-
       <h2 className="text-xl font-bold text-gray-800">
         Carga masiva de Solicitudes de Trámite
       </h2>
 
-      {/* 📄 Descargar plantilla */}
       <button
         onClick={descargarPlantilla}
         className="w-full bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-medium py-2 rounded-lg transition"
@@ -99,7 +155,6 @@ export default function CargaMasivaSolicitudes() {
         📄 Descargar plantilla Excel
       </button>
 
-      {/* 📂 Input archivo */}
       <input
         type="file"
         accept=".xlsx,.xls"
@@ -107,7 +162,6 @@ export default function CargaMasivaSolicitudes() {
         className="w-full border rounded-lg p-2"
       />
 
-      {/* 🔹 Botones acción */}
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={validarArchivo}
@@ -126,7 +180,6 @@ export default function CargaMasivaSolicitudes() {
         </button>
       </div>
 
-      {/* 🔹 Barra de progreso solo en carga */}
       {loading && modo === 'cargar' && (
         <div className="space-y-2">
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
@@ -141,60 +194,27 @@ export default function CargaMasivaSolicitudes() {
         </div>
       )}
 
-      {/* 🔹 Mensaje mientras valida */}
-      {loading && modo === 'validar' && (
-        <p className="text-sm text-gray-600 text-center">
-          Validando archivo...
-        </p>
-      )}
-
-      {/* 🔹 Resultado general */}
-      {resultado && (
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-1 text-sm">
-          <p><span className="font-semibold">Total filas:</span> {resultado.totalProcesados}</p>
+      {(modo === 'validar' || modo === 'cargar') && (
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm">
+          <p><strong>Total filas:</strong> {totalProcesados}</p>
 
           {modo === 'cargar' && (
             <>
               <p className="text-green-600 font-semibold">
-                Guardadas: {resultado.creados.length}
+                Guardadas: {creados.length}
               </p>
               <p className="text-red-500 font-semibold">
-                Errores: {resultado.errores.length}
+                Errores: {errores.length}
               </p>
             </>
           )}
 
           {modo === 'validar' && (
             <p className="font-semibold">
-              Errores encontrados: 
-              <span className="text-red-600"> {resultado.errores.length}</span>
+              Errores encontrados:
+              <span className="text-red-600"> {errores.length}</span>
             </p>
           )}
-        </div>
-      )}
-
-      {/* 🔴 Detalle errores */}
-      {resultado?.errores?.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm space-y-2">
-          <p className="font-semibold text-red-700">
-            Detalle de errores:
-          </p>
-
-          <div className="max-h-40 overflow-y-auto space-y-1">
-           {resultado.errores.map((err:any, index:number)=>(
-  <div key={index} className="text-red-600">
-    Fila {err.fila}: {err.error}
-  </div>
-))}
-
-          </div>
-        </div>
-      )}
-
-      {/* ✅ Validación exitosa */}
-      {modo === 'validar' && resultado?.errores?.length === 0 && (
-        <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-3 text-sm font-semibold text-center">
-          Archivo validado correctamente. Ya puedes cargarlo.
         </div>
       )}
     </div>

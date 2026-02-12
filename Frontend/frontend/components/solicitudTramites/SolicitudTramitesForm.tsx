@@ -19,6 +19,16 @@ export default function SolicitudTramitesForm({ solicitud }: { solicitud?: Solic
   return (
     <div>
 
+      <div className="space-y-3 mt-4 overflow-visible">
+        <label htmlFor="clienteId" className="text-sm uppercase font-bold">
+          Cliente
+        </label>
+        <ClientesComboBox
+          name="clienteId"
+          defaultValue={solicitud?.clientes?.id}
+        />
+      </div>
+
       <div className="space-y-3">
         <label htmlFor="name" className="text-sm uppercase font-bold">
           Detalle Solicitud
@@ -57,15 +67,7 @@ export default function SolicitudTramitesForm({ solicitud }: { solicitud?: Solic
         />
       </div>
 
-      <div className="space-y-3 mt-4 overflow-visible">
-        <label htmlFor="clienteId" className="text-sm uppercase font-bold">
-          Cliente
-        </label>
-        <ClientesComboBox
-          name="clienteId"
-          defaultValue={solicitud?.clientes?.id}
-        />
-      </div>
+      
 
       <div className="space-y-3 mt-4">
         <label htmlFor="fechaEntregaResultado" className="text-sm uppercase font-bold">

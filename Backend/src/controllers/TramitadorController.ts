@@ -15,7 +15,7 @@ export class TramitadorController{
         try {
                 const tramitador=  await Tramitador.findAll({
                     order:[
-                        ['createdAt','DESC']
+                        ['nombreTramitador','ASC']
                     ],
 
                 })

@@ -115,16 +115,36 @@ export const validarSolicitudesExcel = async (req: Request, res: Response) => {
 export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
 
   if (!req.file) {
-    return res.status(400).json({ error: 'Debe subir un archivo Excel' })
+    return res.status(400).json({
+      message: "Debe subir un archivo Excel",
+      totalProcesados: 0,
+      creados: [],
+      errores: []
+    })
+  }
+
+  if (!req.usuario) {
+    return res.status(401).json({
+      message: "Usuario no autenticado",
+      totalProcesados: 0,
+      creados: [],
+      errores: []
+    })
   }
 
   try {
-    const workbook = XLSX.read(req.file.buffer)
-    const sheet = workbook.Sheets[workbook.SheetNames[0]]
-    const rows:any[] = XLSX.utils.sheet_to_json(sheet)
+    const workbook = XLSX.read(req.file.buffer, {
+      cellDates: true
+    })
 
-    const creados:number[] = []
-    const errores:any[] = []
+    const sheet = workbook.Sheets[workbook.SheetNames[0]]
+
+    const rows: any[] = XLSX.utils.sheet_to_json(sheet, {
+      raw: false
+    })
+
+    const creados: number[] = []
+    const errores: any[] = []
 
     for (const [index, row] of rows.entries()) {
 
@@ -132,11 +152,11 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
 
       try {
 
-        const clienteId   = Number(row.clienteId)
+        const clienteId = Number(row.clienteId)
         const municipioId = Number(row.municipiosId)
         const operacionId = Number(row.operacionesId)
-        const entidadId   = Number(row.entidadId)
-        const tramiteId   = Number(row.tramiteId)
+        const entidadId = Number(row.entidadId)
+        const tramiteId = Number(row.tramiteId)
 
         if (
           isNaN(clienteId) ||
@@ -144,22 +164,37 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
           isNaN(operacionId) ||
           isNaN(entidadId) ||
           isNaN(tramiteId)
-        ){
-          errores.push({ fila:filaExcel, error:'IDs inválidos o vacíos' })
+        ) {
+          errores.push({ fila: filaExcel, error: "IDs inválidos o vacíos" })
           continue
         }
 
-        const [cliente, municipio, operacion, entidad, tramite] = await Promise.all([
-          Clientes.findByPk(clienteId),
-          Municipios.findByPk(municipioId),
-          Operaciones.findByPk(operacionId),
-          Entidad.findByPk(entidadId),
-          Tramites.findByPk(tramiteId)
-        ])
+        // 🔥 MANEJO CORRECTO DE FECHA
+        let fechaNormalizada: Date | null = null
 
-        if (!cliente || !municipio || !operacion || !entidad || !tramite){
-          errores.push({ fila:filaExcel, error:'Algún ID no existe en base de datos' })
-          continue
+        if (row.fechaEntregaResultado) {
+
+          if (row.fechaEntregaResultado instanceof Date) {
+
+            // Crear fecha limpia sin hora
+            fechaNormalizada = new Date(
+              row.fechaEntregaResultado.getFullYear(),
+              row.fechaEntregaResultado.getMonth(),
+              row.fechaEntregaResultado.getDate()
+            )
+
+          } else {
+
+            const posibleFecha = new Date(row.fechaEntregaResultado)
+
+            if (!isNaN(posibleFecha.getTime())) {
+              fechaNormalizada = new Date(
+                posibleFecha.getFullYear(),
+                posibleFecha.getMonth(),
+                posibleFecha.getDate()
+              )
+            }
+          }
         }
 
         await SolicitudTramites.create({
@@ -170,30 +205,33 @@ export const cargaMasivaSolicitudes = async (req: Request, res: Response) => {
           operacionesId: operacionId,
           entidadId,
           tramiteId,
+          usuarioId: req.usuario.id,
           placa: row.placa?.toString().trim() || null,
           matriculaInmobiliaria: row.matriculaInmobiliaria?.toString().trim() || null,
-          documentosAportados: row.documentosAportados || 'No',
-          fechaEntregaResultado: row.fechaEntregaResultado
-            ? new Date(row.fechaEntregaResultado)
-            : null
+          documentosAportados: row.documentosAportados || "No",
+          fechaEntregaResultado: fechaNormalizada
         })
 
         creados.push(filaExcel)
 
-      } catch (err:any) {
-        errores.push({ fila:filaExcel, error: err.message })
+      } catch (err: any) {
+        errores.push({ fila: filaExcel, error: err.message })
       }
     }
 
-    res.json({
-      message:'Carga masiva finalizada',
+    return res.json({
+      message: "Carga masiva finalizada",
       totalProcesados: rows.length,
       creados,
       errores
     })
 
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error:'Error procesando archivo Excel' })
+    return res.status(500).json({
+      message: "Error procesando archivo Excel",
+      totalProcesados: 0,
+      creados: [],
+      errores: []
+    })
   }
 }

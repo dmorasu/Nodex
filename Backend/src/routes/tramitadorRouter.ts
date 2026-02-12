@@ -15,6 +15,8 @@ router.post('/',
     TramitadorController.create
 )
 
+router.get('/tramitadores',TramitadorController.getAll)
+
 router.get('/:tramitadorId',
     TramitadorController.getById
 )

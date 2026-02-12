@@ -7,7 +7,7 @@ import Logistica from '../models/logistica'
 import Programacion from '../models/programacion'
 import Clientes from '../models/clientes'
 import Municipios from '../models/municipios'
-import {Op} from 'sequelize'
+import {Op,literal} from 'sequelize'
 import Estados from '../models/estados'
 import Usuarios from '../models/usuarios'
 import { CreatedAt } from 'sequelize-typescript'
@@ -293,4 +293,213 @@ static getAll = async (req: Request, res: Response) => {
         res.json('tarifa Eliminada')
         
     }
+
+
+    static buscarSolicitudes = async (req: Request, res: Response) => {
+  try {
+    const { search } = req.query
+
+    if (!search) {
+      return res.json([])
+    }
+
+    const solicitudes = await SolicitudTramites.findAll({
+      where: {
+        [Op.or]: [
+          { id: search },
+          { '$clientes.identificacionCliente$': search }
+        ]
+      },
+      include: [
+        { model: Clientes, attributes: ['id','nombreCliente','identificacionCliente'] },
+        { model: EstadosTramites, include: [{ model: Estados }] }
+      ],
+      order: [['createdAt','DESC']]
+    })
+
+    res.json(solicitudes)
+  } catch (error) {
+    res.status(500).json({ error: 'Error en búsqueda' })
+  }
 }
+
+static filtrarSolicitudes = async (req: Request, res: Response) => {
+  try {
+    const {
+      search,
+      estadoId,
+      tramiteId,
+      tramitadorId,
+      operacionesId,
+      placa,
+      fechaFinalizacionDesde,
+      fechaFinalizacionHasta,
+      page = 1
+    } = req.query
+
+    const limit = 10
+    const offset = (Number(page) - 1) * limit
+
+    const where: any = {}
+    const whereProgramacion: any = {}
+
+    // ==================================================
+    // 🔍 BÚSQUEDA POR ID SOLICITUD O IDENTIFICACIÓN CLIENTE
+    // ==================================================
+    if (search) {
+      where[Op.or] = [
+        { id: search },
+        {
+          clienteId: {
+            [Op.in]: literal(`(
+              SELECT c.id
+              FROM "Clientes" c
+              WHERE c."identificacionCliente" = '${search}'
+            )`)
+          }
+        }
+      ]
+    }
+
+    // ==================================================
+    // 🔹 FILTROS DIRECTOS
+    // ==================================================
+    if (placa) {
+      where.placa = { [Op.iLike]: `%${placa}%` }
+    }
+
+    if (tramitadorId) {
+      where.tramitadorId = tramitadorId
+    }
+
+    // ==================================================
+    // 🔹 FILTRO POR FECHA FINALIZACIÓN SERVICIO
+    // ==================================================
+    if (fechaFinalizacionDesde && fechaFinalizacionHasta) {
+      whereProgramacion.fechaFinalizacionServicio = {
+        [Op.between]: [
+          new Date(fechaFinalizacionDesde as string),
+          new Date(fechaFinalizacionHasta as string)
+        ]
+      }
+    }
+
+    if (fechaFinalizacionDesde && !fechaFinalizacionHasta) {
+      whereProgramacion.fechaFinalizacionServicio = {
+        [Op.gte]: new Date(fechaFinalizacionDesde as string)
+      }
+    }
+
+    if (!fechaFinalizacionDesde && fechaFinalizacionHasta) {
+      whereProgramacion.fechaFinalizacionServicio = {
+        [Op.lte]: new Date(fechaFinalizacionHasta as string)
+      }
+    }
+
+    // ==================================================
+    // 🔹 FILTRO POR ESTADO ACTUAL
+    // ==================================================
+    const SIN_INICIAR_ID = 1
+
+    if (estadoId) {
+      if (Number(estadoId) === SIN_INICIAR_ID) {
+        where.id = {
+          [Op.or]: [
+            {
+              [Op.in]: literal(`(
+                SELECT et."solicitudTramiteId"
+                FROM "EstadosTramites" et
+                WHERE et."estadoId" = ${SIN_INICIAR_ID}
+                AND et."createdAt" = (
+                  SELECT MAX(et2."createdAt")
+                  FROM "EstadosTramites" et2
+                  WHERE et2."solicitudTramiteId" = et."solicitudTramiteId"
+                )
+              )`)
+            },
+            {
+              [Op.notIn]: literal(`(
+                SELECT DISTINCT "solicitudTramiteId"
+                FROM "EstadosTramites"
+              )`)
+            }
+          ]
+        }
+      } else {
+        where.id = {
+          [Op.in]: literal(`(
+            SELECT et."solicitudTramiteId"
+            FROM "EstadosTramites" et
+            WHERE et."estadoId" = ${estadoId}
+            AND et."createdAt" = (
+              SELECT MAX(et2."createdAt")
+              FROM "EstadosTramites" et2
+              WHERE et2."solicitudTramiteId" = et."solicitudTramiteId"
+            )
+          )`)
+        }
+      }
+    }
+
+    // ==================================================
+    // 🔹 QUERY PRINCIPAL
+    // ==================================================
+    const { rows, count } = await SolicitudTramites.findAndCountAll({
+      where,
+
+      include: [
+        { model: Clientes, required: false },
+        { model: Municipios },
+        {
+          model: Tramite,
+          required: !!tramiteId,
+          where: tramiteId ? { id: tramiteId } : undefined
+        },
+        {
+          model: Operaciones,
+          required: !!operacionesId,
+          where: operacionesId ? { id: operacionesId } : undefined
+        },
+        { model: Tramitador },
+
+        // 🔥 NUEVO INCLUDE
+        {
+          model: Programacion,
+          required: !!fechaFinalizacionDesde || !!fechaFinalizacionHasta,
+          where: Object.keys(whereProgramacion).length
+            ? whereProgramacion
+            : undefined
+        },
+
+        {
+          model: EstadosTramites,
+          as: 'estadosTramites',
+          separate: true,
+          limit: 1,
+          order: [['createdAt', 'DESC']],
+          include: [{ model: Estados }]
+        }
+      ],
+
+      distinct: true,
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']]
+    })
+
+    res.json({
+      data: rows,
+      total: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: Number(page)
+    })
+
+  } catch (error) {
+    console.error('ERROR FILTRAR SOLICITUDES:', error)
+    res.status(500).json({ error: 'Error al filtrar solicitudes' })
+  }
+}
+}
+
+
+

@@ -1,15 +1,29 @@
 import {Router}  from 'express'
 import { handleInputErrors } from '../middleware/validation'
 import { validateClienteExits, validateClienteInput } from '../middleware/cliente'
-import { ClienteController } from '../controllers/ClienteController'
-
+import { ClienteController,generarPlantillaClientes,validarClientesExcel,cargaMasivaClientes } from '../controllers/ClienteController'
+import multer from 'multer'
+import { autenticacion } from '../middleware/auth'
 
 
 const router =Router()
 
 router.param('clienteId',validateClienteExits)
 
+const upload = multer({ storage: multer.memoryStorage() })
 
+router.get('/plantilla', generarPlantillaClientes)
+
+router.post('/validar-excel',
+  upload.single('file'),
+  validarClientesExcel
+)
+
+router.post('/carga-masiva',
+  autenticacion,
+  upload.single('file'),
+  cargaMasivaClientes
+)
 router.get('/',ClienteController.getAll)
 router.get('/search', ClienteController.search)
 

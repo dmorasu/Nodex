@@ -6,9 +6,9 @@ export default function Logo() {
     <Image
   src="/logoblanconodex_.png"
   alt="Logo Nodex"
-  width={150}
-  height={400}
-  className="h-auto w-36"  // agrega h-auto para mantener proporción
+  width={300}
+  height={600}
+  className="h-auto w-56 "  // agrega h-auto para mantener proporción
   priority
 />
   )

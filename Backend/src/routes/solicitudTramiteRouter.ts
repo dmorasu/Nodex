@@ -15,11 +15,21 @@ import { validateEstadosTramitesInput, validateEstadosTramitesExits } from '../m
 import { validateLogisticaInput, validateLogisticaId } from '../middleware/logistica'
 import { validateProgramacionInput, validateProgramacionExits } from '../middleware/programacion'
 import { validateCuentaCobroInput, validateCuentaCobroExits } from '../middleware/cuentaCobro'
+import { autenticacion } from '../middleware/auth'
 
 const router = Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
 //--------------------------------------------Ruta de Cargue Masivo ------------------------------------------------------------- 
+
+
+
+//------------------------------------Busquedas Dashboard-----------------------------------//
+
+router.get('/buscar', SolicitudTramitesController.buscarSolicitudes)
+router.get('/filtrar', SolicitudTramitesController.filtrarSolicitudes)
+router.get('/solicitudes', SolicitudTramitesController.obtenerSolicitudes)
+
 
 
 // ================= PARAMS =================
@@ -32,7 +42,7 @@ router.param('cuentaCobroId', validateCuentaCobroExits)
 
 
 
-router.post('/carga-masiva', upload.single('file'), cargaMasivaSolicitudes )
+router.post('/carga-masiva',autenticacion, upload.single('file'), cargaMasivaSolicitudes )
 router.get('/plantilla', generarPlantillaExcel) 
 router.post('/validar-excel', upload.single('file'), validarSolicitudesExcel )
 
