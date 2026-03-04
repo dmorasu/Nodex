@@ -7,10 +7,10 @@ import Logistica from '../models/logistica'
 import Programacion from '../models/programacion'
 import Clientes from '../models/clientes'
 import Municipios from '../models/municipios'
-import {Op,literal} from 'sequelize'
+import {Op,literal,QueryTypes} from 'sequelize'
 import Estados from '../models/estados'
 import Usuarios from '../models/usuarios'
-import { CreatedAt } from 'sequelize-typescript'
+import { db} from '../config/db'
 import Entidad from '../models/entidad'
 import Operaciones from '../models/operaciones'
 import Tramite from '../models/tramite'
@@ -498,6 +498,99 @@ static filtrarSolicitudes = async (req: Request, res: Response) => {
     console.error('ERROR FILTRAR SOLICITUDES:', error)
     res.status(500).json({ error: 'Error al filtrar solicitudes' })
   }
+}
+
+static torreControl = async (req:Request,res:Response)=>{
+
+try{
+
+const page = Number(req.query.page) || 1
+const limit = 20
+const offset = (page-1)*limit
+
+const semaforo = req.query.semaforo
+const search = req.query.search
+
+let where = []
+
+if(semaforo){
+ where.push(`semaforo='${semaforo}'`)
+}
+
+if(search){
+ where.push(`
+ (
+ id::text ILIKE '%${search}%'
+ OR estado ILIKE '%${search}%'
+ )
+ `)
+}
+
+const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : ""
+
+const data = await db.query(`
+SELECT *
+FROM vw_torre_control
+${whereClause}
+ORDER BY "createdAt" DESC
+LIMIT ${limit}
+OFFSET ${offset}
+`,{
+ type:QueryTypes.SELECT
+})
+
+type CountResult = { count:number }
+
+const count = await db.query<CountResult>(`
+SELECT COUNT(*)::int as count
+FROM vw_torre_control
+${whereClause}
+`,{
+ type:QueryTypes.SELECT
+})
+
+res.json({
+ data,
+ total: count[0].count,
+ page,
+ totalPages: Math.ceil(count[0].count/limit)
+})
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"error torre control"})
+
+}
+
+
+
+}
+static panelControl = async (req: Request, res: Response) => {
+
+ try {
+
+ const result = await db.query(`
+  SELECT
+  COUNT(*) FILTER (WHERE semaforo = 'VENCIDO') as vencidos,
+  COUNT(*) FILTER (WHERE semaforo = 'VENCE_HOY') as vencen_hoy,
+  COUNT(*) FILTER (WHERE semaforo = 'PROXIMO_A_VENCER') as proximos,
+  COUNT(*) FILTER (WHERE semaforo = 'AL_DIA') as al_dia,
+  COUNT(*) FILTER (WHERE semaforo = 'CUMPLIDO') as cumplidos
+  FROM vw_torre_control
+ `,{
+  type: QueryTypes.SELECT
+ })
+
+ res.json(result[0])
+
+ } catch(error){
+
+ console.error(error)
+ res.status(500).json({error:"Error panel control"})
+
+ }
+
 }
 }
 

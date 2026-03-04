@@ -30,6 +30,14 @@ router.get('/buscar', SolicitudTramitesController.buscarSolicitudes)
 router.get('/filtrar', SolicitudTramitesController.filtrarSolicitudes)
 router.get('/solicitudes', SolicitudTramitesController.obtenerSolicitudes)
 
+//==================== TORRE CONTROL ============//
+router.get('/panel-control', SolicitudTramitesController.panelControl)
+router.get(
+ '/torre-control',
+ SolicitudTramitesController.torreControl
+)
+
+
 
 
 // ================= PARAMS =================
@@ -62,6 +70,7 @@ router.put('/:solicitudTramitesId',
   SolicitudTramitesController.updateById
 )
 router.delete('/:solicitudTramitesId', SolicitudTramitesController.deleteById)
+
 
 // ================= TRAZABILIDAD =================
 router.post('/:solicitudTramitesId/trazabilidad',
