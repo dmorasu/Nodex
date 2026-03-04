@@ -51,10 +51,7 @@ export const validateEstadosTramitesInput = async (
     .withMessage("Debe registrar un estado")
     .run(req);
 
-  await body("solicitudTramiteId")
-    .notEmpty()
-    .withMessage("Debe registrar un ID de solicitud de trámite")
-    .run(req);
+ 
 
   next();
 };

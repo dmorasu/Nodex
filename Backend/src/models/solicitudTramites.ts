@@ -22,6 +22,7 @@ import EstadosTramites from "./estadosTramites";
 import Trazabilidad from "./trazabilidad";
 import CuentaCobros from "./cuentaCobro";
 import Tramite from "./tramite";
+import EvaluacionSolicitud from "./evaluacionSolicitud"
 
 @Table({
   tableName: "SolicitudTramites",
@@ -109,6 +110,11 @@ declare tramiteId:number
 declare tramite: Tramite
 
   // ===== Relaciones 1 - N =====
+
+  @HasOne(() => EvaluacionSolicitud, {
+  foreignKey: "solicitudTramiteId"
+})
+declare evaluacion: EvaluacionSolicitud
 
   @HasMany(() => EstadosTramites, { foreignKey: "solicitudTramiteId" })
   declare estadosTramites: EstadosTramites[];

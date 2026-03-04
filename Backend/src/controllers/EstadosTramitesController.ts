@@ -15,50 +15,36 @@ export class EstadosTramitesController{
         
     }
 
-      static create = async (req: Request, res: Response) => {
+   static create = async (req: Request, res: Response) => {
+  try {
 
-    try {
-      // Guardar estado
-      const estadosTramites = new EstadosTramites(req.body)
-      estadosTramites.solicitudTramiteId = req.solicitudTramites.id
+    const estadosTramites = new EstadosTramites(req.body)
+    estadosTramites.solicitudTramiteId = req.solicitudTramites.id
+
+    console.log("ESTADO RECIBIDO:", estadosTramites.estadoId)
+
+    if (Number(estadosTramites.estadoId) === 6) {
+      console.log("ENTRÓ AL IF FINALIZADO")
       await estadosTramites.save()
 
-      // --- Si estado = Finalizado ---
-      if (Number(estadosTramites.estadoId) === 6) {
-
-        const fechaFinalizacionServicio = new Date()
-
-        let programacion = await Programacion.findOne({
-          where: { solicitudTramiteId: req.solicitudTramites.id }
-        })
-
-        // Si ya fue finalizado antes
-        if (programacion && programacion.fechaFinalizacionServicio) {
-          return res.status(400).json({ error: "El trámite ya fue finalizado previamente" })
-        }
-
-        // Si no existe programación → crear registro
-        if (!programacion) {
-          await Programacion.create({
-            solicitudTramiteId: req.solicitudTramites.id,
-            fechaFinalizacionServicio: fechaFinalizacionServicio
-          })
-        } 
-        // Si existe → actualizar fecha de finalización
-        else {
-          programacion.fechaFinalizacionServicio = fechaFinalizacionServicio
-          await programacion.save()
-        }
-      }
-
-      return res.status(201).json("Registro Guardado")
-
-    } catch (error) {
-      console.error("ERROR CREANDO ESTADO:", error)
-      return res.status(500).json({ error: "Hubo un error" })
+      return res.status(201).json({
+        success: true,
+        requiereEvaluacion: true
+      })
     }
-  }
 
+    await estadosTramites.save()
+
+    return res.status(201).json({
+      success: true,
+      requiereEvaluacion: false
+    })
+
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ error: "Hubo un error" })
+  }
+}
 
 
     static getById =async (req: Request, res:Response) =>{
