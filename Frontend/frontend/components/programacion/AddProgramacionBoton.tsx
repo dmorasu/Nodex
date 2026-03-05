@@ -1,31 +1,33 @@
 "use client"
-import { useRouter } from "next/navigation"
 
-export default function AddProgramacionBoton(){
-    const router =useRouter()
+import { useRouter, usePathname } from "next/navigation"
+import { Calendar } from "lucide-react"
 
-    return(
-          <button 
-            type="button"
-                className="
-                    px-4 py-2
-                    hover:border border-sky-400
-                  text-white
-                    rounded-md
-                    font-medium
-                    transition-all
-                  hover:bg-white hover:text-sky-400
-                    focus:outline-none focus:ring-2 focus:ring-blue-400
-                  bg-sky-400"
-            onClick={()=>router.push(location.pathname+'?addProgramacion=true&showModal=true')}
-      
-        >
-            Programación
+export default function AddProgramacionBoton() {
 
-        </button>
-    )
+  const router = useRouter()
+  const pathname = usePathname()
 
-
-    
-        
+  return (
+    <button
+      type="button"
+      className="
+        flex items-center justify-center gap-2
+        h-10 min-w-[140px]
+        px-4
+        bg-sky-400 text-white
+        font-medium rounded-md
+        transition-all
+        hover:bg-white hover:text-sky-400
+        hover:border border-sky-400
+        focus:outline-none focus:ring-2 focus:ring-blue-400
+      "
+      onClick={() =>
+        router.push(`${pathname}?addProgramacion=true&showModal=true`)
+      }
+    >
+      <Calendar size={18} />
+      Programación
+    </button>
+  )
 }

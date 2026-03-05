@@ -1,6 +1,7 @@
 "use client"
 
 import { usePanelControl } from "@/hooks/usePanelControl"
+import Link from "next/link"
 
 export default function PanelControl({setSemaforoFiltro}:any){
 
@@ -19,12 +20,15 @@ return(
 <Card titulo="🟡 Próximos" valor={data.proximos} color="bg-yellow-400" filtro="PROXIMO_A_VENCER" setSemaforoFiltro={setSemaforoFiltro}/>
 
 <Card titulo="🟢 Al Día" valor={data.al_dia} color="bg-green-500" filtro="AL_DIA" setSemaforoFiltro={setSemaforoFiltro}/>
+
+ 
 <button
 onClick={()=>setSemaforoFiltro(null)}
 className="bg-gray-500 text-white px-3 py-2 rounded-lg"
 >
 Ver todos
 </button>
+    
 
 </div>
 

@@ -43,6 +43,13 @@ export default function CenterMenu({ usuario }: { usuario: Usuario }) {
                   Dashboard
                 </Link>
                 <Link
+                  href="/center/torreControl"
+                  onClick={() => close()}
+                  className="block p-2 hover:text-orange-500"
+                >
+                  Torre de Control
+                </Link>
+                <Link
                   href="/center"
                   onClick={() => close()}
                   className="block p-2 hover:text-orange-500"

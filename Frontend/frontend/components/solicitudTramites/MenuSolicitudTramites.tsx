@@ -42,17 +42,17 @@ export default function SolicitudTramiteMenu({solicitudId}:{solicitudId:Solicitu
                 Editar 
               </Link>
             </MenuItem>
+            <MenuItem>
+              <Link
+                href={`/center/torreControl`}
+                className='block px-3 py-1 text-sm leading-6 text-sky-500 font-semibold hover:text-red-500'
+              >
+                Torre Control
+              </Link>
+            </MenuItem>
             
 
-            <MenuItem>
-              <button
-                type='button'
-                className='block px-3 py-1 text-sm leading-6 text-red-500 font-semibold'
-                onClick={ () => router.push(`?eliminarSolicitudTramiteId=${solicitudId}`) }
-              >
-                Eliminar 
-              </button>
-            </MenuItem>
+            
           </MenuItems>
         </Transition>
       </Menu>

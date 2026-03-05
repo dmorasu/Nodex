@@ -1,7 +1,7 @@
 import AddCuentaCobroBoton from '@/components/cuentacobro/AddCuentaCobroBoton';
 import AddEstadosBoton from '@/components/estados/AddEstadosBoton';
 import AddLogisticatoBoton from '@/components/logistica/AddLogistica';
-
+import { ArrowLeft, Radar, FileText, Activity } from "lucide-react"
 import AddProgramacionBoton from '@/components/programacion/AddProgramacionBoton';
 import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton';
 
@@ -57,50 +57,77 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
   //console.log(solicitudTramite)
   return (
     <>
-      <div className=' bg-white  border-slate-200 rounded-lg  px-6 py-4 flex justify-between items-center divide-gray-300 border shadow-lg mt-10'>
-        
-        <div>
-          <h1 className="  text-2xl font-semibold text-slate-800">Trámite N: {solicitudTramite.id}</h1>
-         
-        </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+<div className="bg-white border border-slate-200 rounded-lg px-6 py-4 shadow-lg mt-10">
 
-  {/* Fila 1 */}
-  <AddEstadosBoton />
-  <AddTramitadorBoton />
-  <AddProgramacionBoton />
-  <AddLogisticatoBoton />
+  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
-  {/* Fila 2 → alineados a la derecha */}
-  <div className="md:col-start-2">
-    <AddCuentaCobroBoton />
-  </div>
+    {/* Título */}
+    <div className="flex items-center gap-4 bg-slate-50 px-4 py-3 rounded-lg border w-fit">
 
-  <div className="md:col-start-3">
-    <AddTrazabilidadBoton />
-  </div>
+      <FileText className="text-sky-500" size={24} />
 
-  <div className="md:col-start-4">
-    <Link
-      href="/center"
-      className="
-        px-4 py-2
-        bg-red-400 text-slate-50 font-medium rounded-md
-        hover:bg-white hover:text-slate-600 
-        hover:border hover:border-red-400
-        transition
-        text-center
-        block
-      "
-    >
-      Volver
-    </Link>
+      <h1 className="text-l sm:text-2xl font-semibold text-slate-800">
+        Trámite N: {solicitudTramite.id}
+      </h1>
+
+    </div>
+
+    {/* Botonera */}
+    <div className="flex flex-col gap-3 w-full lg:w-auto">
+
+      {/* Fila 1 */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <AddEstadosBoton />
+        <AddTramitadorBoton />
+        <AddProgramacionBoton />
+        <AddLogisticatoBoton />
+      </div>
+
+      {/* Fila 2 */}
+      <div className="flex flex-wrap lg:justify-end gap-3">
+
+        <Link
+          href="/center/dashboard"
+          className="
+            flex items-center justify-center gap-2
+            h-10 min-w-[140px]
+            px-4
+            bg-red-400 text-white font-medium rounded-md
+            hover:bg-white hover:text-slate-600
+            hover:border hover:border-red-400
+            transition
+          "
+        >
+          <ArrowLeft size={18} />
+          Volver
+        </Link>
+
+        <Link
+          href="/center/torreControl"
+          className="
+            flex items-center justify-center gap-2
+            h-10 min-w-[140px]
+            px-4
+            bg-emerald-400 text-white font-medium rounded-md
+            hover:bg-white hover:text-slate-600
+            hover:border hover:border-emerald-400
+            transition
+          "
+        >
+          <Radar size={18} />
+          Torre Control
+        </Link>
+
+        <AddCuentaCobroBoton />
+        <AddTrazabilidadBoton />
+
+      </div>
+
+    </div>
+
   </div>
 
 </div>
-        
-
-      </div>
       <>  
           
           <div>

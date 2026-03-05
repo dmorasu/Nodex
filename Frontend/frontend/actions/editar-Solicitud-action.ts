@@ -69,7 +69,7 @@ export async function EditarSolicitudTramite(solicitudTramiteId: SolicitudTramit
     }
    }
 
-   revalidatePath('/center')
+   revalidatePath('/center/dashboard')
    const success=SuccessSchema.parse(json)
 
     return {
