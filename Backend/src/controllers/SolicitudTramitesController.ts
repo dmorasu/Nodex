@@ -478,6 +478,11 @@ static filtrarSolicitudes = async (req: Request, res: Response) => {
           limit: 1,
           order: [['createdAt', 'DESC']],
           include: [{ model: Estados }]
+        },
+        {
+          model: Usuarios,
+          attributes:["nombreUsuario"]
+          
         }
       ],
 

@@ -346,19 +346,11 @@ export default function DashboardPageClient() {
                       </span>
                     </p>
                     <p className="text-gray-800 text-sm font-bold">
-                      Fecha Espera Resultado:{" "}
-                      <span className="font-normal text-gray-600">
-                        {formatoFecha(solicitud.fechaEntregaResultado)}
-                      </span>
-                    </p>
-
-                    <p className="text-gray-800 text-sm font-bold">
                       Creado por:{" "}
                       <span className=" text-gray-600 font-normal">
                         {solicitud.usuario?.nombreUsuario}
                       </span>
                     </p>
-                    
                     <p className="text-gray-800 text-sm font-bold">
                       Fecha de Creacion:{" "}
                       <span className="font-normal text-gray-600 ">
@@ -366,13 +358,14 @@ export default function DashboardPageClient() {
                       </span>
                     </p>
                     <p className="text-gray-800 text-sm font-bold">
-                      Última Actualizacion:{" "}
+                      Fecha en la que se debe Entregar Resultado:{" "}
                       <span className="font-normal text-gray-600">
-                        {formatoFecha(solicitud.updatedAt)}
+                        {formatoFecha(solicitud.fechaEntregaResultado)}
                       </span>
                     </p>
+                    
                     <p className="text-red-500 text-sm font-bold">
-                      Fecha de Finalización:{" "}
+                      Fecha en la que se Finaliza el Servicio:{" "}
                       <span className="font-normal text-gray-600">
                         {formatoFechaFinaizacion(solicitud.programacion?.fechaFinalizacionServicio?? "")}
                       </span>

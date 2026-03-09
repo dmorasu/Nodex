@@ -193,13 +193,15 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                           {formatoMoneda(   solicitudTramite.programacion?.valorViaticos??"0")}
 
                     </p>
-                    <p className='text-gray-600 text-sm'>
-                        <span className="text-black font-bold">Fecha Realizacion Servicio Servicio:</span>{" "}
-                        {solicitudTramite.fechaEntregaResultado && formatoFechaFinaizacion(solicitudTramite.programacion?.fechaRealizacionDiligencia??"Sin Fecha")}
+                     <p className='text-gray-500  text-sm'>
+                        
 
+                        <span className="text-black font-semibold">Fecha de Creación:</span>{" "}
+                        {formatoFecha(solicitudTramite.createdAt)} 
                     </p>
+                    
                     <p className='text-gray-600 text-sm'>
-                        <span className="text-black font-bold">Fecha Entrega Resultado:</span>{" "}
+                        <span className="text-black font-bold">Fecha en la que se debe Entregar Resultado:</span>{" "}
                         {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
 
                     </p>
@@ -207,14 +209,14 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                      <p className='text-gray-500  text-sm'>
                         
 
-                        <span className="text-black font-semibold">Fecha Probable Entrega:</span>{" "}
+                        <span className="text-black font-semibold">Fecha en la que se realizara la Diligencia:</span>{" "}
                         {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
                     </p>
-                    <p className='text-gray-500  text-sm'>
-                        
+                   
+                    <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Fecha en la que se Finaliza el Servicio:</span>{" "}
+                        {solicitudTramite.fechaEntregaResultado && formatoFechaFinaizacion(solicitudTramite.programacion?.fechaFinalizacionServicio??"Sin Fecha")}
 
-                        <span className="text-black font-semibold">Fecha de Creación:</span>{" "}
-                        {formatoFecha(solicitudTramite.createdAt)} 
                     </p>
                     <p className='text-red-500  text-sm font-bold'>
                         

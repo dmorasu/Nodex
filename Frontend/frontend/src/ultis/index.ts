@@ -5,26 +5,17 @@ export function formatoFecha(isoString?: string | null) {
   if (!isoString) return "Sin fecha";
 
   const fecha = new Date(isoString);
-
-  if (isNaN(fecha.getTime())) {
-    return "Sin fecha";
-  }
+fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
 
   const fechaTexto = fecha.toLocaleDateString("es-CO", {
+    timeZone: "UTC",
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 
-  const horaTexto = fecha.toLocaleTimeString("es-CO", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  return `${fechaTexto} , Hora: ${horaTexto}`;
+  return fechaTexto;
 }
-
 export function toDateInput(value?: string | null) {
   if (!value) return ""
   return value.split("T")[0]   // "2026-02-13"
