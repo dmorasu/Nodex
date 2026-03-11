@@ -48,8 +48,12 @@ export const validateProgramacionInput = async (
 ) => {
   await body("fechaProbableEntrega")
     .notEmpty()
-    .withMessage("La fecha probable de entrega no puede estar vacía")
+    .withMessage("La fecha en la que se realizara la diligencia no puede estar vacía")
     .run(req);
+  await body("valorTramite")
+    .notEmpty()
+    .withMessage("Asigne un valor al trámite")
+    .run(req);  
 
   next();
 };

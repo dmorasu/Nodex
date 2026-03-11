@@ -248,13 +248,9 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                                       >
                                         {solicitudTramite.estadosTramites?.[0]?.estado?.nombreEstado ?? "Sin Iniciar"}
                                       </p> */}
-                    <p className="text-black font-semibold text-sm">
-                      Última Actualización:{" "}
-                      <span className="font-normal text-gray-600">
-                  {formatoFecha(solicitudTramite.updatedAt)}
-                </span>
+                  
 
-              </p>
+        
               <p className="text-black font-semibold text-sm">
                       Programador:{" "}
                       <span className="font-normal text-gray-600">
