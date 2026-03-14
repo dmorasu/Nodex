@@ -1,73 +1,78 @@
 "use server"
 
-import { ErrorResponoseSchema,TrazabilidadSchema,SuccessSchema, logisticaSchema } from "@/src/schemas"
-import { verificacionSesion } from "@/src/auth/dal"
+import { ErrorResponoseSchema, SuccessSchema, logisticaSchema } from "@/src/schemas"
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
 
-
-type ActionStateType ={
-    errors:string[],
-    success:string
+type ActionStateType = {
+  errors: string[],
+  success: string
 }
 
+export default async function CrearLogistica(
+  solicitudTramitesId: number,
+  prevState: ActionStateType,
+  formData: FormData
+) {
 
+  // Normalización de datos
+  const numeroGuia = (formData.get("numeroGuia") as string) || null
+  const valorEnvio = formData.get("valorEnvio") ? Number(formData.get("valorEnvio")) : null
+  const destinatario = (formData.get("destinatario") as string) || null
+  const transportadoraId = formData.get("transportadoraId")
+    ? Number(formData.get("transportadoraId"))
+    : null
+  const fechaProgramacionLogistica = (formData.get("fechaProgramacionLogistica") as string) || null
+  const fechaEntregaTransportadora = (formData.get("fechaEntregaTransportadora") as string) || null
 
-export default async function CrearLogistica(solicitudTramitesId:number,prevState:ActionStateType,formData:FormData) {
-    const logisticaData={
-        solicitudTramitesId:solicitudTramitesId, 
-        numeroGuia:formData.get('numeroGuia'),
-        valorEnvio:formData.get('valorEnvio'),
-        transportadora:formData.get('transportadora'),
-        fechaProgramacionLogistica:formData.get("fechaProgramacionLogistica"),
-        fechaEntregaTransportadora:formData.get('fechaEntregaTransportadora'),
+  const logisticaData = {
+    solicitudTramitesId,
+    numeroGuia,
+    valorEnvio,
+    destinatario,
+    transportadoraId,
+    fechaProgramacionLogistica,
+    fechaEntregaTransportadora
+  }
 
+  const logistica = logisticaSchema.safeParse(logisticaData)
+
+  if (!logistica.success) {
+    return {
+      errors: logistica.error.issues.map(issue => issue.message),
+      success: ""
     }
-    
-    const logistica=logisticaSchema.safeParse(logisticaData)
+  }
 
-    if(!logistica.success){
-        return{
-            errors:logistica.error.issues.map(issue=>issue.message),
-            success:''
-        }
+  const token = cookies().get("TOKEN")?.value
+
+  const url = `${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/logistica`
+
+  const req = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(logisticaData)
+  })
+
+  const json = await req.json()
+
+  if (!req.ok) {
+    const { error } = ErrorResponoseSchema.parse(json)
+    return {
+      errors: [error],
+      success: ""
     }
+  }
 
-    const token = cookies().get("TOKEN")?.value
-    // Generar Trazabilidad
-    const url =`${process.env.API_URL}/solicitudTramites/${solicitudTramitesId}/logistica`
-    const req =await fetch(url,{
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json',
-          
-        },
-        body:JSON.stringify({
-            solicitudTramitesId:solicitudTramitesId,
-            numeroGuia:logisticaData.numeroGuia,
-            valorEnvio:logisticaData.valorEnvio,
-            transportadora:logisticaData.transportadora,
-            fechaProgramacionLogistica:logisticaData.fechaProgramacionLogistica,
-            fechaEntregaTransportadora:logisticaData.fechaEntregaTransportadora,
-        })
-    })
+  revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
 
-    const json =await req.json()
-    console.log(json)
-    if(!req.ok){
-        const {error}=ErrorResponoseSchema.parse(json)
-        return{
-            errors:[error],
-            success:''
-        }
-    }
-    
-    revalidatePath(`/center/solicitudTramites/${solicitudTramitesId}`)
-    const success = SuccessSchema.parse(json)
+  const success = SuccessSchema.parse(json)
 
-    return{
-        errors:[],
-        success
-    }
-    
+  return {
+    errors: [],
+    success
+  }
 }

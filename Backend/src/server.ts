@@ -10,7 +10,8 @@ import clienteRouter from "./routes/clienteRouter"
 import municipiosRouter from "./routes/municipiosRouter"
 import operacionesRouter from "./routes/operacionesRouter" 
 import tarifaRouter from "./routes/tarifaRouter" 
-import tramitadorRouter from "./routes/tramitadorRouter" 
+import tramitadorRouter from "./routes/tramitadorRouter"
+import transportadoraRouter from "./routes/transportadoraRouter"  
 import solicitudTramiteRouter from  "./routes/solicitudTramiteRouter"
 import estadosRouter from './routes/estadosRouter'
 import authRouter from './routes/authRouter'
@@ -72,5 +73,6 @@ app.use('/api/solicitudTramites/', solicitudTramiteRouter)
 app.use('/api/estados', estadosRouter)
 app.use('/api/auth', authRouter)
 app.use("/api/solicitudes", evaluacionRoutes)
+app.use("/api/transportadora",transportadoraRouter)
 
 export default app

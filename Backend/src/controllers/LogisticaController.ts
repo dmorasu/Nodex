@@ -29,26 +29,36 @@ export class LogisticaController{
 
     static create = async (req: Request, res: Response) => {
   try {
-    const solicitudId = req.solicitudTramites.id; 
-    // (asumo que ya estás inyectando req.solicitudTramites desde middleware)
 
-    // Buscar si ya existe logística para esta solicitud
+    const solicitudId = req.solicitudTramites.id;
+
     let logistica = await Logistica.findOne({
       where: { solicitudTramiteId: solicitudId }
     });
 
     if (!logistica) {
-      // Crear si no existe
+
       logistica = await Logistica.create({
+
         solicitudTramiteId: solicitudId,
+
         numeroGuia: req.body.numeroGuia || null,
+
         valorEnvio: req.body.valorEnvio || null,
-        transportadora: req.body.transportadora|| null,
+
+        destinatario: req.body.destinatario || null,
+
+        transportadoraId: req.body.transportadoraId
+          ? Number(req.body.transportadoraId)
+          : null,
+
         fechaProgramacionLogistica: req.body.fechaProgramacionLogistica || null,
+
         fechaEntregaTransportadora: req.body.fechaEntregaTransportadora || null
+
       });
+
     } else {
-      // Actualizar solo los campos enviados
 
       if (req.body.numeroGuia !== undefined) {
         logistica.numeroGuia = req.body.numeroGuia || null;
@@ -58,8 +68,14 @@ export class LogisticaController{
         logistica.valorEnvio = req.body.valorEnvio || null;
       }
 
-      if (req.body.horaProgramada !== undefined) {
-        logistica.transportadora = req.body.transportadora || null;
+      if (req.body.destinatario !== undefined) {
+        logistica.destinatario = req.body.destinatario || null;
+      }
+
+      if (req.body.transportadoraId !== undefined) {
+        logistica.transportadoraId = req.body.transportadoraId
+          ? Number(req.body.transportadoraId)
+          : null;
       }
 
       if (req.body.fechaProgramacionLogistica !== undefined) {
@@ -76,11 +92,15 @@ export class LogisticaController{
     res.status(201).json("Logística guardada correctamente");
 
   } catch (error) {
+
     console.error("ERROR LOGISTICA:", error);
-    res.status(500).json({ error: "No se pudo almacenar la logística" });
+
+    res.status(500).json({
+      error: "No se pudo almacenar la logística"
+    });
+
   }
 };
-
     static getById =  async (req:Request,res:Response)=>{
         res.json(req.logistica)
     }

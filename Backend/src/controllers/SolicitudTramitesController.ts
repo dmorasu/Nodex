@@ -15,6 +15,7 @@ import Entidad from '../models/entidad'
 import Operaciones from '../models/operaciones'
 import Tramite from '../models/tramite'
 import Tramitador from '../models/tramitador'
+import Transportadora from '../models/trasnportadora'
 
 
 
@@ -91,7 +92,7 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
         },
         {
           model: Logistica,
-          attributes: ["id","transportadora"]
+          attributes: ["id","transportadoraId"]
         },
         {
           model: Usuarios,
@@ -106,6 +107,14 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
           as: "estadosTramites",
           required: false, // permite trámites sin estado
           include: [{ model: Estados, attributes:["nombreEstado"] }],
+          order: [["createdAt","DESC"]],
+          limit: 1   // 👈 solo último estado
+        },
+        {
+          model: Transportadora,
+          as: "transportadora",
+          required: false, // permite trámites sin estado
+          include: [{ model: Logistica, attributes:["nombreTransportadora"] }],
           order: [["createdAt","DESC"]],
           limit: 1   // 👈 solo último estado
         }

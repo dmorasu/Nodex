@@ -151,6 +151,9 @@ export const estadosTramites = z.object({
 
 })
 
+
+
+
 export const Trazabilidad = z.object({
         id: z.number(),
         observacionTrazabilidad: z.string(),
@@ -174,14 +177,22 @@ export const Programacion = z.object({
 })
 
 export const logistica = z.object({
-        id: z.number(),
-        numeroGuia: z.string().nullable().optional(),
-        valorEnvio: z.string().nullable().optional(),
-        transportadora: z.string().nullable().optional(),
-        fechaProgramacionLogistica: z.string().nullable().optional(),
-        fechaEntregaTransportadora: z.string().nullable().optional()
+  id: z.number(),
 
+  numeroGuia: z.string().nullable().optional(),
 
+  valorEnvio: z.string().nullable().optional(),
+  destinatario: z.string().nullable().optional(),
+
+  transportadoraId: z.number().nullable().optional(),
+
+  fechaProgramacionLogistica: z.string().nullable().optional(),
+
+  fechaEntregaTransportadora: z.string().nullable().optional(),
+
+  transportadora: z.object({
+    nombreTransportadora: z.string()
+  }).optional().nullable()
 })
 
 export const  cuentaCobroSchema =z.object({
@@ -247,6 +258,12 @@ export const logisticaApiSchema = z.object({
 
 })
 
+export const transportadoraSchema= z.object({
+        id:z.number(),
+        nombreTransportadora:z.string()
+
+})
+export const transportadorasSchema = z.array(transportadoraSchema)
 export const logisticaSchema =z.object({
          numeroGuia:  z.string()
                 .min(1, "Debe Digitar el nuemro de guia")
@@ -293,30 +310,34 @@ export const UsuarioSchema = z.object({
 })
 
 export const SolicitudAPIRespuestaSchema = z.object({
-        id: z.number(),
-        detalleSolicitud: z.string(),
-        direccionTramite: z.string(),
-        fechaEntregaResultado: z.string().nullable(),
-        matriculaInmobiliaria: z.string().nullable(),
-        placa: z.string().nullable(),
-        createdAt: z.string(),
-        updatedAt: z.string(),
-        clientes: ClienteSchema.optional(),
-        usuario: UsuarioSchema.optional().nullable(),
-        municipios: MunicipioSchema.optional(),
-        estadosTramites: z.array(estadosTramites).optional(),
-        trazabilidad: array(Trazabilidad).optional(),
-        programacion: Programacion.optional().nullable(),
-        logistica: logistica.optional().nullable(),
-        cuentaCobro:CuentaCobro.optional().nullable(),
-        operaciones:operaciones.optional().nullable(),
-        entidad:Entidad.optional().nullable(),
-        tramite:Tramites.optional().nullable(),
-        tramitador:TramitadorSchema.optional().nullable()
-        
+  id: z.number(),
+  detalleSolicitud: z.string(),
+  direccionTramite: z.string(),
 
+  fechaEntregaResultado: z.string().nullable(),
+  matriculaInmobiliaria: z.string().nullable(),
+  placa: z.string().nullable(),
 
-        //userId: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+
+  clientes: ClienteSchema.optional(),
+  usuario: UsuarioSchema.optional().nullable(),
+  municipios: MunicipioSchema.optional(),
+
+  estadosTramites: z.array(estadosTramites).optional(),
+
+  trazabilidad: z.array(Trazabilidad).optional(),
+
+  programacion: Programacion.optional().nullable(),
+
+  logistica: logistica.optional().nullable(),
+
+  cuentaCobro: CuentaCobro.optional().nullable(),
+  operaciones: operaciones.optional().nullable(),
+  entidad: Entidad.optional().nullable(),
+  tramite: Tramites.optional().nullable(),
+  tramitador: TramitadorSchema.optional().nullable()
 
 })
         .passthrough()

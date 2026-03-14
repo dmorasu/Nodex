@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import CrearLogistica from "@/actions/crear-logistica-action";
 import { LogisticaType } from "@/src/type/solicitudes";
 import { toDateInput } from "@/src/ultis";
+import TransportadorasSelect from "../transportadoras/transportadoraSelect";
 
 
 export default function AddLogisticaForm({closeModal, logistica}:{closeModal:()=>void , logistica?:LogisticaType | null}){
@@ -71,15 +72,26 @@ export default function AddLogisticaForm({closeModal, logistica}:{closeModal:()=
     />
   </div>
 
+   <div className="py-3">
+    <label className="text-sm uppercase font-bold">
+      Transportadora
+    </label>
+        <TransportadorasSelect
+  name="transportadoraId"
+  defaultValue={logistica?.transportadoraId ?? undefined}
+/>
+  </div>
+
   <div className="py-3">
     <label className="text-sm uppercase font-bold">
-      Transportadora:
+      Destinatario:
     </label>
     <input
       type="text"
-      name="transportadora"
+      name="destinatario"
       className="w-full p-3 border border-gray-100 bg-slate-100"
-      defaultValue={logistica?.transportadora??""}
+      defaultValue={logistica?.destinatario??""}
+     
     />
   </div>
 
