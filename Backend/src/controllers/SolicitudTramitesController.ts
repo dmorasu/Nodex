@@ -91,9 +91,15 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
           attributes: ["id","nombreTramite","responsable"]
         },
         {
-          model: Logistica,
-          attributes: ["id","transportadoraId"]
-        },
+  model: Logistica,
+  attributes: ["id","transportadoraId","destinatario"],
+  include: [
+    {
+      model: Transportadora,
+      attributes: ["id","nombreTransportadora"]
+    }
+  ]
+},
         {
           model: Usuarios,
           attributes:["id","nombreUsuario"]
@@ -110,14 +116,7 @@ static obtenerSolicitudes = async (req: Request, res: Response) => {
           order: [["createdAt","DESC"]],
           limit: 1   // 👈 solo último estado
         },
-        {
-          model: Transportadora,
-          as: "transportadora",
-          required: false, // permite trámites sin estado
-          include: [{ model: Logistica, attributes:["nombreTransportadora"] }],
-          order: [["createdAt","DESC"]],
-          limit: 1   // 👈 solo último estado
-        }
+       
       ],
       order: [["createdAt","DESC"]],
       limit,

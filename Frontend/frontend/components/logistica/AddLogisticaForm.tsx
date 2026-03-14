@@ -97,7 +97,7 @@ export default function AddLogisticaForm({closeModal, logistica}:{closeModal:()=
 
   <div className="py-3">
     <label className="text-sm uppercase font-bold">
-      Fecha de Programación:
+      Fecha Probable de Entrega:
     </label>
     <input
       type="date"

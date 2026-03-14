@@ -159,7 +159,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         <span className='text-justify'> {solicitudTramite.placa?? "Sin Placa"}</span>
                     </p>
                      <p className='text-gray-600  text-sm'>
-                        <span className="text-black font-bold">Matricula Inmobiliaria:</span>{" "}
+                        <span className="text-black font-bold">Matrícula Inmobiliaria:</span>{" "}
                         <span className='text-justify'>{solicitudTramite.matriculaInmobiliaria??"Sin Matricula"}</span>
                     </p>
                      
@@ -175,7 +175,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                     <p className='text-gray-500  text-sm'>
                         
 
-                        <span className="text-black font-semibold">Cuidad:</span>{" "}
+                        <span className="text-black font-semibold">Ciudad:</span>{" "}
                         {solicitudTramite.municipios?.nombreMunicipio}
                     </p>
                     <p className='text-gray-500  text-sm'>
@@ -184,12 +184,17 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         {solicitudTramite.direccionTramite} 
                     </p>
                     <p className='text-gray-600 text-sm'>
+                        <span className="text-black font-bold">Tipo de Trámite:</span>{" "}
+                        {solicitudTramite.tramite?.nombreTramite}
+
+                    </p>
+                    <p className='text-gray-600 text-sm'>
                         <span className="text-black font-bold">Valor Trámite:</span>{" "}
                         {formatoMoneda(   solicitudTramite.programacion?.valorTramite??"0")}
 
                     </p>
                     <p className='text-gray-600 text-sm'>
-                        <span className="text-black font-bold">Valor Viaticos:</span>{" "}
+                        <span className="text-black font-bold">Valor Viáticos:</span>{" "}
                           {formatoMoneda(   solicitudTramite.programacion?.valorViaticos??"0")}
 
                     </p>
@@ -201,7 +206,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                     </p>
                     
                     <p className='text-gray-600 text-sm'>
-                        <span className="text-black font-bold">Fecha en la que se debe Entregar Resultado:</span>{" "}
+                        <span className="text-black font-bold">Fecha en la que se debe Entregar el  Resultado:</span>{" "}
                         {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
 
                     </p>
@@ -209,8 +214,8 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                      <p className='text-gray-500  text-sm'>
                         
 
-                        <span className="text-black font-semibold">Fecha en la que se realizara la Diligencia:</span>{" "}
-                        {formatoFecha(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
+                        <span className="text-black font-semibold">Fecha en la que se realizará la Diligencia:</span>{" "}
+                        {formatoFechaFinaizacion(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
                     </p>
                    
                     <p className='text-gray-600 text-sm'>
@@ -293,7 +298,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                     <span className="text-orange-500">Creado por :</span>{" "}
                         {solicitudTramite.nombreUsuario} 
                     <p className="text-sm font-bold text-sky-400">
-                      {formatoFecha(solicitudTramite.createdAt)}
+                      {formatoFechaFinaizacion(solicitudTramite.createdAt)}
 
                     </p>
                     <p className='text-gray-500  text-sm'>

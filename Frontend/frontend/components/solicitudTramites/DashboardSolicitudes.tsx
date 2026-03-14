@@ -340,7 +340,7 @@ export default function DashboardPageClient() {
                       </span>
                     </p>
                     <p className="text-gray-800 text-sm font-bold">
-                      Operacion:{" "}
+                      Operación:{" "}
                       <span className="font-normal text-gray-600">
                         {solicitud.operaciones?.nombreOperacion}
                       </span>
@@ -352,7 +352,7 @@ export default function DashboardPageClient() {
                       </span>
                     </p>
                     <p className="text-gray-800 text-sm font-bold">
-                      Fecha de Creacion:{" "}
+                      Fecha de Creación:{" "}
                       <span className="font-normal text-gray-600 ">
                         {formatoFecha(solicitud.createdAt)}
                       </span>
