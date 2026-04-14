@@ -57,6 +57,10 @@ export const validateSolicitudTramitesInput = async (
     .notEmpty()
     .withMessage("Debe ingresar un detalle a la solicitud")
     .run(req);
+  await body("fechaEntregaResultado")
+    .notEmpty()
+    .withMessage("Debe ingresar la fecha de entrega de resultado")
+    .run(req);
 
   next();
 };

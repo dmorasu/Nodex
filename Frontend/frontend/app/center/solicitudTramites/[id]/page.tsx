@@ -7,7 +7,7 @@ import AddTrazabilidadBoton from '@/components/trazabilidad/AddTrazabilitadBoton
 
 import dynamic from "next/dynamic";
 import { SolicitudAPIRespuestaSchema } from '@/src/schemas'
-import { formatoFecha, formatoFechaFinaizacion, formatoMoneda } from '@/src/ultis';
+import { formatoFecha, formatoFechaFinaizacion, formatoFechaSinZona, formatoMoneda } from '@/src/ultis';
 import { Metadata } from 'next'
 import Link from 'next/link';
 import React from 'react'
@@ -202,12 +202,12 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         
 
                         <span className="text-black font-semibold">Fecha de Creación:</span>{" "}
-                        {formatoFecha(solicitudTramite.createdAt)} 
+                        {formatoFechaFinaizacion(solicitudTramite.createdAt)} 
                     </p>
                     
                     <p className='text-gray-600 text-sm'>
                         <span className="text-black font-bold">Fecha en la que se debe Entregar el  Resultado:</span>{" "}
-                        {solicitudTramite.fechaEntregaResultado && formatoFecha(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
+                        {solicitudTramite.fechaEntregaResultado && formatoFechaSinZona(solicitudTramite.fechaEntregaResultado??"Sin Fecha")}
 
                     </p>
                     
@@ -215,7 +215,7 @@ export default async function DetalleSolicitudTramite({ params }: { params: { id
                         
 
                         <span className="text-black font-semibold">Fecha en la que se realizará la Diligencia:</span>{" "}
-                        {formatoFechaFinaizacion(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
+                        {formatoFechaSinZona(solicitudTramite.programacion?.fechaProbableEntrega??"Sin Fecha ")} 
                     </p>
                    
                     <p className='text-gray-600 text-sm'>

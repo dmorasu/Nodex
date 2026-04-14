@@ -5,10 +5,9 @@ export function formatoFecha(isoString?: string | null) {
   if (!isoString) return "Sin fecha";
 
   const fecha = new Date(isoString);
-fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
 
   const fechaTexto = fecha.toLocaleDateString("es-CO", {
-    timeZone: "UTC",
+    timeZone: "America/Bogota",
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -30,18 +29,24 @@ export function formatoFechaFinaizacion(isoString?: string | null) {
     return "Trámite sin Finalizar";
   }
 
-  const fechaTexto = fecha.toLocaleDateString("es-CO", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const opcionesFecha = {
+    timeZone: "America/Bogota",
+    day: "numeric" as const,
+    month: "long" as const,
+    year: "numeric" as const,
+  };
+
+  const opcionesHora = {
+    timeZone: "America/Bogota",
+    hour: "2-digit" as const,
+    minute: "2-digit" as const,
+    hour12: false,
+  };
+
+  const fechaTexto = fecha.toLocaleDateString("es-CO", opcionesFecha);
 
   const horaTexto = fecha
-    .toLocaleTimeString("es-CO", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
+    .toLocaleTimeString("es-CO", opcionesHora)
     .replace("a. m.", "a.m.")
     .replace("p. m.", "p.m.");
 
@@ -67,5 +72,22 @@ export function formatoMoneda(
     currency: "COP",
     minimumFractionDigits: mostrarCentavos ? 2 : 0,
     maximumFractionDigits: mostrarCentavos ? 2 : 0,
+  });
+}
+
+export function formatoFechaSinZona(isoString?: string | null) {
+  if (!isoString) return "Sin fecha";
+
+  // 🔥 Extraemos solo la parte de fecha (YYYY-MM-DD)
+  const soloFecha = isoString.split("T")[0];
+
+  const [year, month, day] = soloFecha.split("-");
+
+  const fecha = new Date(Number(year), Number(month) - 1, Number(day));
+
+  return fecha.toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 }

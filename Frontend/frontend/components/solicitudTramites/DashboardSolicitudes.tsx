@@ -13,7 +13,7 @@ import { useSolicitudesFiltradas } from '@/hooks/useSolicitudesFiltradas'
 
 import SolicitudTramiteMenu from '@/components/solicitudTramites/MenuSolicitudTramites'
 import EliminarSolicitudTramiteModal from '@/components/solicitudTramites/EliminarSolicitudTramiteModal'
-import { formatoFecha, formatoFechaFinaizacion } from '@/src/ultis'
+import { formatoFecha, formatoFechaFinaizacion, formatoFechaSinZona } from '@/src/ultis'
 
 export default function DashboardPageClient() {
 
@@ -354,13 +354,13 @@ export default function DashboardPageClient() {
                     <p className="text-gray-800 text-sm font-bold">
                       Fecha de Creación:{" "}
                       <span className="font-normal text-gray-600 ">
-                        {formatoFecha(solicitud.createdAt)}
+                        {formatoFechaFinaizacion(solicitud.createdAt)}
                       </span>
                     </p>
                     <p className="text-gray-800 text-sm font-bold">
                       Fecha en la que se debe Entregar Resultado:{" "}
                       <span className="font-normal text-gray-600">
-                        {formatoFecha(solicitud.fechaEntregaResultado)}
+                        {formatoFechaSinZona(solicitud.fechaEntregaResultado)}
                       </span>
                     </p>
                     
