@@ -56,7 +56,7 @@ export default function AddProgramacionForm({ closeModal ,programacion}: { close
 
         <div className="py-3">
           <label className="text-sm uppercase font-bold">
-            Fecha Probable de Entrega:
+            Fecha en que se realizara el tràmite:
           </label>
           <input
             type="date"
@@ -67,8 +67,8 @@ export default function AddProgramacionForm({ closeModal ,programacion}: { close
         </div>
         
         <div className="mb-3">
-          <label className="text-sm uppercase font-bold"> Valor del Támite</label>
-          <input type="number" step={0.01} min={0} name="valorTramite" className="w-full p-3 border border-gray-100 bg-slate-100" defaultValue={programacion?.valorTramite??""} >
+          <label className="text-sm uppercase font-bold"> Valor del Trámite</label>
+          <input type="number" step={0.01} min={0}  name="valorTramite" className="w-full p-3 border border-gray-100 bg-slate-100" defaultValue={programacion?.valorTramite ? parseInt(programacion.valorTramite) : ""} >
 
           </input>
         </div>
