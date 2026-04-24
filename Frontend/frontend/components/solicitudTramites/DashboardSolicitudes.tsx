@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { Search, Filter, Trash2, Plus, Radar } from 'lucide-react'
+import { Search, Filter, Trash2, Plus, Radar , Database} from 'lucide-react'
 
 import { useTramites } from '@/hooks/useTramites'
 import { useTramitadores } from '@/hooks/useTramitadores'
@@ -85,51 +85,64 @@ export default function DashboardPageClient() {
   </div>
 
   {/* BOTONES - MISMA ESTRUCTURA QUE FILA 2 */}
-  <div className="md:col-span-2 flex justify-center items-center">
-    <div className="flex gap-4">
+<div className="md:col-span-2 flex justify-center items-center">
+  <div className="flex gap-4">
 
-      {/* Buscar */}
-      <div className="relative group">
-        <button
-          onClick={aplicarFiltros}
-          className="bg-blue-500 hover:bg-blue-600 transition text-white p-2 rounded-md"
-        >
-          <Search size={16} />
-        </button>
-        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-          Buscar
-        </span>
-      </div>
-
-      {/* Crear */}
-      <div className="relative group">
-        <Link
-          href="/center/solicitudTramites/nueva"
-          className="bg-red-500 hover:bg-red-600 transition text-white p-2 rounded-md flex items-center justify-center"
-        >
-          <Plus size={16} />
-        </Link>
-        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-          Crear trámite
-        </span>
-        
-        
-      </div>
-      {/* Torre Control */}
-      <div className="relative group">
-          <Link
-          href="/center/torreControl"
-          className="bg-emerald-400 hover:bg-sky-400 transition text-white p-2 rounded-md flex items-center justify-center"
-        >
-          <Radar size={16} />
-        </Link>
-        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-          Torre Control
-        </span>
-      </div>
-
+    {/* Buscar */}
+    <div className="relative group">
+      <button
+        onClick={aplicarFiltros}
+        className="bg-blue-500 hover:bg-blue-600 transition text-white p-2 rounded-md"
+      >
+        <Search size={16} />
+      </button>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+        Buscar
+      </span>
     </div>
+
+    {/* Crear */}
+    <div className="relative group">
+      <Link
+        href="/center/solicitudTramites/nueva"
+        className="bg-red-500 hover:bg-red-600 transition text-white p-2 rounded-md flex items-center justify-center"
+      >
+        <Plus size={16} />
+      </Link>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+        Crear trámite
+      </span>
+    </div>
+
+    {/* Torre Control */}
+    <div className="relative group">
+      <Link
+        href="/center/torreControl"
+        className="bg-emerald-400 hover:bg-sky-400 transition text-white p-2 rounded-md flex items-center justify-center"
+      >
+        <Radar size={16} />
+      </Link>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+        Torre Control
+      </span>
+    </div>
+
+    {/* Gestión Masiva */}
+    <div className="relative group">
+      <Link
+        href="/center/gestionMasiva"
+        className="bg-purple-500 hover:bg-purple-600 transition text-white p-2 rounded-md flex items-center justify-center"
+      >
+        <Database size={16} />
+      </Link>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+        Gestión Masiva
+      </span>
+    </div>
+
   </div>
+</div>
+  
 
 </div>
 

@@ -79,6 +79,14 @@ export default function CenterMenu({ usuario }: { usuario: Usuario }) {
                   Cargue Masivo Clientes
                 </Link>
 
+                <Link
+                  href="/center/gestionMasiva"
+                  onClick={() => close()}
+                  className="block p-2 hover:text-orange-500"
+                >
+                  Gestión Masivo Nodex
+                </Link>
+
                 <button
                   className="block w-full text-left p-2 hover:text-sky-500 text-orange-500 font-semibold"
                   type="button"
