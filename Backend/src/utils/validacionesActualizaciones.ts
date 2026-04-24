@@ -7,6 +7,22 @@ import Transportadora from '../models/trasnportadora'
 // VALIDAR ESTADOS
 // ============================
 export const validarEstados = async (data: any[]) => {
+  const columnasEsperadas = [
+  'solicitudTramiteId',
+  'estadoId'
+]
+
+const columnasArchivo = Object.keys(data[0] || {})
+
+const esValido = columnasEsperadas.every(col => columnasArchivo.includes(col))
+
+if (!esValido) {
+  return [{
+    fila: 1,
+    columna: 'archivo',
+    error: 'Plantilla incorrecta para este proceso'
+  }]
+}
 
   const errores: any[] = []
 
@@ -42,6 +58,47 @@ export const validarEstados = async (data: any[]) => {
 // VALIDAR LOGISTICA
 // ============================
 export const validarLogistica = async (data: any[]) => {
+
+  const normalizar = (str: string) =>
+    str.trim().toLowerCase().replace(/\s+/g, '')
+
+  // 🔥 BUSCAR FILA VÁLIDA
+  const filaValida = data.find(row => Object.keys(row).length > 0)
+
+  if (!filaValida) {
+    return [{
+      fila: 1,
+      columna: 'archivo',
+      error: 'El archivo está vacío o mal estructurado'
+    }]
+  }
+
+  const columnasArchivo = Object.keys(filaValida).map(normalizar)
+
+  const columnasEsperadas = [
+    'solicitudTramiteId',
+    'numeroGuia',
+    'destinatario',
+    'valorEnvio',
+    'fechaProgramacionLogistica',
+    'fechaEntregaTransportadora',
+    'transportadoraId'
+  ].map(normalizar)
+
+  const esValido = columnasEsperadas.every(col =>
+    columnasArchivo.includes(col)
+  )
+
+  if (!esValido) {
+    console.log('COLUMNAS ARCHIVO:', columnasArchivo)
+
+    return [{
+      fila: 1,
+      columna: 'archivo',
+      error: 'Plantilla incorrecta para este proceso'
+    }]
+  }
+
   const errores: any[] = []
 
   for (let i = 0; i < data.length; i++) {
@@ -50,13 +107,13 @@ export const validarLogistica = async (data: any[]) => {
 
     const solicitud = await SolicitudTramites.findByPk(row.solicitudTramiteId)
     if (!solicitud) {
-      errores.push({ fila, error: 'Solicitud no existe' })
+      errores.push({ fila, columna: 'solicitudTramiteId', error: 'No existe' })
     }
 
     if (row.transportadoraId) {
       const t = await Transportadora.findByPk(row.transportadoraId)
       if (!t) {
-        errores.push({ fila, error: 'Transportadora no existe' })
+        errores.push({ fila, columna: 'transportadoraId', error: 'No existe' })
       }
     }
   }
@@ -67,6 +124,27 @@ export const validarLogistica = async (data: any[]) => {
 // VALIDAR PROGRAMACION
 
 export const validarProgramacion = async (data: any[]) => {
+  const columnasEsperadas = [
+  'solicitudTramiteId',
+
+  
+  'valorTramite',
+  'valorViaticos',
+  'conceptoHonorarios',
+  'conceptoViaticos'
+]
+
+const columnasArchivo = Object.keys(data[0] || {})
+
+const esValido = columnasEsperadas.every(col => columnasArchivo.includes(col))
+
+if (!esValido) {
+  return [{
+    fila: 1,
+    columna: 'archivo',
+    error: 'Plantilla incorrecta para este proceso'
+  }]
+}
 
   const errores: any[] = []
 
@@ -89,6 +167,27 @@ export const validarProgramacion = async (data: any[]) => {
   return errores
 }
 export const validarTrazabilidad = async (data: any[]) => {
+   const columnasEsperadas = [
+  'solicitudTramiteId',
+
+  
+  'observacionTrazabilidad',
+  'nombreUsuario',
+  
+]
+
+const columnasArchivo = Object.keys(data[0] || {})
+
+const esValido = columnasEsperadas.every(col => columnasArchivo.includes(col))
+
+if (!esValido) {
+  return [{
+    fila: 1,
+    columna: 'archivo',
+    error: 'Plantilla incorrecta para este proceso'
+  }]
+}
+  
 
   const errores: any[] = []
 
@@ -124,6 +223,25 @@ export const validarTrazabilidad = async (data: any[]) => {
 // VALIDAR TRAMITADOR
 
 export const validarTramitador = async (data: any[]) => {
+   const columnasEsperadas = [
+  'solicitudTramiteId',
+
+  
+  'tramitadorId',
+  
+]
+
+const columnasArchivo = Object.keys(data[0] || {})
+
+const esValido = columnasEsperadas.every(col => columnasArchivo.includes(col))
+
+if (!esValido) {
+  return [{
+    fila: 1,
+    columna: 'archivo',
+    error: 'Plantilla incorrecta para este proceso'
+  }]
+}
 
   const errores: any[] = []
 
